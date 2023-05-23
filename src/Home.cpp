@@ -3,10 +3,10 @@
 extern int WINDOW_W;
 extern int WINDOW_H;
 
-const int TOP_BUTTON_W = WINDOW_W / 10;
-const int TOP_BUTTON_H = WINDOW_H / 5;
-const int SIDE_BUTTON_W = WINDOW_W / 5;
-const int SIDE_BUTTON_H = WINDOW_H / 5;
+const int TOP_BUTTON_W = 60;
+const int TOP_BUTTON_H = 60;
+const int SIDE_BUTTON_W = 200;
+const int SIDE_BUTTON_H = 60;
 
 Game *home_g;
 void weaponButton()
@@ -51,90 +51,13 @@ Home::Home(Game *game)
     LoadMedia();
 
     mWeaponButton.onClick = &weaponButton;
-/*
-    mArmorButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
-        10 + (TOP_BUTTON_W * 1),
-        0,
-        TOP_BUTTON_W,
-        TOP_BUTTON_H,
-        "mArmorButton",
-        mGame->mFont,
-        (SDL_Color){255, 0, 255, 255},
-        (SDL_Color){255, 255, 255, 255});
     mArmorButton.onClick = &armorButton;
-
-    mItemButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
-        10 + (TOP_BUTTON_W * 2),
-        0,
-        TOP_BUTTON_W,
-        TOP_BUTTON_H,
-        "mItemButton",
-        mGame->mFont,
-        (SDL_Color){255, 0, 255, 255},
-        (SDL_Color){255, 255, 255, 255});
     mItemButton.onClick = &itemButton;
-
-    mOtherButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
-        10 + (TOP_BUTTON_W * 3),
-        0,
-        TOP_BUTTON_W,
-        TOP_BUTTON_H,
-        "mOtherButton",
-        mGame->mFont,
-        (SDL_Color){255, 0, 255, 255},
-        (SDL_Color){255, 255, 255, 255});
     mOtherButton.onClick = &otherButton;
-
-    mHaveButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
-        WINDOW_W - SIDE_BUTTON_W,
-        SIDE_BUTTON_H * 0,
-        SIDE_BUTTON_W,
-        SIDE_BUTTON_H,
-        "mHaveButton",
-        mGame->mFont,
-        (SDL_Color){255, 0, 255, 255},
-        (SDL_Color){255, 255, 255, 255});
     mHaveButton.onClick = &haveButton;
-
-    mStorageButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
-        WINDOW_W - SIDE_BUTTON_W,
-        SIDE_BUTTON_H * 1,
-        SIDE_BUTTON_W,
-        SIDE_BUTTON_H,
-        "mStorageButton",
-        mGame->mFont,
-        (SDL_Color){255, 0, 255, 255},
-        (SDL_Color){255, 255, 255, 255});
     mStorageButton.onClick = &storageButton;
-
-    mSaveButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
-        WINDOW_W - SIDE_BUTTON_W,
-        SIDE_BUTTON_H * 2,
-        SIDE_BUTTON_W,
-        SIDE_BUTTON_H,
-        "mSaveButton",
-        mGame->mFont,
-        (SDL_Color){255, 0, 255, 255},
-        (SDL_Color){255, 255, 255, 255});
     mSaveButton.onClick = &saveButton;
-
-    mDungeonButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
-        WINDOW_W - SIDE_BUTTON_W,
-        SIDE_BUTTON_H * 3,
-        SIDE_BUTTON_W,
-        SIDE_BUTTON_H,
-        "mDungeonButton",
-        mGame->mFont,
-        (SDL_Color){255, 0, 255, 255},
-        (SDL_Color){255, 255, 255, 255});
-    mDungeonButton.onClick = &dungeonButton;*/
+    mDungeonButton.onClick = &dungeonButton;
 }
 
 void Home::LoadMedia()
@@ -143,17 +66,104 @@ void Home::LoadMedia()
 
 void Home::Draw()
 {
+    CreateButton();
+
+    mWeaponButton.Draw();
+    mArmorButton.Draw();
+    mItemButton.Draw();
+    mOtherButton.Draw();
+    mHaveButton.Draw();
+    mStorageButton.Draw();
+    mSaveButton.Draw();
+    mDungeonButton.Draw();
+
+}
+
+void Home::CreateButton()
+{
+    //トップボタン
     mWeaponButton.create(
         mGame->getWindow(), mGame->getRenderer(),
-        10 + (TOP_BUTTON_W * 0),
+        WINDOW_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 4),
         0,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
-        "mWeaponButton",
+        "武",
         mGame->mFont,
-        (SDL_Color){255, 0, 255, 255},
-        (SDL_Color){255, 255, 255, 255});
-    mWeaponButton.Draw();
+        Color::SDL_blue,
+        Color::SDL_white);
+    mArmorButton.create(
+        mGame->getWindow(), mGame->getRenderer(),
+        WINDOW_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 3),
+        0,
+        TOP_BUTTON_W,
+        TOP_BUTTON_H,
+        "防",
+        mGame->mFont,
+        Color::SDL_blue,
+        Color::SDL_white);
+    mItemButton.create(
+        mGame->getWindow(), mGame->getRenderer(),
+        WINDOW_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 2),
+        0,
+        TOP_BUTTON_W,
+        TOP_BUTTON_H,
+        "ア",
+        mGame->mFont,
+        Color::SDL_blue,
+        Color::SDL_white);
+    mOtherButton.create(
+        mGame->getWindow(), mGame->getRenderer(),
+        WINDOW_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 1),
+        0,
+        TOP_BUTTON_W,
+        TOP_BUTTON_H,
+        "他",
+        mGame->mFont,
+        Color::SDL_blue,
+        Color::SDL_white);
+
+    //サイドボタン
+    mHaveButton.create(
+        mGame->getWindow(), mGame->getRenderer(),
+        WINDOW_W - SIDE_BUTTON_W,
+        SIDE_BUTTON_H * 0,
+        SIDE_BUTTON_W,
+        SIDE_BUTTON_H,
+        "もちもの",
+        mGame->mFont,
+        Color::SDL_blue,
+        Color::SDL_white);
+    mStorageButton.create(
+        mGame->getWindow(), mGame->getRenderer(),
+        WINDOW_W - SIDE_BUTTON_W,
+        (SIDE_BUTTON_H + 10) * 1,
+        SIDE_BUTTON_W,
+        SIDE_BUTTON_H,
+        "　倉庫　",
+        mGame->mFont,
+        Color::SDL_blue,
+        Color::SDL_white);
+    mSaveButton.create(
+        mGame->getWindow(), mGame->getRenderer(),
+        WINDOW_W - SIDE_BUTTON_W,
+        (SIDE_BUTTON_H + 10) * 2,
+        SIDE_BUTTON_W,
+        SIDE_BUTTON_H,
+        " セーブ ",
+        mGame->mFont,
+        Color::SDL_blue,
+        Color::SDL_white);
+    mDungeonButton.create(
+        mGame->getWindow(), mGame->getRenderer(),
+        WINDOW_W - SIDE_BUTTON_W,
+        (SIDE_BUTTON_H + 10) * 3,
+        SIDE_BUTTON_W,
+        SIDE_BUTTON_H,
+        "ﾀﾞﾝｼﾞｮﾝ",
+        mGame->mFont,
+        Color::SDL_blue,
+        Color::SDL_white);
 }
 
 void Home::Input(SDL_KeyCode keyCode)

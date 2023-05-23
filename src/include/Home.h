@@ -1,9 +1,11 @@
 #pragma once
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #include "Game.h"
 #include "../omits/Button.h"
+#include "../omits/Color.h"
 
 class Home
 {
@@ -13,6 +15,8 @@ public:
     void LoadMedia();
     void Draw();
     void Input(SDL_KeyCode keyCode);
+
+    void CreateButton();
     void PlayMusic();
     void MoveScene();
 

@@ -6,7 +6,7 @@ const int FPS = 1000 / 30;
 
 Game::Game()
     : mWindow(nullptr), mRenderer(nullptr), mTicksCount(0), mIsRunning(true)
-    , mNowScene(START), mStart(new Start(this))
+    , mNowScene(START), mStart(new Start(this)), mHome(new Home(this))
 {
 }
 
@@ -28,7 +28,7 @@ bool Game::Initialize()
         return false;
     }
 
-    mFont = TTF_OpenFont("assets/JF-Dot-K14.ttf", 40);
+    mFont = TTF_OpenFont("assets/JF-Dot-K14.ttf", 30);
     if (!mFont) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
         return false;
@@ -80,60 +80,21 @@ void Game::ProcessInput()
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
-        //TODO: 連続で反応しないように
-        if(event.type == SDL_QUIT) {
-            mIsRunning = false;
-        }
-        if(mNowScene == START)
+        if(event.type == SDL_KEYDOWN)
         {
-            switch (event.key.keysym.sym)
+            //TODO: 連続で反応しないように
+            if(event.type == SDL_QUIT) {
+                mIsRunning = false;
+            }
+            if(mNowScene == START)
             {
-                case SDLK_s:
-                    SDL_Log("S\n");
-                    mStart->Input();
-                    break;
+                mStart->Input();
+            }
+            else if(mNowScene == HOME)
+            {
+                mHome->Input((SDL_KeyCode) event.key.keysym.sym);
             }
         }
-        else if(mNowScene == HOME)
-        {
-            switch (event.key.keysym.sym)
-            {
-                case SDLK_1:
-                    SDL_Log("1\n");
-                    mHome->Input(SDLK_1);
-                    break;
-                case SDLK_2:
-                    SDL_Log("2\n");
-                    mHome->Input(SDLK_2);
-                    break;
-                case SDLK_3:
-                    SDL_Log("3\n");
-                    mHome->Input(SDLK_3);
-                    break;
-                case SDLK_4:
-                    SDL_Log("4\n");
-                    mHome->Input(SDLK_4);
-                    break;
-                case SDLK_5:
-                    SDL_Log("5\n");
-                    mHome->Input(SDLK_5);
-                    break;
-                case SDLK_6:
-                    SDL_Log("6\n");
-                    mHome->Input(SDLK_6);
-                    break;
-                case SDLK_7:
-                    SDL_Log("7\n");
-                    mHome->Input(SDLK_7);
-                    break;
-                case SDLK_8:
-                    SDL_Log("8\n");
-                    mHome->Input(SDLK_8);
-                    break;
-                
-            }
-        }
-        
     }
 
     // Get state of keyboard
@@ -186,6 +147,7 @@ void Game::GenerateOutput()
             mStart->Draw();
             break;
         case HOME:
+            SDL_Log("mHome->Draw()");
             mHome->Draw();
             break;
     }

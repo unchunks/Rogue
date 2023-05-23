@@ -4,7 +4,7 @@ extern int WINDOW_W;
 extern int WINDOW_H;
 
 const int S_BUTTON_W = 500;
-const int S_BUTTON_H = 100;
+const int S_BUTTON_H = 50;
 
 Game *start_g;
 void startButton()
@@ -37,10 +37,10 @@ void Start::Draw()
         (WINDOW_H - S_BUTTON_H) / 3,
         S_BUTTON_W,
         S_BUTTON_H,
-        "Game Start",
+        "S : Game Start",
         mGame->mFont,
-        (SDL_Color){255, 0, 255, 255},
-        (SDL_Color){255, 255, 255, 255});
+        Color::SDL_blue,
+        Color::SDL_white);
     mStartButton.Draw();
 }
 
