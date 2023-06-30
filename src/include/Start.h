@@ -4,6 +4,7 @@
 // #include <SDL_image.h>
 #include <SDL_ttf.h>
 
+#include "Data.h"
 #include "Game.h"
 #include "../omits/Button.h"
 #include "../omits/Color.h"

@@ -3,6 +3,7 @@
 extern const int WINDOW_W = 1024;
 extern const int WINDOW_H = 512;
 const int FPS = 1000 / 30;
+Mix_Chunk* mClickEffect = NULL;
 
 Game::Game()
     : mWindow(nullptr), mRenderer(nullptr), mTicksCount(0), mIsRunning(true)
@@ -13,10 +14,18 @@ Game::Game()
 bool Game::Initialize()
 {
     // Initialize SDL
-    int sdlResult = SDL_Init(SDL_INIT_VIDEO);
+    int sdlResult = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     if (sdlResult != 0)
     {
         SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+        return false;
+    }
+
+    // Initialize SDL_IMG
+    sdlResult = IMG_Init(IMG_INIT_PNG);
+    if (!(sdlResult & IMG_INIT_PNG))
+    {
+        SDL_Log("Unable to initialize SDL_IMG: %s", IMG_GetError());
         return false;
     }
 
@@ -27,12 +36,26 @@ bool Game::Initialize()
         SDL_Log("Unable to initialize SDL_TTF: %s", TTF_GetError());
         return false;
     }
-
     mFont = TTF_OpenFont("assets/JF-Dot-K14.ttf", 30);
     if (!mFont) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
         return false;
     }
+
+    // Initialize SDL_Mix
+    sdlResult = Mix_Init(MIX_INIT_MP3);
+    if (sdlResult < 0)
+    {
+        SDL_Log("Unable to initialize SDL_Mix: %s", Mix_GetError());
+        return false;
+    }
+    sdlResult = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+    if (sdlResult < 0)
+    {
+        SDL_Log("Unable to initialize SDL_mixer: %s", Mix_GetError());
+        return false;
+    }
+
 
     // Create an SDL Window
     mWindow = SDL_CreateWindow(
@@ -59,6 +82,12 @@ bool Game::Initialize()
     if (!mRenderer)
     {
         SDL_Log("Failed to create renderer: %s", SDL_GetError());
+        return false;
+    }
+
+    mClickEffect = Mix_LoadWAV("assets/click.mp3");
+    if(mClickEffect == NULL) {
+        SDL_Log("Failed to load sound effect : %s", Mix_GetError());
         return false;
     }
 
@@ -147,7 +176,6 @@ void Game::GenerateOutput()
             mStart->Draw();
             break;
         case HOME:
-            SDL_Log("mHome->Draw()");
             mHome->Draw();
             break;
     }
@@ -158,10 +186,17 @@ void Game::GenerateOutput()
 
 void Game::Shutdown()
 {
-    TTF_Quit();
+    Mix_FreeChunk(mClickEffect);
+    mClickEffect = NULL;
 
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
+    mWindow = NULL;
+    mRenderer = NULL;
+    
+    IMG_Quit();
+    TTF_Quit();
+    Mix_Quit();
     SDL_Quit();
 }
 

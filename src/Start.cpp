@@ -9,6 +9,7 @@ const int S_BUTTON_H = 50;
 Game *start_g;
 void startButton()
 {
+    Mix_PlayChannel(-1, mClickEffect, 0);
     start_g->mNowScene = Game::scene::HOME;
     SDL_Log("Clicked\n");
     SDL_Log("%d\n", start_g->mNowScene);
@@ -21,6 +22,16 @@ Start::Start(Game *game)
     LoadMedia();
     
     mStartButton.onClick = &startButton;
+    // mStartButton.create(
+    //     mGame->getWindow(), mGame->getRenderer(),
+    //     (WINDOW_W - S_BUTTON_W) / 2,
+    //     (WINDOW_H - S_BUTTON_H) / 3,
+    //     S_BUTTON_W,
+    //     S_BUTTON_H,
+    //     "S : Game Start",
+    //     mGame->mFont,
+    //     Color::SDL_blue,
+    //     Color::SDL_white);
 }
 
 void Start::LoadMedia()

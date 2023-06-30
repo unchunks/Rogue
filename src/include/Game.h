@@ -1,8 +1,11 @@
 #pragma once
 
 #include <SDL.h>
+#include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
+#include "Data.h"
 #include "Start.h"
 #include "Home.h"
 
