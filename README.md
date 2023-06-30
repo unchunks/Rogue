@@ -24,10 +24,10 @@ section 横山
 発表資料作成: after y4, 4w
 
 section 河野
-ダンジョン内タイル: active, k1, 05/01, 4w
-キャラタイル: k2, after k1, 8w
-アイテムタイル: k3, after k2, 8w
-UI系: k4, after k3, 4w
+ダンジョン内タイル: active, k1, 05/01, 8w
+キャラタイル: k2, after k1, 12w
+アイテムタイル: k3, after k2, 4w
+UI系: k4, after k3, 0w
 完成: k5, after k4, 4w
 発表資料作成: after k5, 4w
 ```
