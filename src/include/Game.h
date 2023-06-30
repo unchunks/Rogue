@@ -8,6 +8,7 @@
 #include "Data.h"
 #include "Start.h"
 #include "Home.h"
+#include "DungeonMenu.h"
 
 struct Vector2
 {
@@ -33,7 +34,9 @@ public:
 
     enum scene {
         START,
-        HOME
+        HOME,
+        DUNGEONMENU,
+        DUNGEON
     };
 
     scene mNowScene;
@@ -58,4 +61,5 @@ private:
 
     class Start *mStart;
     class Home *mHome;
+    class DungeonMenu *mDungeonMenu;
 };

@@ -7,7 +7,7 @@ Mix_Chunk* mClickEffect = NULL;
 
 Game::Game()
     : mWindow(nullptr), mRenderer(nullptr), mTicksCount(0), mIsRunning(true)
-    , mNowScene(START), mStart(new Start(this)), mHome(new Home(this))
+    , mNowScene(START), mStart(new Start(this)), mHome(new Home(this)), mDungeonMenu(new DungeonMenu(this))
 {
 }
 
@@ -115,13 +115,16 @@ void Game::ProcessInput()
             if(event.type == SDL_QUIT) {
                 mIsRunning = false;
             }
-            if(mNowScene == START)
-            {
-                mStart->Input();
-            }
-            else if(mNowScene == HOME)
-            {
-                mHome->Input((SDL_KeyCode) event.key.keysym.sym);
+            switch (mNowScene) {
+                case START:
+                    mStart->Input();
+                    break;
+                case HOME:
+                    mHome->Input((SDL_KeyCode) event.key.keysym.sym);
+                    break;
+                case DUNGEONMENU:
+                    mDungeonMenu->Input((SDL_KeyCode) event.key.keysym.sym);
+                    break;
             }
         }
     }

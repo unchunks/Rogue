@@ -11,35 +11,44 @@ const int SIDE_BUTTON_H = 60;
 Game *home_g;
 void weaponButton()
 {
+    Mix_PlayChannel(-1, mClickEffect, 0);
     SDL_Log("weaponButton\n");
 }
 void armorButton()
 {
+    Mix_PlayChannel(-1, mClickEffect, 0);
     SDL_Log("armorButton\n");
 }
 void itemButton()
 {
+    Mix_PlayChannel(-1, mClickEffect, 0);
     SDL_Log("itemButton\n");
 }
 void otherButton()
 {
+    Mix_PlayChannel(-1, mClickEffect, 0);
     SDL_Log("otherButton\n");
 }
 
 void haveButton()
 {
+    Mix_PlayChannel(-1, mClickEffect, 0);
     SDL_Log("haveButton\n");
 }
 void storageButton()
 {
+    Mix_PlayChannel(-1, mClickEffect, 0);
     SDL_Log("storageButton\n");
 }
 void saveButton()
 {
+    Mix_PlayChannel(-1, mClickEffect, 0);
     SDL_Log("saveButton\n");
 }
 void dungeonButton()
 {
+    Mix_PlayChannel(-1, mClickEffect, 0);
+    home_g->mNowScene = Game::scene::DUNGEONMENU;
     SDL_Log("dungeonButton\n");
 }
 
