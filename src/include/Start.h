@@ -16,7 +16,7 @@ public:
 
     void LoadMedia();
     void Draw();
-    void Input();
+    void Input(SDL_KeyCode keyCode);
     void PlayMusic();
     void MoveScene();
 

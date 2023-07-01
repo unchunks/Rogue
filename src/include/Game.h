@@ -28,8 +28,8 @@ public:
     // Shutdown the game
     void Shutdown();
 
-    SDL_Renderer *getRenderer();
-    SDL_Window *getWindow();
+    SDL_Renderer *getRenderer() { return mRenderer; }
+    SDL_Window *getWindow() { return mWindow; }
     TTF_Font *mFont;
 
     enum scene {

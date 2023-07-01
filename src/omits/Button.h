@@ -15,13 +15,12 @@ class Button
 {
 public:
     void create(
-        SDL_Window *window, SDL_Renderer *renderer, 
+        SDL_Renderer *renderer, 
         int x, int y, int w, int h, std::string text, TTF_Font *font, 
         SDL_Color buttonColor, SDL_Color textColor)
     {
         mRenderer = renderer;
-        SDL_Surface *surface = SDL_GetWindowSurface(window);
-        surface = TTF_RenderUTF8_Blended(font, text.c_str(), textColor);
+        SDL_Surface *surface = TTF_RenderUTF8_Blended(font, text.c_str(), textColor);
 
         mButtonColor = buttonColor;
 
@@ -40,6 +39,8 @@ public:
         mTextRect.y += padding;
         mTextRect.w -= padding*2;
         mTextRect.h -= padding*2;
+
+        SDL_FreeSurface(surface);
     }
     void Draw()
     {
@@ -59,15 +60,9 @@ public:
     // 関数へのポインタ
     void (*onClick)();
 
-    // ラムダバージョン
-    //std::function<void()> onClick;
-
 private:
     SDL_Renderer *mRenderer;
     SDL_Texture *mTexture;
-    SDL_Rect mBottomOutlineRect;
-    SDL_Rect mRightOutlineRect;
-    SDL_Rect mButtonRect;
-    SDL_Rect mTextRect;
+    SDL_Rect mBottomOutlineRect, mRightOutlineRect, mButtonRect, mTextRect;
     SDL_Color mButtonColor;
 };

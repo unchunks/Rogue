@@ -22,16 +22,16 @@ Start::Start(Game *game)
     LoadMedia();
     
     mStartButton.onClick = &startButton;
-    // mStartButton.create(
-    //     mGame->getWindow(), mGame->getRenderer(),
-    //     (WINDOW_W - S_BUTTON_W) / 2,
-    //     (WINDOW_H - S_BUTTON_H) / 3,
-    //     S_BUTTON_W,
-    //     S_BUTTON_H,
-    //     "S : Game Start",
-    //     mGame->mFont,
-    //     Color::SDL_blue,
-    //     Color::SDL_white);
+    mStartButton.create(
+        mGame->getRenderer(),
+        (WINDOW_W - S_BUTTON_W) / 2,
+        (WINDOW_H - S_BUTTON_H) / 3,
+        S_BUTTON_W,
+        S_BUTTON_H,
+        "S : Game Start",
+        mGame->mFont,
+        Color::SDL_blue,
+        Color::SDL_white);
 }
 
 void Start::LoadMedia()
@@ -42,23 +42,18 @@ void Start::LoadMedia()
 
 void Start::Draw()
 {
-    mStartButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
-        (WINDOW_W - S_BUTTON_W) / 2,
-        (WINDOW_H - S_BUTTON_H) / 3,
-        S_BUTTON_W,
-        S_BUTTON_H,
-        "S : Game Start",
-        mGame->mFont,
-        Color::SDL_blue,
-        Color::SDL_white);
     mStartButton.Draw();
 }
 
-void Start::Input()
+void Start::Input(SDL_KeyCode keyCode)
 {
     SDL_Log("Input\n");
-    mStartButton.onClick();
+    switch(keyCode)
+    {
+    case SDLK_s:
+        mStartButton.onClick();
+        break;
+    }
 }
 
 void Start::PlayMusic()

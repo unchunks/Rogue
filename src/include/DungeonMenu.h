@@ -22,5 +22,5 @@ public:
 private:
     class Game *mGame;
 
-    Button mSelectButtons[2];
+   Button mSelectButtons[2];
 };

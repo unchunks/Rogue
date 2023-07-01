@@ -67,32 +67,9 @@ Home::Home(Game *game)
     mStorageButton.onClick = &storageButton;
     mSaveButton.onClick = &saveButton;
     mDungeonButton.onClick = &dungeonButton;
-}
-
-void Home::LoadMedia()
-{
-}
-
-void Home::Draw()
-{
-    CreateButton();
-
-    mWeaponButton.Draw();
-    mArmorButton.Draw();
-    mItemButton.Draw();
-    mOtherButton.Draw();
-    mHaveButton.Draw();
-    mStorageButton.Draw();
-    mSaveButton.Draw();
-    mDungeonButton.Draw();
-
-}
-
-void Home::CreateButton()
-{
     //トップボタン
     mWeaponButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
+        mGame->getRenderer(),
         WINDOW_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 4),
         0,
         TOP_BUTTON_W,
@@ -102,7 +79,7 @@ void Home::CreateButton()
         Color::SDL_blue,
         Color::SDL_white);
     mArmorButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
+        mGame->getRenderer(),
         WINDOW_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 3),
         0,
         TOP_BUTTON_W,
@@ -112,7 +89,7 @@ void Home::CreateButton()
         Color::SDL_blue,
         Color::SDL_white);
     mItemButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
+        mGame->getRenderer(),
         WINDOW_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 2),
         0,
         TOP_BUTTON_W,
@@ -122,7 +99,7 @@ void Home::CreateButton()
         Color::SDL_blue,
         Color::SDL_white);
     mOtherButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
+        mGame->getRenderer(),
         WINDOW_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 1),
         0,
         TOP_BUTTON_W,
@@ -134,7 +111,7 @@ void Home::CreateButton()
 
     //サイドボタン
     mHaveButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
+        mGame->getRenderer(),
         WINDOW_W - SIDE_BUTTON_W,
         SIDE_BUTTON_H * 0,
         SIDE_BUTTON_W,
@@ -144,7 +121,7 @@ void Home::CreateButton()
         Color::SDL_blue,
         Color::SDL_white);
     mStorageButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
+        mGame->getRenderer(),
         WINDOW_W - SIDE_BUTTON_W,
         (SIDE_BUTTON_H + 10) * 1,
         SIDE_BUTTON_W,
@@ -154,7 +131,7 @@ void Home::CreateButton()
         Color::SDL_blue,
         Color::SDL_white);
     mSaveButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
+        mGame->getRenderer(),
         WINDOW_W - SIDE_BUTTON_W,
         (SIDE_BUTTON_H + 10) * 2,
         SIDE_BUTTON_W,
@@ -164,7 +141,7 @@ void Home::CreateButton()
         Color::SDL_blue,
         Color::SDL_white);
     mDungeonButton.create(
-        mGame->getWindow(), mGame->getRenderer(),
+        mGame->getRenderer(),
         WINDOW_W - SIDE_BUTTON_W,
         (SIDE_BUTTON_H + 10) * 3,
         SIDE_BUTTON_W,
@@ -173,6 +150,22 @@ void Home::CreateButton()
         mGame->mFont,
         Color::SDL_blue,
         Color::SDL_white);
+}
+
+void Home::LoadMedia()
+{
+}
+
+void Home::Draw()
+{
+    mWeaponButton.Draw();
+    mArmorButton.Draw();
+    mItemButton.Draw();
+    mOtherButton.Draw();
+    mHaveButton.Draw();
+    mStorageButton.Draw();
+    mSaveButton.Draw();
+    mDungeonButton.Draw();
 }
 
 void Home::Input(SDL_KeyCode keyCode)

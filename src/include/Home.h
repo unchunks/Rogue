@@ -17,7 +17,6 @@ public:
     void Draw();
     void Input(SDL_KeyCode keyCode);
 
-    void CreateButton();
     void PlayMusic();
     void MoveScene();
 

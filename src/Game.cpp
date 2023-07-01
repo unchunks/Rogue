@@ -6,8 +6,7 @@ const int FPS = 1000 / 30;
 Mix_Chunk* mClickEffect = NULL;
 
 Game::Game()
-    : mWindow(nullptr), mRenderer(nullptr), mTicksCount(0), mIsRunning(true)
-    , mNowScene(START), mStart(new Start(this)), mHome(new Home(this)), mDungeonMenu(new DungeonMenu(this))
+    : mWindow(nullptr), mRenderer(NULL), mTicksCount(0), mIsRunning(true), mNowScene(START)
 {
 }
 
@@ -78,7 +77,6 @@ bool Game::Initialize()
         mWindow, // Window to create renderer for
         -1,      // Usually -1
         SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
     if (!mRenderer)
     {
         SDL_Log("Failed to create renderer: %s", SDL_GetError());
@@ -90,6 +88,10 @@ bool Game::Initialize()
         SDL_Log("Failed to load sound effect : %s", Mix_GetError());
         return false;
     }
+
+    mStart = new Start(this);
+    mHome = new Home(this);
+    mDungeonMenu = new DungeonMenu(this);
 
     return true;
 }
@@ -117,7 +119,7 @@ void Game::ProcessInput()
             }
             switch (mNowScene) {
                 case START:
-                    mStart->Input();
+                    mStart->Input((SDL_KeyCode) event.key.keysym.sym);
                     break;
                 case HOME:
                     mHome->Input((SDL_KeyCode) event.key.keysym.sym);
@@ -181,6 +183,12 @@ void Game::GenerateOutput()
         case HOME:
             mHome->Draw();
             break;
+        case DUNGEONMENU:
+            mDungeonMenu->Draw();
+            break;
+        // case DUNGEON:
+        //     mHome->Draw();
+        //     break;
     }
 
     // Swap front buffer and back buffer
@@ -201,14 +209,4 @@ void Game::Shutdown()
     TTF_Quit();
     Mix_Quit();
     SDL_Quit();
-}
-
-SDL_Renderer *Game::getRenderer()
-{
-    return mRenderer;
-}
-
-SDL_Window *Game::getWindow()
-{
-    return mWindow;;
 }

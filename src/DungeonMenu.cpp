@@ -3,7 +3,7 @@
 extern int WINDOW_W;
 extern int WINDOW_H;
 
-const int BUTTON_W = 100;
+const int BUTTON_W = 250;
 const int BUTTON_H = 60;
 
 Game *dungeonMenu_g;
@@ -20,20 +20,11 @@ DungeonMenu::DungeonMenu(Game *game)
     mGame = game;
     dungeonMenu_g = game;
     LoadMedia();
-    
+
     mSelectButtons[0].onClick = &dungeonMenuButton;
     mSelectButtons[1].onClick = &dungeonMenuButton;
-}
-
-void DungeonMenu::LoadMedia()
-{
-}
-
-void DungeonMenu::Draw()
-{
-    // TODO: ボタンが表示されない
     mSelectButtons[0].create(
-        mGame->getWindow(), mGame->getRenderer(),
+        mGame->getRenderer(),
         (WINDOW_W / 2 - BUTTON_W) / 2,
         (WINDOW_H - BUTTON_H) / 2,
         BUTTON_W,
@@ -42,10 +33,9 @@ void DungeonMenu::Draw()
         mGame->mFont,
         Color::SDL_blue,
         Color::SDL_white);
-
     mSelectButtons[1].create(
-        mGame->getWindow(), mGame->getRenderer(),
-        (WINDOW_W / 2 + BUTTON_W) / 2,
+        mGame->getRenderer(),
+        (WINDOW_W * 1.5 - BUTTON_W) / 2,
         (WINDOW_H - BUTTON_H) / 2,
         BUTTON_W,
         BUTTON_H,
@@ -53,7 +43,14 @@ void DungeonMenu::Draw()
         mGame->mFont,
         Color::SDL_blue,
         Color::SDL_white);
+}
 
+void DungeonMenu::LoadMedia()
+{
+}
+
+void DungeonMenu::Draw()
+{
     mSelectButtons[0].Draw();
     mSelectButtons[1].Draw();
 }
