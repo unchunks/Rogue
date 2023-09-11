@@ -1,10 +1,5 @@
 #include "Game.h"
 
-#include "1_Start.h"
-#include "2_Home.h"
-#include "3_DungeonMemu.h"
-#include "4_Dungeon.h"
-
 extern const int WIN_W = 1024;
 extern const int WIN_H = 512;
 
@@ -129,7 +124,6 @@ void Game::Input()
         if (event.type == SDL_QUIT) mIsRunning = false;
         switch (getNowScene())
         {
-        std::cout << getNowScene() << std::endl;
         case START:         mStart->Input();        break;
         // case HOME:          mHome->Input();         break;
         // case DUNGEON_MENU:  mDungeonMenu->Input();  break;
