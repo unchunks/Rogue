@@ -10,10 +10,10 @@
 
 #include "Game.h"
 
-class Home
+class DungeonMenu
 {
 public:
-    Home(class Game *game);
+    DungeonMenu(class Game *game);
 
     void Input(SDL_Event event);
     void Update();
@@ -25,12 +25,6 @@ private:
 
     class Game *mGame;
 
-    Button mWeaponButton;
-    Button mArmorButton;
-    Button mItemButton;
-    Button mOtherButton;
-    Button mHaveButton;
-    Button mStorageButton;
-    Button mSaveButton;
-    Button mDungeonButton;
+    Button mAreaDivide;
+    Button mRRA;
 };

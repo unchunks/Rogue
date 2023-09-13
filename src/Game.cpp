@@ -98,9 +98,9 @@ bool Game::Init()
     }
 
     mStart = new Start(this);
-    // mHome = new Home(this);
-    // mDungeonMenu = new DungeonMenu(this);
-    // mDungeon = new Dungeon(this);
+    mHome = new Home(this);
+    mDungeonMenu = new DungeonMenu(this);
+    mDungeon = new Dungeon(this);
 
     return true;
 }
@@ -124,10 +124,10 @@ void Game::Input()
         if (event.type == SDL_QUIT) mIsRunning = false;
         switch (getNowScene())
         {
-        case START:         mStart->Input();        break;
-        // case HOME:          mHome->Input();         break;
-        // case DUNGEON_MENU:  mDungeonMenu->Input();  break;
-        // case DUNGEON:       mDungeon->Input();      break;
+        case START:         mStart->Input(event);       break;
+        case HOME:          mHome->Input(event);        break;
+        case DUNGEON_MENU:  mDungeonMenu->Input(event); break;
+        case DUNGEON:       mDungeon->Input(event);     break;
         }
     }
     const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -139,9 +139,9 @@ void Game::Update()
     switch (getNowScene())
     {
     case START:         mStart->Update();        break;
-    // case HOME:          mHome->Update();         break;
-    // case DUNGEON_MENU:  mDungeonMenu->Update();  break;
-    // case DUNGEON:       mDungeon->Update();      break;
+    case HOME:          mHome->Update();         break;
+    case DUNGEON_MENU:  mDungeonMenu->Update();  break;
+    case DUNGEON:       mDungeon->Update();      break;
     }
 }
 
@@ -153,9 +153,9 @@ void Game::Output()
     switch (getNowScene())
     {
     case START:         mStart->Output();        break;
-    // case HOME:          mHome->Output();         break;
-    // case DUNGEON_MENU:  mDungeonMenu->Output();  break;
-    // case DUNGEON:       mDungeon->Output();      break;
+    case HOME:          mHome->Output();         break;
+    case DUNGEON_MENU:  mDungeonMenu->Output();  break;
+    case DUNGEON:       mDungeon->Output();      break;
     }
 
     SDL_RenderPresent(mRenderer);

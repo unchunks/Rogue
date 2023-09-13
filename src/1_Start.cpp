@@ -6,17 +6,17 @@ extern int WIN_H;
 const int BUTTON_W = 500;
 const int BUTTON_H = 50;
 
-Game *g;
+Game *start_g;
 void startButton()
 {
-    Mix_PlayChannel(-1, g->getClickEffect(), 0);
-    g->setNowScene(SCENE::HOME);
+    Mix_PlayChannel(-1, start_g->getClickEffect(), 0);
+    start_g->setNowScene(SCENE::HOME);
     SDL_Log("startButton\n");
 }
 
 Start::Start(Game *game)
 {
-    g = game;
+    start_g = game;
     mGame = game;
     LoadData();
 
@@ -34,10 +34,8 @@ Start::Start(Game *game)
     );
 }
 
-void Start::Input()
+void Start::Input(SDL_Event event)
 {
-    SDL_Event event;
-    std::cout << "Hi!\n";
     switch(event.key.keysym.sym)
     {
     case SDLK_s:    mStartButton.onClick();  break;
@@ -61,5 +59,5 @@ void Start::LoadData()
 
 void Start::PlayMusic()
 {
-    
+
 }

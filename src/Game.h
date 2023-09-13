@@ -12,8 +12,8 @@
 
 #include "1_Start.h"
 #include "2_Home.h"
-#include "3_DungeonMemu.h"
-// #include "4_Dungeon.h"
+#include "3_DungeonMenu.h"
+#include "4_Dungeon.h"
 
 enum SCENE
 {
@@ -55,8 +55,8 @@ private:
     bool mIsRunning;
 
     class Start *mStart;
-    // class Home *mHome;
-    // class DungeonMenu *mDungeonMenu;
-    // class Dungeon *mDungeon;
+    class Home *mHome;
+    class DungeonMenu *mDungeonMenu;
+    class Dungeon *mDungeon;
     SCENE mNowScene;
 };
