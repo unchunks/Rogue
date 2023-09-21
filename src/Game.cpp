@@ -1,5 +1,10 @@
 #include "Game.h"
 
+#include "1_Start.h"
+#include "2_Home.h"
+#include "3_DungeonMenu.h"
+#include "4_Dungeon.h"
+
 extern const int WIN_W = 1024;
 extern const int WIN_H = 512;
 

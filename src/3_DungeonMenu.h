@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __DUNGEON_MENU
+#define __DUNGEON_MENU
 
 #include <iostream>
 #include <SDL.h>
@@ -28,3 +29,5 @@ private:
     Button mAreaDivide;
     Button mRRA;
 };
+
+#endif __DUNGEON_MENU

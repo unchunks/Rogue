@@ -1,72 +1,4 @@
-#pragma once
-
-#include <iostream>
-#include <iomanip>
-#include <vector>
-
-#include "Area.h"
-#include "Room.h"
-#include "Player.h"
-#include "Enemy.h"
-
-const int FLOOR_W = 40;
-const int FLOOR_H = 40;
-const int AREA_MAX = 10;
-const int AREA_SIZE_MIN = 10;
-
-enum CELL_TYPE {
-    NONE,
-//0辺床と接地（柱）
-    PILLAR,
-//1辺床と接地
-    WALL_LEFT,
-    WALL_RIGHT,
-    WALL_TOP,
-    WALL_BOTTOM,
-//2辺床と接地
-    WALL_LEFT_TOP,
-    WALL_LEFT_BOTTOM,
-    WALL_RIGHT_TOP,
-    WALL_RIGHT_BOTTOM,
-    WALL_SIDE_LR,
-    WALL_SIDE_TB,
-//3辺床と接地
-    WALL_END_LEFT,
-    WALL_END_RIGHT,
-    WALL_END_TOP,
-    WALL_END_BOTTOM,
-//4辺床と接地
-    WALL_ALL,
-    FLOOR,
-    AISLE,
-    STEP
-};
-
-class Generator
-{
-public:
-    void initFloor();
-    void fillSurround();
-    void eraseDeadEnd();
-    void randomEraseDeadEnd();
-    void identificationWallKind();
-    void output(Player player, std::vector<Enemy> enemies);
-
-    Area getArea(int id) { return areas[id]; }
-    Room getRoom(int id) { return rooms[id]; }
-    int getAreaNum() { return areas.size(); }
-    int getRoomNum() { return rooms.size(); }
-
-    int areaCount = 0;
-    int randomNumber;
-
-    CELL_TYPE buff[FLOOR_H + 2][FLOOR_W + 2];
-
-protected:
-    CELL_TYPE floorTYPE[FLOOR_H][FLOOR_W];
-    std::vector<Area> areas = std::vector<Area>(1, Area(0, 0, FLOOR_W, FLOOR_H));
-    std::vector<Room> rooms = std::vector<Room>(1, Room(ROOM_MARGIN, ROOM_MARGIN, FLOOR_W - 2*ROOM_MARGIN, FLOOR_H - 2*ROOM_MARGIN));
-};
+#include "Generator.h"
 
 void Generator::initFloor() {
     for(int y=0; y<FLOOR_H; y++) {
@@ -204,6 +136,7 @@ void Generator::identificationWallKind() {
 }
 
 void Generator::output(Player player, std::vector<Enemy> enemies) {
+    bool charDrawn = false;
     std::cout << "  ";
     for(int x=0; x<FLOOR_W; x++)
         std::cout << std::setw(2) << x;
@@ -211,17 +144,20 @@ void Generator::output(Player player, std::vector<Enemy> enemies) {
     for(int y=0; y<FLOOR_H; y++) {
         std::cout << std::setw(2) << y;
         for(int x=0; x<FLOOR_W; x++) {
+            charDrawn = false;
             // SDLでは後ろから重ねて描画する
-            if((player.getX() == x) && (player.getY() == y)) {
+            if((player.getPos().x == x) && (player.getPos().y == y)) {
                 std::cout << "@ ";
-                continue;
+                charDrawn = true;
             }
-            // for(auto c : enemies) {
-            //     if((c.getX() == x) && (c.getY() == y)) {
-            //         std::cout << "E ";
-            //         continue;
-            //     }
-            // }
+            for(auto e : enemies) {
+                if((e.getPos().x == x) && (e.getPos().y == y)) {
+                    std::cout << e.getIcon();
+                    charDrawn = true;
+                }
+            }
+            if(charDrawn)
+                continue;
             switch(floorTYPE[y][x]) {
                 case NONE:              std::cout << "~ "; break;
                 case PILLAR:            std::cout << "・"; break;
@@ -241,7 +177,7 @@ void Generator::output(Player player, std::vector<Enemy> enemies) {
                 case WALL_END_BOTTOM:   std::cout << "Ａ"; break;
                 case WALL_ALL:          std::cout << "■ "; break;
                 case FLOOR: case AISLE: std::cout << "  "; break;
-                case STEP:              std::cout << "S "; break;
+                case STEP:              std::cout << "▃▅"; break;
             }
         }
         // if(isPlayerPos(x, y)) {
@@ -255,4 +191,3 @@ void Generator::output(Player player, std::vector<Enemy> enemies) {
         std::cout << "\n";
     }
 }
-

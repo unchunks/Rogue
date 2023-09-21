@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __GAME
+#define __GAME
 
 #include <iostream>
 #include <vector>
@@ -9,11 +10,6 @@
 #include <SDL_mixer.h>
 
 #include "Functions/Math.h"
-
-#include "1_Start.h"
-#include "2_Home.h"
-#include "3_DungeonMenu.h"
-#include "4_Dungeon.h"
 
 enum SCENE
 {
@@ -60,3 +56,5 @@ private:
     class Dungeon *mDungeon;
     SCENE mNowScene;
 };
+
+#endif __GAME

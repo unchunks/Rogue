@@ -1,16 +1,4 @@
-#pragma once
-
-#include <random> 
-
-#include "Generator.h"
-
-class AreaDivide : public Generator
-{
-public:
-    void generate();
-private:
-    void divide(int ID);
-};
+#include "AreaDivide.h"
 
 void AreaDivide::divide(int ID)
 {
@@ -43,36 +31,28 @@ void AreaDivide::divide(int ID)
 // エリアの最小サイズに満たない場合はキャンセル
     if(w < AREA_SIZE_MIN || h < AREA_SIZE_MIN
         || newArea.w < AREA_SIZE_MIN || newArea.h < AREA_SIZE_MIN) {
-        std::cout << "中断" << std::endl;
         return;
     }
     areaCount++;
     areas[ID].w = w;
     areas[ID].h = h;
     areas.push_back(newArea);
-    std::cout << areaCount << "回目:\n";
-    for(auto area : areas) {
-        std::cout << "(" << area.x << ", " << area.y << ") " << area.w << " x " << area.h << std::endl;
-    }
     if((areas[ID].w > 20) || (areas[ID].h > 20) || (randomNumber%2))
         divide(ID);
     if((areas[newID].w > 20) || (areas[newID].h > 20) || !(randomNumber%2))
         divide(newID);
 }
 
-void AreaDivide::generate()
+void AreaDivide::generate(int _randomNumber)
 {
-    std::random_device seed;
-    std::mt19937 engine(seed());
-    std::uniform_int_distribution<int> randNum(AREA_MAX, 100);
-    randomNumber = randNum(engine);
+    randomNumber = _randomNumber;
 
     areas = std::vector<Area>(1, Area(0, 0, FLOOR_W, FLOOR_H));
     areaCount = 0;
     divide(areaCount);
+    if(areaCount < 5) divide(areaCount);
 
 // 各エリアに対する処理
-    std::cout << "生成後" << std::endl;
     for(auto area : areas) {
 // 部屋生成
     Room room = Room(
@@ -97,8 +77,17 @@ void AreaDivide::generate()
                 floorTYPE[y][x] = FLOOR;
             }
         }
-        std::cout << "(" << area.x << ", " << area.y << "), " << area.w << ", " << area.h << " : ";
-        std::cout << "(" << room.x << ", " << room.y << "), " << room.w << ", " << room.h;
-        std::cout << std::endl;
     }
+
+    int roomNum = rand() % areaCount;
+    Room room = rooms[roomNum];
+    glm::vec2 pos;
+    while((floorTYPE[(int)pos.y][(int)pos.x] != FLOOR)
+        && (floorTYPE[(int)pos.y][(int)pos.x] != AISLE))
+    {
+        pos.x = room.x + rand()%room.w;
+        pos.y = room.y + rand()%room.h;
+    }
+    floorTYPE[(int)pos.y][(int)pos.x] = STEP;
+    std::cout << "階段(" << pos.x << ", " << pos.y << ")\n";
 }

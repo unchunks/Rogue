@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __HOME
+#define __HOME
 
 #include <iostream>
 #include <SDL.h>
@@ -34,3 +35,5 @@ private:
     Button mSaveButton;
     Button mDungeonButton;
 };
+
+#endif __HOME

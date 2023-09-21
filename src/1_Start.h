@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __START
+#define __START
 
 #include <iostream>
 #include <SDL.h>
@@ -28,3 +29,5 @@ private:
 
     Button mStartButton;
 };
+
+#endif __START

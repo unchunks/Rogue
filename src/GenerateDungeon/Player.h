@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __PLAYER
+#define __PLAYER
 
 #include "Character.h"
 
@@ -8,7 +9,4 @@ public:
     Player(int _x, int _y, int _maxHP, int _STR, int _VIT);
 };
 
-Player::Player(int _x, int _y, int _maxHP, int _STR, int _VIT)
-: Character(_x, _y, _maxHP, _STR, _VIT, ALIVE, DOWN, PLAYER)
-{
-}
+#endif __PLAYER

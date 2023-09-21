@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __BUTTON
+#define __BUTTON
 
 #include <string>
 #include <functional>
@@ -66,3 +67,5 @@ private:
     SDL_Rect mBottomOutlineRect, mRightOutlineRect, mButtonRect, mTextRect;
     SDL_Color mButtonColor;
 };
+
+#endif __BUTTON

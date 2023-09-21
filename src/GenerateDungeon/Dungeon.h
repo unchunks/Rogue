@@ -1,48 +1,45 @@
-#include "4_Dungeon.h"
+// #ifndef __DUNGEON
+// #define __DUNGEON
 
-extern int WIN_W;
-extern int WIN_H;
+// #include <iostream>
+// #include <random>
+// #include <glm/glm.hpp>
 
-Game *dungeon_g;
+// #include "AreaDivide.h"
 
-Dungeon::Dungeon(Game *game)
-{
-    dungeon_g = game;
-    mGame = game;
-    LoadData();
-    // while(inDungeon) {
-    //     init();
-    //     run();
-    // }
-    // quit();
-}
+// #include "Character.h"
+// #include "Player.h"
+// #include "Enemy.h"
+// #include "Const.h"
 
-void Dungeon::Input(SDL_Event event)
-{
-    switch(event.key.keysym.sym)
-    {
-    // case SDLK_s:    mDungeonButton.onClick();  break;
-    }
-}
+// class Dungeon
+// {
+// public:
+//     void init(int _randomNumber);
+//     void run();
+//     void quit();
 
-void Dungeon::Update()
-{
-}
+//     void update();
 
-void Dungeon::Output()
-{
-}
+//     bool isRunning = true;
 
-void Dungeon::LoadData()
-{
-}
+// private:
+//     bool goNextFloor = false;
+//     char input = 'a';
+//     AreaDivide areaDivide;
 
-void Dungeon::PlayMusic()
-{
-}
+//     Player player = Player(0, 0, PLAYER_HP, PLAYER_STR, PLAYER_VIT);
+//     std::vector<Enemy> enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(SLIME));
+//     std::vector<Enemy> deadEnemies;
 
-// ダンジョン生成
-// TODO: 削除予定
+//     int isOtherPos(glm::vec2 _pos);
+//     bool canGetOn(glm::vec2 _pos);
+//     glm::vec2 getRandomPos(int _roomCount);
+//     glm::vec2 getFrontPos(glm::vec2 _pos, DIRECTION _dir);
+//     Enemy& whichEnemy(glm::vec2 _pos);
+// };
+
+// // TODO: 削除予定
 // const char* get(DIRECTION _dir)
 // {
 //     switch(_dir)
@@ -55,19 +52,15 @@ void Dungeon::PlayMusic()
 //     return "空";
 // }
 
-// void Dungeon::init()
+// void Dungeon::init(int _randomNumber)
 // {
-//     std::random_device seed;
-//     std::mt19937 engine(seed());
-//     std::uniform_int_distribution<int> randNum(AREA_MAX, 100);
-
-//     inDungeon = true;
+//     isRunning = true;
 //     goNextFloor = false;
 //     enemies.clear();
 //     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(SLIME));
 
 //     areaDivide.initFloor();
-//     areaDivide.generate(randNum(engine));
+//     areaDivide.generate(_randomNumber);
 //     areaDivide.fillSurround();
 //     areaDivide.randomEraseDeadEnd();
 //     areaDivide.identificationWallKind();
@@ -92,7 +85,7 @@ void Dungeon::PlayMusic()
 
 // void Dungeon::run()
 // {
-//     while(inDungeon && !goNextFloor)
+//     while(isRunning && !goNextFloor)
 //     {
 //         areaDivide.output(player, enemies);
 //         std::cout << "　　　　　  | HP |向き|\n" ;
@@ -101,7 +94,7 @@ void Dungeon::PlayMusic()
 //         // std::cout << "　　敵　　: |" << std::setw(4) << e.getNowHP() << "|\n";
 //         // }
 //         std::cin >> input;
-//         if(input == 'q') inDungeon = false;
+//         if(input == 'q') isRunning = false;
 //         update();
 //     }
 // }
@@ -181,7 +174,7 @@ void Dungeon::PlayMusic()
 //         if(it->getState() == DEAD)
 //             enemies.erase(it);
 //     if(player.getState() == DEAD)
-//         inDungeon = false;
+//         isRunning = false;
 // }
 
 
@@ -246,3 +239,5 @@ void Dungeon::PlayMusic()
 //     }
 //     return _pos + front;
 // }
+
+// #endif __DUNGEON
