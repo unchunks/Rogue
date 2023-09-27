@@ -1,5 +1,4 @@
-#ifndef __ROOM
-#define __ROOM
+#pragma once
 
 const int ROOM_MARGIN = 2;
 
@@ -11,5 +10,3 @@ public:
         :x(_x), y(_y), w(_w), h(_h){};
     int x, y, w, h;
 };
-
-#endif __ROOM

@@ -1,5 +1,4 @@
-#ifndef __TEXTURE
-#define __TEXTURE
+#pragma once
 
 #include <string>
 #include <SDL2/SDL.h>
@@ -24,5 +23,3 @@ SDL_Texture* loadTexture(std::string path, SDL_Renderer* renderer) {
     SDL_FreeSurface(loadedSurface);
     return texture;
 }
-
-#endif __TEXTURE

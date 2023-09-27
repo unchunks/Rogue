@@ -1,5 +1,4 @@
-#ifndef __CHARACTER
-#define __CHARACTER
+#pragma once
 
 #include <vector>
 #include <cstdlib>
@@ -8,13 +7,13 @@
 #include "Enum.h"
 
 enum STATE {
-    // Player
+    // プレイヤー
     ALIVE,
-    // AI
+    // 敵キャラ
     SEARCH,
     FOUND,
     ESCAPE,
-    // both
+    // どちらも
     DEAD
 };
 
@@ -49,5 +48,3 @@ protected:
     CHAR_TYPE mType;
     glm::vec2 mPos;
 };
-
-#endif __CHARACTER

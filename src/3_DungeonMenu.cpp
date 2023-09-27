@@ -1,4 +1,4 @@
-#include "3_DungeonMenu.h"
+#include "Scene/3_DungeonMenu.h"
 
 extern int WIN_W;
 extern int WIN_H;
@@ -12,14 +12,12 @@ void areaDivide()
     Mix_PlayChannel(-1, dungeonMenu_g->getClickEffect(), 0);
     dungeonMenu_g->setNowScene(SCENE::DUNGEON);
     SDL_Log("areaDivide\n");
-    SDL_Log("%d\n", dungeonMenu_g->setNowScene(SCENE::DUNGEON));
 }
 void RRA()
 {
     Mix_PlayChannel(-1, dungeonMenu_g->getClickEffect(), 0);
     dungeonMenu_g->setNowScene(SCENE::DUNGEON);
     SDL_Log("RRA\n");
-    SDL_Log("%d\n", dungeonMenu_g->setNowScene(SCENE::DUNGEON));
 }
 
 DungeonMenu::DungeonMenu(Game *game)

@@ -1,5 +1,4 @@
-#ifndef __ASTAR
-#define __ASTAR
+#pragma once
 
 #include <glm/glm.hpp>
 #include <deque>
@@ -44,4 +43,3 @@ namespace AStar{
 
 	std::deque<glm::vec2> AStar(CELL_TYPE def_data[FLOOR_H][FLOOR_W], glm::vec2 _start, glm::vec2 _goal);
 }
-#endif __ASTAR

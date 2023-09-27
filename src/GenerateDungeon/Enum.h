@@ -1,5 +1,4 @@
-#ifndef __ENUM
-#define __ENUM
+#pragma once
 
 enum CELL_TYPE {
     NONE,
@@ -49,5 +48,3 @@ enum ENEMY_TYPE {
     DRAGON,
     ENEMY_TYPE_NUMBER
 };
-
-#endif __ENUM

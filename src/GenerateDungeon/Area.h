@@ -1,5 +1,4 @@
-#ifndef __AREA
-#define __AREA
+#pragma once
 
 class Area 
 {
@@ -18,5 +17,3 @@ public:
         // return Area(area.x, area.y, area.w, area.h);
     }
 };
-
-#endif __AREA

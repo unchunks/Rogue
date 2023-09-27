@@ -1,5 +1,4 @@
-#ifndef __COLOR
-#define __COLOR
+#pragma once
 
 #include <SDL.h>
 
@@ -13,5 +12,3 @@ namespace Color
         SDL_green = {0, 255, 0, 255},
         SDL_blue = {0, 0, 255, 255};
 }
-
-#endif __COLOR

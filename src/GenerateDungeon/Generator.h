@@ -1,7 +1,5 @@
-#ifndef __GENERATOR
-#define __GENERATOR
+#pragma once
 
-#include <iostream>
 #include <iomanip>
 #include <vector>
 
@@ -38,5 +36,3 @@ protected:
     std::vector<Area> areas = std::vector<Area>(1, Area(0, 0, FLOOR_W, FLOOR_H));
     std::vector<Room> rooms = std::vector<Room>(1, Room(ROOM_MARGIN, ROOM_MARGIN, FLOOR_W - 2*ROOM_MARGIN, FLOOR_H - 2*ROOM_MARGIN));
 };
-
-#endif __GENERATOR

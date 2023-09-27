@@ -1,6 +1,6 @@
-#ifndef __ENEMY
-#define __ENEMY
+#pragma once
 
+#include <iostream>
 #include <deque>
 
 #include "AStar.h"
@@ -32,5 +32,3 @@ private:
     const char* icon;
     ENEMY_TYPE enemy_type;
 };
-
-#endif __ENEMY

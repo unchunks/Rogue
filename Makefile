@@ -6,7 +6,7 @@ CC = g++
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
-COMPILER_FLAGS = -w
+COMPILER_FLAGS = -Wall
 
 COMPILE_OPTIONS = `sdl2-config --cflags --libs`
 
@@ -32,3 +32,7 @@ push-% :
 	git add -A
 	git commit -m "${@:push-%=%}"
 	git push
+
+# real    0m18.780s
+# user    0m15.831s
+# sys     0m2.673s

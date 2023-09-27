@@ -1,5 +1,4 @@
-#ifndef __CONST
-#define __CONST
+#pragma once
 
 constexpr int FLOOR_W = 40;
 constexpr int FLOOR_H = 40;
@@ -22,18 +21,16 @@ constexpr int PLAYER_VIT = 10;
 constexpr int   SLIME_HP   = 50;
 constexpr int   SLIME_STR  = 2;
 constexpr int   SLIME_VIT  = 5;
-constexpr char* SLIME_ICON = "Ω ";
+constexpr char* SLIME_ICON = (char*)"Ω ";
 
 // ゴブリン
 constexpr int   GOBLIN_HP   = 80;
 constexpr int   GOBLIN_STR  = 5;
 constexpr int   GOBLIN_VIT  = 8;
-constexpr char* GOBLIN_ICON = "ಪ ";
+constexpr char* GOBLIN_ICON = (char*)"ಪ ";
 
 // ドラゴン
 constexpr int   DRAGON_HP   = 1000;
 constexpr int   DRAGON_STR  = 70;
 constexpr int   DRAGON_VIT  = 30;
-constexpr char* DRAGON_ICON = "ඣ ";
-
-#endif __CONST
+constexpr char* DRAGON_ICON = (char*)"ඣ ";

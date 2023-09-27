@@ -1,5 +1,4 @@
-#ifndef __AREA_DIVIDE
-#define __AREA_DIVIDE
+#pragma once
 
 #include <random> 
 
@@ -12,5 +11,3 @@ public:
 private:
     void divide(int ID);
 };
-
-#endif __AREA_DIVIDE

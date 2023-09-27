@@ -1,5 +1,4 @@
-#ifndef __GAME
-#define __GAME
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -8,8 +7,6 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-
-#include "Functions/Math.h"
 
 enum SCENE
 {
@@ -34,7 +31,7 @@ public:
     TTF_Font *getFont() const { return mFont; }
     Mix_Chunk *getClickEffect() const { return mClickEffect; }
 
-    SCENE setNowScene(const SCENE nextScene) { mNowScene = nextScene; }
+    void setNowScene(const SCENE nextScene) { mNowScene = nextScene; }
     SCENE getNowScene() const { return mNowScene; }
 
 private:
@@ -56,5 +53,3 @@ private:
     class Dungeon *mDungeon;
     SCENE mNowScene;
 };
-
-#endif __GAME
