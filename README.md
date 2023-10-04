@@ -16,14 +16,14 @@ title ガントチャート
 dateFormat MM/DD
 axisFormat %m/%d
 
-section 横山
+section unchunks
 ダンジョン生成アルゴリズム: active, y1, 05/01, 8w
 敵AIアルゴリズム: y2, after y1, 8w
 各画面の描画: y3, after y2, 8w
 バグ修正: y4, after y3, 4w
 発表資料作成: after y4, 4w
 
-section 河野
+section null029
 ダンジョン内タイル: active, k1, 05/01, 10w
 キャラタイル: k2, after k1, 14w
 アイテムタイル: k3, after k2, 4w
