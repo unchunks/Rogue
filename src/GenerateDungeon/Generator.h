@@ -2,6 +2,8 @@
 
 #include <iomanip>
 #include <vector>
+#include <string>
+#include <fstream>
 
 #include "Area.h"
 #include "Room.h"
@@ -18,7 +20,7 @@ public:
     void eraseDeadEnd();
     void randomEraseDeadEnd();
     void identificationWallKind();
-    void output(Player player, std::vector<Enemy> enemies);
+    void outputMap();
 
     Area getArea(int id) { return areas[id]; }
     Room getRoom(int id) { return rooms[id]; }

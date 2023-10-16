@@ -1,7 +1,6 @@
 #include "Scene/2_Home.h"
 
-extern int WIN_W;
-extern int WIN_H;
+extern SDL_Renderer *gRenderer;
 
 const int TOP_BUTTON_W = 60;
 const int TOP_BUTTON_H = 60;
@@ -69,8 +68,8 @@ Home::Home(Game *game)
     mDungeonButton.onClick = &dungeonButton;
     //トップボタン
     mWeaponButton.create(
-        mGame->getRenderer(),
-        WIN_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 4),
+        gRenderer,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 4),
         0,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
@@ -79,8 +78,8 @@ Home::Home(Game *game)
         Color::SDL_blue,
         Color::SDL_white);
     mArmorButton.create(
-        mGame->getRenderer(),
-        WIN_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 3),
+        gRenderer,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 3),
         0,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
@@ -89,8 +88,8 @@ Home::Home(Game *game)
         Color::SDL_blue,
         Color::SDL_white);
     mItemButton.create(
-        mGame->getRenderer(),
-        WIN_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 2),
+        gRenderer,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 2),
         0,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
@@ -99,8 +98,8 @@ Home::Home(Game *game)
         Color::SDL_blue,
         Color::SDL_white);
     mOtherButton.create(
-        mGame->getRenderer(),
-        WIN_W - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 1),
+        gRenderer,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 1),
         0,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
@@ -111,8 +110,8 @@ Home::Home(Game *game)
 
     //サイドボタン
     mHaveButton.create(
-        mGame->getRenderer(),
-        WIN_W - SIDE_BUTTON_W,
+        gRenderer,
+        SCREEN_WIDTH - SIDE_BUTTON_W,
         SIDE_BUTTON_H * 0,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
@@ -121,8 +120,8 @@ Home::Home(Game *game)
         Color::SDL_blue,
         Color::SDL_white);
     mStorageButton.create(
-        mGame->getRenderer(),
-        WIN_W - SIDE_BUTTON_W,
+        gRenderer,
+        SCREEN_WIDTH - SIDE_BUTTON_W,
         (SIDE_BUTTON_H + 10) * 1,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
@@ -131,8 +130,8 @@ Home::Home(Game *game)
         Color::SDL_blue,
         Color::SDL_white);
     mSaveButton.create(
-        mGame->getRenderer(),
-        WIN_W - SIDE_BUTTON_W,
+        gRenderer,
+        SCREEN_WIDTH - SIDE_BUTTON_W,
         (SIDE_BUTTON_H + 10) * 2,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
@@ -141,8 +140,8 @@ Home::Home(Game *game)
         Color::SDL_blue,
         Color::SDL_white);
     mDungeonButton.create(
-        mGame->getRenderer(),
-        WIN_W - SIDE_BUTTON_W,
+        gRenderer,
+        SCREEN_WIDTH - SIDE_BUTTON_W,
         (SIDE_BUTTON_H + 10) * 3,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,

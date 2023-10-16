@@ -138,59 +138,46 @@ void Generator::identificationWallKind() {
     //         buff[y+1][x+1] = floorTYPE[y][x];
 }
 
-void Generator::output(Player player, std::vector<Enemy> enemies) {
+void Generator::outputMap() {
     bool charDrawn = false;
-    std::cout << "  ";
-    for(int x=0; x<FLOOR_W; x++)
-        std::cout << std::setw(2) << x;
-    std::cout << "\n";
+
+    std::ofstream writing_file;
+    std::string filename = "dungeon.map";
+    writing_file.open(filename, std::ios::out);
+    std::string writing_text = "";
+
+    std::cout << "1\n";
     for(int y=0; y<FLOOR_H; y++) {
-        std::cout << std::setw(2) << y;
         for(int x=0; x<FLOOR_W; x++) {
             charDrawn = false;
-            // SDLでは後ろから重ねて描画する
-            if((player.getPos().x == x) && (player.getPos().y == y)) {
-                std::cout << "@ ";
-                charDrawn = true;
-            }
-            for(auto e : enemies) {
-                if((e.getPos().x == x) && (e.getPos().y == y)) {
-                    std::cout << e.getIcon();
-                    charDrawn = true;
-                }
-            }
             if(charDrawn)
                 continue;
             switch(floorTYPE[y][x]) {
-                case NONE:              std::cout << "~ "; break;
-                case PILLAR:            std::cout << "・"; break;
-                case WALL_LEFT:         std::cout << "| "; break;
-                case WALL_RIGHT:        std::cout << " |"; break;
-                case WALL_TOP:          std::cout << "￣"; break;
-                case WALL_BOTTOM:       std::cout << "＿"; break;
-                case WALL_LEFT_TOP:     std::cout << "┏ "; break;
-                case WALL_LEFT_BOTTOM:  std::cout << "┗ "; break;
-                case WALL_RIGHT_TOP:    std::cout << " ┓"; break;
-                case WALL_RIGHT_BOTTOM: std::cout << " ┛"; break;
-                case WALL_SIDE_LR:      std::cout << "||"; break;
-                case WALL_SIDE_TB:      std::cout << "二"; break;
-                case WALL_END_LEFT:     std::cout << "＞"; break;
-                case WALL_END_RIGHT:    std::cout << "＜"; break;
-                case WALL_END_TOP:      std::cout << "Ｖ"; break;
-                case WALL_END_BOTTOM:   std::cout << "Ａ"; break;
-                case WALL_ALL:          std::cout << "■ "; break;
-                case FLOOR: case AISLE: std::cout << "  "; break;
-                case STEP:              std::cout << "▃▅"; break;
+                case NONE:              writing_text += "00 "; break; //std::cout << "~ ";
+                case PILLAR:            writing_text += "01 "; break; //std::cout << "・";
+                case WALL_LEFT:         writing_text += "02 "; break; //std::cout << "| ";
+                case WALL_RIGHT:        writing_text += "03 "; break; //std::cout << " |";
+                case WALL_TOP:          writing_text += "04 "; break; //std::cout << "￣";
+                case WALL_BOTTOM:       writing_text += "05 "; break; //std::cout << "＿";
+                case WALL_LEFT_TOP:     writing_text += "06 "; break; //std::cout << "┏ ";
+                case WALL_LEFT_BOTTOM:  writing_text += "07 "; break; //std::cout << "┗ ";
+                case WALL_RIGHT_TOP:    writing_text += "08 "; break; //std::cout << " ┓";
+                case WALL_RIGHT_BOTTOM: writing_text += "09 "; break; //std::cout << " ┛";
+                case WALL_SIDE_LR:      writing_text += "10 "; break; //std::cout << "||";
+                case WALL_SIDE_TB:      writing_text += "11 "; break; //std::cout << "二";
+                case WALL_END_LEFT:     writing_text += "12 "; break; //std::cout << "＞";
+                case WALL_END_RIGHT:    writing_text += "13 "; break; //std::cout << "＜";
+                case WALL_END_TOP:      writing_text += "14 "; break; //std::cout << "Ｖ";
+                case WALL_END_BOTTOM:   writing_text += "15 "; break; //std::cout << "Ａ";
+                case WALL_ALL:          writing_text += "16 "; break; //std::cout << "■ ";
+                case FLOOR:             writing_text += "17 "; break; //std::cout << "  ";
+                case AISLE:             writing_text += "18 "; break; //std::cout << "  ";
+                case STEP:              writing_text += "19 "; break; //std::cout << "▃▅";
             }
         }
-        // if(isPlayerPos(x, y)) {
-            //     std::cout << "@ ";
-            //     continue;
-            // }
-            // if(isEnemiesPos(x, y)) {
-            //     cout << "E ";
-            //     continue;
-            // }
-        std::cout << "\n";
+        writing_text += "\n";
     }
+    std::cout << "2\n";
+    writing_file << writing_text << std::endl;
+    writing_file.close();
 }

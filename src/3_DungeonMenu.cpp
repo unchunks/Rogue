@@ -1,7 +1,6 @@
 #include "Scene/3_DungeonMenu.h"
 
-extern int WIN_W;
-extern int WIN_H;
+extern SDL_Renderer *gRenderer;
 
 const int BUTTON_W = 250;
 const int BUTTON_H = 60;
@@ -29,9 +28,9 @@ DungeonMenu::DungeonMenu(Game *game)
     mAreaDivide.onClick = &areaDivide;
     mRRA.onClick = &RRA;
     mAreaDivide.create(
-        mGame->getRenderer(),
-        (WIN_W / 2 - BUTTON_W) / 2,
-        (WIN_H - BUTTON_H) / 2,
+        gRenderer,
+        (SCREEN_WIDTH / 2 - BUTTON_W) / 2,
+        (SCREEN_HEIGHT - BUTTON_H) / 2,
         BUTTON_W,
         BUTTON_H,
         "1 : 区域分割法",
@@ -39,9 +38,9 @@ DungeonMenu::DungeonMenu(Game *game)
         Color::SDL_blue,
         Color::SDL_white);
     mRRA.create(
-        mGame->getRenderer(),
-        (WIN_W * 1.5 - BUTTON_W) / 2,
-        (WIN_H - BUTTON_H) / 2,
+        gRenderer,
+        (SCREEN_WIDTH * 1.5 - BUTTON_W) / 2,
+        (SCREEN_HEIGHT - BUTTON_H) / 2,
         BUTTON_W,
         BUTTON_H,
         "2 : RRA",

@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "Enum.h"
+#include "Tile.h"
 
 enum STATE {
     // プレイヤー
@@ -23,9 +24,6 @@ public:
     Character();
     Character(int _x, int _y, int _maxHP, int _STR, int _VIT, STATE _state, DIRECTION _dir, CHAR_TYPE _type);
 
-    void move(DIRECTION _dir);
-    void moveTo(glm::vec2 _pos);
-    void back();
     virtual void attack(class Character& _enemy);
     void receiveDamage(int _damage);
 
@@ -38,13 +36,25 @@ public:
     STATE getState() {return mState;}
     DIRECTION getDir() {return mDir;}
     CHAR_TYPE getType() {return mType;}
-    glm::vec2 getPos() {return mPos;}
+    glm::vec2 getPos() {return glm::vec2(mBox.x, mBox.y);}
+
+    void move(Tile *tiles[]);
+    void setCamera(SDL_Rect& camera);
+    void render(SDL_Rect& camera, int anim_frame);
+    LTexture mCharTexture;
+    bool mNowMoving;
+    DIRECTION mMovingDir;
+    SDL_Rect mSpriteClips[ ANIMATION_FRAMES * NO_DIRECTION ];
 
 protected:
+    bool onTileCenter( Tile* tiles[] );
+
     int maxHP, STR, VIT;
     int nowHP;
     STATE mState;
     DIRECTION mDir;
     CHAR_TYPE mType;
-    glm::vec2 mPos;
+
+    //プレイヤーの衝突判定
+    SDL_Rect mBox;
 };

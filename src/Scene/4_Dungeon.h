@@ -8,12 +8,14 @@
 
 #include "../UI/Button.h"
 #include "../Functions/Color.h"
+#include "../GenerateDungeon/Const.h"
 
 #include "../GenerateDungeon/AreaDivide.h"
 #include "../GenerateDungeon/Player.h"
 #include "../GenerateDungeon/Enemy.h"
 #include "../GenerateDungeon/Const.h"
-// #include "../GenerateDungeon/GeneratePch.h"
+#include "../GenerateDungeon/Tile.h"
+#include "../GenerateDungeon/LTexture.h"
 
 #include "../Game.h"
 
@@ -23,19 +25,19 @@ public:
     Dungeon(class Game *game);
 
     void Input(SDL_Event event);
-    void Update();
-    void Output();
+    void Update(int anim_frame);
+    void Output(int anim_frame);
 
 // ダンジョン生成
     void InitDungeon();
-    void quit();
+    void quit(Tile* tiles[]);
 
     bool inDungeon;
 
 // TODO: ダンジョンを画像で表示
 
 private:
-    void LoadData();
+    bool LoadData();
     void PlayMusic();
 
     class Game *mGame;
@@ -56,4 +58,16 @@ private:
     glm::vec2 getRandomPos(int _roomCount);
     glm::vec2 getFrontPos(glm::vec2 _pos, DIRECTION _dir);
     Enemy& whichEnemy(glm::vec2 _pos);
+
+    //The level tiles
+	Tile* tileSet[ TOTAL_TILES ];
+
+    SDL_Rect camera;
 };
+
+//ボックスとタイルの衝突判定
+bool touchesWall( SDL_Rect box, Tile* tiles[] );
+
+//.mapファイルからタイルをセット
+bool setTiles( Tile *tiles[] );
+

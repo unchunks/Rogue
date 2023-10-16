@@ -27,7 +27,8 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
 
         case ENEMY_TYPE_NUMBER: break;
     }
-    mPos = glm::vec2(0, 0);
+    mBox.x = 0;
+    mBox.y = 0;
     mState = SEARCH;
     mDir = DOWN;
     mType = ENEMY;
@@ -39,20 +40,20 @@ Enemy::Enemy(int _x, int _y, int _maxHP, int _STR, int _VIT, const char* _icon)
 {
 }
 
-void Enemy::walk()
-{
-    nextPos = route[0];
-    route.pop_front();
-    moveTo(nextPos);
-    elapsedTurn++;
-}
+// void Enemy::walk()
+// {
+//     nextPos = route[0];
+//     route.pop_front();
+//     moveTo(nextPos);
+//     elapsedTurn++;
+// }
 
 void Enemy::setGoal(CELL_TYPE dungeon[FLOOR_H][FLOOR_W], glm::vec2 _goal)
 {
     goal = _goal;
     std::cout << "GOAL ==> (" << goal.x << ", " << goal.y << ")\n";
     route.clear();
-    route = AStar::AStar(dungeon, mPos, goal);
+    route = AStar::AStar(dungeon, glm::vec2(mBox.x, mBox.y), goal);
     route.pop_front();
     elapsedTurn = 0;
 }

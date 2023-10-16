@@ -5,13 +5,15 @@
 #include "Scene/3_DungeonMenu.h"
 #include "Scene/4_Dungeon.h"
 
-constexpr double FPS = 1;
-constexpr double SPF = 1000.0 / FPS;
-
-extern const int WIN_W = 1024;
-extern const int WIN_H = 512;
+extern SDL_Window *gWindow = nullptr;
+extern SDL_Surface *gSurface = nullptr;
+extern SDL_Renderer *gRenderer = nullptr;
 
 SDL_atomic_t frames;
+
+//現在のアニメーション フレーム
+int anim_frame = 0;
+
 /* 設定された間隔で平均フレームレートの計算と表示を行う */
 Uint32 fps_timer_callback(Uint32 interval, void *data)
 {
@@ -19,7 +21,7 @@ Uint32 fps_timer_callback(Uint32 interval, void *data)
         const float iv = interval * 0.001f;
 
         /* 注意: printfがスレッドセーフであるかは環境に依存する */
-        printf("%.2f\tfps\n", f / iv);
+// SDL_Log("%.2f\tfps\n", f / iv);
 
         /* フレームカウンタをリセットする */
         SDL_AtomicSet(&frames, 0);
@@ -28,9 +30,7 @@ Uint32 fps_timer_callback(Uint32 interval, void *data)
 }
 
 Game::Game()
-:mWindow(nullptr)
-,mRenderer(NULL)
-,mIsRunning(true)
+:mIsRunning(true)
 ,mNowScene(START)
 {
 
@@ -89,27 +89,27 @@ SDL_Log("Unable to initialize SDL_mixer: %s", Mix_GetError());
 
 
     // Create an SDL Window
-    mWindow = SDL_CreateWindow(
+    gWindow = SDL_CreateWindow(
         "Game Programming in C++ (Chapter 1)", // Window title
         100,                                   // Top left x-coordinate of window
         100,                                   // Top left y-coordinate of window
-        WIN_W,                              // Width of window
-        WIN_H,                              // Height of window
+        SCREEN_WIDTH,                              // Width of window
+        SCREEN_HEIGHT,                              // Height of window
         0                                      // Flags (0 for no flags set)
     );
 
-    if (!mWindow)
+    if (!gWindow)
     {
 SDL_Log("Failed to create window: %s", SDL_GetError());
         return false;
     }
 
     // Create SDL renderer
-    mRenderer = SDL_CreateRenderer(
-        mWindow, // Window to create renderer for
+    gRenderer = SDL_CreateRenderer(
+        gWindow, // Window to create renderer for
         -1,      // Usually -1
         SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (!mRenderer)
+    if (!gRenderer)
     {
 SDL_Log("Failed to create renderer: %s", SDL_GetError());
         return false;
@@ -131,9 +131,11 @@ SDL_Log("Failed to load sound effect : %s", Mix_GetError());
 
 void Game::RunLoop()
 {
+    SDL_AddTimer(1000, fps_timer_callback, NULL);
     int beforTime = SDL_GetTicks();
     int afterTime = SDL_GetTicks();
     int elapsedTime = 0;
+
 // 別スレッドで1秒毎にフレームレートを表示
 // SDL_AddTimer(1000, fps_timer_callback, NULL);
     while (mIsRunning)
@@ -143,6 +145,12 @@ void Game::RunLoop()
         Input();
         Update();
         Output();
+
+        //次のフレームに移動
+		anim_frame++;
+		//サイクルアニメーション
+		if( anim_frame >= ANIMATION_FRAMES / ANIM_SPEED * FPS )
+			anim_frame = 0;
 
         /* フレーム数に1を加える */
         SDL_AtomicAdd(&frames, 1);
@@ -160,7 +168,7 @@ void Game::Input()
     {
         // if (event.type != SDL_KEYDOWN) continue;
         if (event.type == SDL_QUIT) mIsRunning = false;
-SDL_Log("%d\n", getNowScene());
+// SDL_Log("%d\n", getNowScene());
         switch (getNowScene())
         {
             case START:         mStart->Input(event);       break;
@@ -180,24 +188,24 @@ void Game::Update()
         case START:         mStart->Update();        break;
         case HOME:          mHome->Update();         break;
         case DUNGEON_MENU:  mDungeonMenu->Update();  break;
-        case DUNGEON:       mDungeon->Update();      break;
+        case DUNGEON:       mDungeon->Update(anim_frame);      break;
     }
 }
 
 void Game::Output()
 {
-    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
-    SDL_RenderClear(mRenderer);
+    SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+    SDL_RenderClear(gRenderer);
 
     switch (getNowScene())
     {
         case START:         mStart->Output();        break;
         case HOME:          mHome->Output();         break;
         case DUNGEON_MENU:  mDungeonMenu->Output();  break;
-        case DUNGEON:       mDungeon->Output();      break;
+        case DUNGEON:       mDungeon->Output(anim_frame);      break;
     }
 
-    SDL_RenderPresent(mRenderer);
+    SDL_RenderPresent(gRenderer);
 }
 
 void Game::Shutdown()
@@ -205,10 +213,10 @@ void Game::Shutdown()
     Mix_FreeChunk(mClickEffect);
     mClickEffect = NULL;
 
-    SDL_DestroyRenderer(mRenderer);
-    SDL_DestroyWindow(mWindow);
-    mWindow = NULL;
-    mRenderer = NULL;
+    SDL_DestroyRenderer(gRenderer);
+    SDL_DestroyWindow(gWindow);
+    gWindow = NULL;
+    gRenderer = NULL;
     
     IMG_Quit();
     TTF_Quit();

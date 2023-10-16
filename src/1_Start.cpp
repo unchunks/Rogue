@@ -1,7 +1,6 @@
 #include "Scene/1_Start.h"
 
-extern int WIN_W;
-extern int WIN_H;
+extern SDL_Renderer *gRenderer;
 
 const int BUTTON_W = 500;
 const int BUTTON_H = 50;
@@ -22,9 +21,9 @@ Start::Start(Game *game)
 
     mStartButton.onClick = &startButton;
     mStartButton.create(
-        mGame->getRenderer(),
-        (WIN_W - BUTTON_W) / 2,
-        (WIN_H - BUTTON_H) / 3,
+        gRenderer,
+        (SCREEN_WIDTH - BUTTON_W) / 2,
+        (SCREEN_HEIGHT - BUTTON_H) / 3,
         BUTTON_W,
         BUTTON_H,
         "S : Game Start",

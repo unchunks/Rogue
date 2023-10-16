@@ -26,8 +26,6 @@ public:
     void RunLoop();
     void Shutdown();
 
-    SDL_Window *getWindow() const { return mWindow; }
-    SDL_Renderer *getRenderer() const { return mRenderer; }
     TTF_Font *getFont() const { return mFont; }
     Mix_Chunk *getClickEffect() const { return mClickEffect; }
 
@@ -39,9 +37,6 @@ private:
     void Update();
     void Output();
 
-    SDL_Window *mWindow;
-    SDL_Surface *mSurface;
-    SDL_Renderer *mRenderer;
     TTF_Font *mFont;
     Mix_Chunk* mClickEffect;
 

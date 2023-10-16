@@ -7,7 +7,9 @@
 class AreaDivide : public Generator
 {
 public:
-    void generate(int _randomNumber);
+    void generate();
+
 private:
     void divide(int ID);
+
 };
