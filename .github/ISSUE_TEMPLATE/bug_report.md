@@ -1,11 +1,16 @@
 ---
 name: Bug report
-about: クリック音のラグが大きい
-title: クリック音のバグ
-labels: bug
-assignees: unchunks
+about: 
+title: 
+labels: 
+assignees: 
 
 ---
 
-音声ファイルの中で音の前に無音が入っている可能性あり。
-音声を流す処理は [Game.cpp](src/Game.cpp)。
+# 概要／Overview
+# 詳細／Detail
+# 再現手順／Reproduction Procedure
+# 現状の状態／Status
+# キャプチャまたは動画(あれば貼り付け)／Capture or video (paste if available)
+# 考えられる原因／Possible causes
+# 修正案／Proposed amendment
