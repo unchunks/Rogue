@@ -11,6 +11,8 @@
 #include "../GenerateDungeon/Const.h"
 
 #include "../GenerateDungeon/AreaDivide.h"
+#include "../GenerateDungeon/RRA.h"
+
 #include "../GenerateDungeon/Player.h"
 #include "../GenerateDungeon/Enemy.h"
 #include "../GenerateDungeon/Const.h"
@@ -47,7 +49,9 @@ private:
 // ダンジョン生成
     bool goNextFloor;
     char input = 'a';
+
     AreaDivide areaDivide;
+    RRA rra;
 
     Player player = Player(0, 0, PLAYER_HP, PLAYER_STR, PLAYER_VIT);
     std::vector<Enemy> enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(SLIME));

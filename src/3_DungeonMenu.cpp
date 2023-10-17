@@ -9,13 +9,13 @@ Game *dungeonMenu_g;
 void areaDivide()
 {
     Mix_PlayChannel(-1, dungeonMenu_g->getClickEffect(), 0);
-    dungeonMenu_g->setNowScene(SCENE::DUNGEON);
+    dungeonMenu_g->setNowScene(SCENE::DUNGEON_AREA_DIVIDE);
     SDL_Log("areaDivide\n");
 }
 void RRA()
 {
     Mix_PlayChannel(-1, dungeonMenu_g->getClickEffect(), 0);
-    dungeonMenu_g->setNowScene(SCENE::DUNGEON);
+    dungeonMenu_g->setNowScene(SCENE::DUNGEON_RRA);
     SDL_Log("RRA\n");
 }
 

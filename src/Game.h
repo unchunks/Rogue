@@ -13,7 +13,8 @@ enum SCENE
     START,
     HOME,
     DUNGEON_MENU,
-    DUNGEON,
+    DUNGEON_AREA_DIVIDE,
+    DUNGEON_RRA,
 };
 
 class Game
@@ -37,6 +38,7 @@ private:
     void Update();
     void Output();
 
+    SDL_Event event;
     TTF_Font *mFont;
     Mix_Chunk* mClickEffect;
 

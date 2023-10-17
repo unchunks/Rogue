@@ -82,8 +82,12 @@ void Dungeon::Input(SDL_Event event)
 	// }
 
 // 階段を登ったときの処理
-    if(areaDivide.buff[(int)player.getPos().y+1][(int)player.getPos().x+1] == STEP) {
-        goNextFloor = true;
+	switch(dungeon_g->getNowScene())
+	{
+	case DUNGEON_AREA_DIVIDE: goNextFloor = areaDivide.getFloor()[(int)player.getPos().y][(int)player.getPos().x] == STEP; break;
+	case DUNGEON_RRA: 		  goNextFloor = 	   rra.getFloor()[(int)player.getPos().y][(int)player.getPos().x] == STEP; break;
+	}
+    if(goNextFloor) {
         return;
     }
 }
@@ -96,6 +100,7 @@ void Dungeon::Update(int anim_frame)
 std::cout << "ダンジョン脱出\n";
 		quit(tileSet);
         dungeon_g->setNowScene(SCENE::HOME);
+		inDungeon = true;
         return;
     }
     if(goNextFloor)
@@ -126,7 +131,13 @@ std::cout << "ダンジョン脱出\n";
                 }
 // std::cout << e.getRouteSize() << " : " << e.getElapsedTurn() << std::endl;
                 if((e.getRouteSize() < 1) || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
-                    e.setGoal(areaDivide.getFloor(), getRandomPos(areaDivide.areaCount));
+				{
+					switch(dungeon_g->getNowScene())
+					{
+					case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), getRandomPos(areaDivide.areaCount)); break;
+					case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), getRandomPos(	   rra.areaCount)); break;
+					}
+				}
                 // e.walk();
             break;
             case FOUND:
@@ -141,7 +152,13 @@ std::cout << "ダンジョン脱出\n";
                 }
                 // 攻撃できないとき
                 else if((e.getRouteSize() < 1) || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
-                    e.setGoal(areaDivide.getFloor(), player.getPos());
+				{
+					switch(dungeon_g->getNowScene())
+					{
+					case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), player.getPos()); break;
+					case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), player.getPos()); break;
+					}
+				}
                 // e.walk();
             break;
             case ESCAPE:
@@ -172,7 +189,6 @@ std::cout << "ダンジョン脱出\n";
 
 void Dungeon::Output(int anim_frame)
 {
-// std::cout << "Output\n";
 	//Render level
 	for( int i = 0; i < TOTAL_TILES; ++i )
 	{
@@ -299,10 +315,22 @@ std::cout << "ダンジョン初期化\n";
     enemies.clear();
     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(SLIME));
 
-    areaDivide.initFloor();
-	//FIX: ここでエラーが発生することがある
-    areaDivide.generate();
-	areaDivide.outputMap();
+	switch(dungeon_g->getNowScene())
+	{
+	case DUNGEON_AREA_DIVIDE: 
+		areaDivide.initFloor();
+		//FIX: ここでエラーが発生することがある
+		areaDivide.generate();
+		areaDivide.outputMap();
+	break;
+	case DUNGEON_RRA:
+		rra.initFloor();
+		rra.generate();
+		rra.outputMap();
+	break;
+	}
+
+    
 
 	//Load tile map
 	//FIX: 何故かここでifの中が実行される
@@ -316,20 +344,31 @@ std::cout << "ダンジョン初期化\n";
         e = Enemy((ENEMY_TYPE)(rand() % ENEMY_TYPE_NUMBER));
     }
 
-    glm::vec2 pos = getRandomPos(areaDivide.getRoomNum());
+	glm::vec2 pos;
+	switch(dungeon_g->getNowScene())
+	{
+	case DUNGEON_AREA_DIVIDE: pos = getRandomPos(areaDivide.getRoomNum()); 	 break;
+	case DUNGEON_RRA:		  pos = getRandomPos(	   	  rra.getRoomNum()); break;
+	}
 std::cout << "初期スポーン地点(" << pos.x << ", " << pos.y << ")\n";
 	pos.x = pos.x*TILE_WIDTH + TILE_WIDTH/4;
 	pos.y = pos.y*TILE_HEIGHT + TILE_HEIGHT/4;
     player.setPos(pos);
     for(auto& e : enemies)
     {
-        pos = getRandomPos(areaDivide.getRoomNum());
+		switch(dungeon_g->getNowScene())
+		{
+		case DUNGEON_AREA_DIVIDE: pos = getRandomPos(areaDivide.getRoomNum()); break;
+		case DUNGEON_RRA: 		  pos = getRandomPos(		rra.getRoomNum()); break;
+		}
+		pos.x = pos.x*TILE_WIDTH + TILE_WIDTH/4;
+		pos.y = pos.y*TILE_HEIGHT + TILE_HEIGHT/4;
         e.setPos(pos);
     }
-    for(auto e : enemies)
-    {
-        // std::cout << "(" << e.getPos().x << ", " << e.getPos().y << ")\n";
-    }
+    // for(auto e : enemies)
+    // {
+    //     std::cout << "(" << e.getPos().x << ", " << e.getPos().y << ")\n";
+    // }
 }
 
 void Dungeon::quit(Tile* tiles[])
@@ -364,10 +403,21 @@ int Dungeon::isOtherPos(glm::vec2 _pos)
 
 bool Dungeon::canGetOn(glm::vec2 _pos) 
 {
-    if((areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != FLOOR) 
-    && (areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != AISLE)
-    && (areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != STEP)) 
-        return false;
+	switch(dungeon_g->getNowScene())
+	{
+	case DUNGEON_AREA_DIVIDE: 
+		if((areaDivide.getFloor()[(int)_pos.y][(int)_pos.x] != FLOOR) 
+    	&& (areaDivide.getFloor()[(int)_pos.y][(int)_pos.x] != AISLE)
+    	&& (areaDivide.getFloor()[(int)_pos.y][(int)_pos.x] != STEP)) 
+        	return false;
+	break;
+	case DUNGEON_RRA:
+		if((rra.getFloor()[(int)_pos.y][(int)_pos.x] != FLOOR) 
+    	&& (rra.getFloor()[(int)_pos.y][(int)_pos.x] != AISLE)
+    	&& (rra.getFloor()[(int)_pos.y][(int)_pos.x] != STEP)) 
+        	return false;
+	break;
+	}
     if(isOtherPos(_pos)  > 1)
         return false;
     return true;
@@ -376,7 +426,16 @@ bool Dungeon::canGetOn(glm::vec2 _pos)
 glm::vec2 Dungeon::getRandomPos(int _roomCount)
 {
     int roomNum = rand() % _roomCount;
-    Room room = areaDivide.getRoom(roomNum);
+	Room room;
+	switch(dungeon_g->getNowScene())
+	{
+	case DUNGEON_AREA_DIVIDE: 
+		room = areaDivide.getRoom(roomNum);
+	break;
+	case DUNGEON_RRA:
+		room = rra.getRoom(roomNum);
+	break;
+	}
     glm::vec2 pos;
     pos.x = room.x + rand()%room.w;
     pos.y = room.y + rand()%room.h;

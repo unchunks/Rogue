@@ -163,7 +163,6 @@ void Game::RunLoop()
 
 void Game::Input()
 {
-    SDL_Event event;
     while (SDL_PollEvent(&event))
     {
         // if (event.type != SDL_KEYDOWN) continue;
@@ -174,7 +173,8 @@ void Game::Input()
             case START:         mStart->Input(event);       break;
             case HOME:          mHome->Input(event);        break;
             case DUNGEON_MENU:  mDungeonMenu->Input(event); break;
-            case DUNGEON:       mDungeon->Input(event);     break;
+            case DUNGEON_AREA_DIVIDE:
+            case DUNGEON_RRA:   mDungeon->Input(event);     break;
         }
     }
     const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -185,10 +185,11 @@ void Game::Update()
 {
     switch (getNowScene())
     {
-        case START:         mStart->Update();        break;
-        case HOME:          mHome->Update();         break;
-        case DUNGEON_MENU:  mDungeonMenu->Update();  break;
-        case DUNGEON:       mDungeon->Update(anim_frame);      break;
+        case START:         mStart->Update();             break;
+        case HOME:          mHome->Update();              break;
+        case DUNGEON_MENU:  mDungeonMenu->Update();       break;
+        case DUNGEON_AREA_DIVIDE:
+        case DUNGEON_RRA:   mDungeon->Update(anim_frame); break;
     }
 }
 
@@ -199,10 +200,11 @@ void Game::Output()
 
     switch (getNowScene())
     {
-        case START:         mStart->Output();        break;
-        case HOME:          mHome->Output();         break;
-        case DUNGEON_MENU:  mDungeonMenu->Output();  break;
-        case DUNGEON:       mDungeon->Output(anim_frame);      break;
+        case START:         mStart->Output();             break;
+        case HOME:          mHome->Output();              break;
+        case DUNGEON_MENU:  mDungeonMenu->Output();       break;
+        case DUNGEON_AREA_DIVIDE:
+        case DUNGEON_RRA:   mDungeon->Output(anim_frame); break;
     }
 
     SDL_RenderPresent(gRenderer);
