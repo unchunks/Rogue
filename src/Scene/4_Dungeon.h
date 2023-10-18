@@ -54,7 +54,7 @@ private:
     RRA rra;
 
     Player player = Player(0, 0, PLAYER_HP, PLAYER_STR, PLAYER_VIT);
-    std::vector<Enemy> enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(SLIME));
+    std::vector<Enemy> enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
     std::vector<Enemy> deadEnemies;
 
     int isOtherPos(glm::vec2 _pos);
@@ -74,4 +74,3 @@ bool touchesWall( SDL_Rect box, Tile* tiles[] );
 
 //.mapファイルからタイルをセット
 bool setTiles( Tile *tiles[] );
-

@@ -43,8 +43,6 @@ enum CHAR_TYPE {
 
 // TODO: キャラを作ったらConst.hでステータスを作成
 enum ENEMY_TYPE {
-    SLIME,
-    GOBLIN,
-    DRAGON,
+    DEKA,
     ENEMY_TYPE_NUMBER
 };

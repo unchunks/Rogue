@@ -6,23 +6,10 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
     enemy_type = _enemy_type;
     switch(enemy_type)
     {
-        case SLIME:
-            maxHP = SLIME_HP;
-            STR   = SLIME_STR;
-            VIT   = SLIME_VIT;
-            icon  = SLIME_ICON;
-        break;
-        case GOBLIN:
-            maxHP = GOBLIN_HP;
-            STR   = GOBLIN_STR;
-            VIT   = GOBLIN_VIT;
-            icon  = GOBLIN_ICON;
-        break;
-        case DRAGON:
-            maxHP = DRAGON_HP;
-            STR   = DRAGON_STR;
-            VIT   = DRAGON_VIT;
-            icon  = DRAGON_ICON;
+        case DEKA:
+            maxHP = DEKA_HP;
+            STR   = DEKA_STR;
+            VIT   = DEKA_VIT;
         break;
 
         case ENEMY_TYPE_NUMBER: break;

@@ -45,20 +45,7 @@ constexpr int PLAYER_STR = 20;
 constexpr int PLAYER_VIT = 10;
 
 // TODO: キャラを作ったらEnum.hに名前を追加
-// スライム
-constexpr int   SLIME_HP   = 50;
-constexpr int   SLIME_STR  = 2;
-constexpr int   SLIME_VIT  = 5;
-constexpr char* SLIME_ICON = (char*)"Ω ";
-
-// ゴブリン
-constexpr int   GOBLIN_HP   = 80;
-constexpr int   GOBLIN_STR  = 5;
-constexpr int   GOBLIN_VIT  = 8;
-constexpr char* GOBLIN_ICON = (char*)"ಪ ";
-
-// ドラゴン
-constexpr int   DRAGON_HP   = 1000;
-constexpr int   DRAGON_STR  = 70;
-constexpr int   DRAGON_VIT  = 30;
-constexpr char* DRAGON_ICON = (char*)"ඣ ";
+// デカ
+constexpr int   DEKA_HP   = 50;
+constexpr int   DEKA_STR  = 2;
+constexpr int   DEKA_VIT  = 5;

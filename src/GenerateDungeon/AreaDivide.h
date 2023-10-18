@@ -1,7 +1,5 @@
 #pragma once
 
-#include <random> 
-
 #include "Generator.h"
 
 class AreaDivide : public Generator

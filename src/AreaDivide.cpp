@@ -1,8 +1,7 @@
 #include "GenerateDungeon/AreaDivide.h"
 
-std::random_device area_divide_seed;
-std::mt19937 area_divide_engine(area_divide_seed());
-std::uniform_int_distribution<int> area_divide_random_num(AREA_MAX, 100);
+extern std::mt19937 random_engine;
+extern std::uniform_int_distribution<int> random_num;
 
 void AreaDivide::divide(int ID)
 {
@@ -16,7 +15,7 @@ void AreaDivide::divide(int ID)
     int newID = areaCount + 1;
 // エリアの長辺で分割
     if(areas[ID].w > areas[ID].h) {
-        w /= (area_divide_random_num(area_divide_engine)%3) + 2;
+        w /= (random_num(random_engine)%3) + 2;
         newArea = Area(
             areas[ID].x + w,
             areas[ID].y,
@@ -24,7 +23,7 @@ void AreaDivide::divide(int ID)
             areas[ID].h
         );
     } else {
-        h /= (area_divide_random_num(area_divide_engine)%3) + 2;
+        h /= (random_num(random_engine)%3) + 2;
         newArea = Area(
             areas[ID].x,
             areas[ID].y + h,
@@ -41,9 +40,9 @@ void AreaDivide::divide(int ID)
     areas[ID].w = w;
     areas[ID].h = h;
     areas.push_back(newArea);
-    if((areas[ID].w > 20) || (areas[ID].h > 20) || (area_divide_random_num(area_divide_engine)%2))
+    if((areas[ID].w > 20) || (areas[ID].h > 20) || (random_num(random_engine)%2))
         divide(ID);
-    if((areas[newID].w > 20) || (areas[newID].h > 20) || !(area_divide_random_num(area_divide_engine)%2))
+    if((areas[newID].w > 20) || (areas[newID].h > 20) || !(random_num(random_engine)%2))
         divide(newID);
 }
 
@@ -73,11 +72,11 @@ SDL_Log("部屋生成\n");
 SDL_Log("通路書き込み\n");
         for(int y=area.y; y<area.y + area.h; y++) {
             floorTYPE[y][room.x + room.w + 1] = AISLE;
-            floorTYPE[y][room.x + (area_divide_random_num(area_divide_engine) % (room.w - 2)) + 1] = AISLE;
+            floorTYPE[y][room.x + (random_num(random_engine) % (room.w - 2)) + 1] = AISLE;
         }
         for(int x=area.x; x<area.x + area.w; x++) {
             floorTYPE[room.y + room.h + 1][x] = AISLE;
-            floorTYPE[room.y + (area_divide_random_num(area_divide_engine) % (room.h - 2)) + 1][x] = AISLE;
+            floorTYPE[room.y + (random_num(random_engine) % (room.h - 2)) + 1][x] = AISLE;
         }
 
 SDL_Log("部屋書き込み\n");
@@ -94,13 +93,13 @@ SDL_Log("地形整形\n");
     identificationWallKind();
 
 SDL_Log("階段生成\n");
-    int roomNum = area_divide_random_num(area_divide_engine) % areaCount;
+    int roomNum = random_num(random_engine) % areaCount;
     Room room = rooms[roomNum];
     glm::vec2 pos = glm::vec2(0, 0);
     while(floorTYPE[(int)pos.y][(int)pos.x] != FLOOR)
     {
-        pos.x = room.x + area_divide_random_num(area_divide_engine)%room.w;
-        pos.y = room.y + area_divide_random_num(area_divide_engine)%room.h;
+        pos.x = room.x + random_num(random_engine)%room.w;
+        pos.y = room.y + random_num(random_engine)%room.h;
     }
     floorTYPE[(int)pos.y][(int)pos.x] = STEP;
 SDL_Log("階段(%.0f, %.0f)\n", pos.x, pos.y);

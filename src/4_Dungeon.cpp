@@ -134,8 +134,8 @@ std::cout << "case SEARCH\n";
 				{
 					switch(dungeon_g->getNowScene())
 					{
-					case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), getRandomPos(areaDivide.areaCount)); break;
-					case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), getRandomPos(	   rra.areaCount)); break;
+					case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), areaDivide.getRandomFloorPos()); break;
+					case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), rra.getRandomFloorPos());        break;
                     default: break;
                     }
 				}
@@ -350,7 +350,7 @@ std::cout << "初期スポーン地点(" << pos.x << ", " << pos.y << ")\n";
 
 std::cout << "敵を初期化\n";
     enemies.clear();
-    enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(SLIME));
+    enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
     for(auto& e : enemies)
     {
         e = Enemy((ENEMY_TYPE)(rand() % ENEMY_TYPE_NUMBER));
@@ -378,7 +378,7 @@ void Dungeon::quit(Tile* tiles[])
     inDungeon = true;
     goNextFloor = true;
     player = Player(0, 0, PLAYER_HP, PLAYER_STR, PLAYER_VIT);
-    enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(SLIME));
+    enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
 	//Deallocate tiles
 	// for( int i = 0; i < TOTAL_TILES; ++i )
 	// {
@@ -433,7 +433,7 @@ bool Dungeon::canGetOn(glm::vec2 _pos)
 glm::vec2 Dungeon::getRandomPos(int _roomCount)
 {
     int roomNum = rand() % _roomCount;
-	Room room;
+	Room room = Room();
 	switch(dungeon_g->getNowScene())
 	{
 	case DUNGEON_AREA_DIVIDE:
@@ -445,11 +445,11 @@ glm::vec2 Dungeon::getRandomPos(int _roomCount)
     default: break;
 	}
     glm::vec2 pos;
-    pos.x = room.x + rand()%room.w;
-    pos.y = room.y + rand()%room.h;
+    pos.x = room.x + rand() % room.w;
+    pos.y = room.y + rand() % room.h;
     while(!canGetOn(pos)) {
-        pos.x = room.x + rand()%room.w;
-        pos.y = room.y + rand()%room.h;
+        pos.x = room.x + rand() % room.w;
+        pos.y = room.y + rand() % room.h;
     }
     return pos;
 }

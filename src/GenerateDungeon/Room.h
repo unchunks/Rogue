@@ -8,7 +8,11 @@ const int ROOM_MARGIN = 2;
 class Room
 {
 public:
-    Room(){};
+    Room()
+    {
+        x = y = 0;
+        w = h = 0;
+    };
     Room(int _x, int _y, int _w, int _h)
         :x(_x), y(_y), w(_w), h(_h){};
     Room(Area area)

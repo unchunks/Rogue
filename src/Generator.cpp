@@ -1,5 +1,9 @@
 #include "GenerateDungeon/Generator.h"
 
+std::random_device random_seed;
+std::mt19937 random_engine(random_seed());
+std::uniform_int_distribution<int> random_num(AREA_MAX, 100);
+
 void Generator::initFloor() {
     for(int y=0; y<FLOOR_H; y++) {
         for(int x=0; x<FLOOR_W; x++) {
@@ -55,7 +59,7 @@ void Generator::randomEraseDeadEnd() {
             if(floorTYPE[y-1][x] == WALL_ALL) n++;
             if(floorTYPE[y][x+1] == WALL_ALL) n++;
             if(floorTYPE[y][x-1] == WALL_ALL) n++;
-            if((n >= 3) && (rand()%5)) {
+            if((n >= 3) && (random_num(random_engine)%5)) {
                 floorTYPE[y][x] = WALL_ALL;
             }
         }
@@ -68,7 +72,7 @@ void Generator::randomEraseDeadEnd() {
             if(floorTYPE[y-1][x] == WALL_ALL) n++;
             if(floorTYPE[y][x+1] == WALL_ALL) n++;
             if(floorTYPE[y][x-1] == WALL_ALL) n++;
-            if((n >= 3) && (rand()%5)) {
+            if((n >= 3) && (random_num(random_engine)%5)) {
                 floorTYPE[y][x] = WALL_ALL;
             }
         }
@@ -180,4 +184,18 @@ void Generator::outputMap() {
     std::cout << "2\n";
     writing_file << writing_text << std::endl;
     writing_file.close();
+}
+
+glm::vec2 Generator::getRandomFloorPos()
+{
+    int roomNum = random_num(random_engine) % rooms.size();
+	Room room = rooms[roomNum];
+    glm::vec2 pos;
+    pos.x = room.x + random_num(random_engine)%room.w;
+    pos.y = room.y + random_num(random_engine)%room.h;
+    while(floorTYPE[static_cast<int>(pos.y)][static_cast<int>(pos.x)] != FLOOR) {
+        pos.x = room.x + random_num(random_engine)%room.w;
+        pos.y = room.y + random_num(random_engine)%room.h;
+    }
+    return pos;
 }

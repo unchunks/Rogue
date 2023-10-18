@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <random>
+#include <glm/glm.hpp>
 
 #include "Area.h"
 #include "Room.h"
@@ -20,6 +22,7 @@ public:
     int getAreaNum() { return areas.size(); }
     int getRoomNum() { return rooms.size(); }
     CELL_TYPE (*getFloor())[FLOOR_W] { return floorTYPE; }
+    glm::vec2 getRandomFloorPos();
 
     int areaCount = 0;
     int randomNumber;

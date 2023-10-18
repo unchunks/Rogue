@@ -1,9 +1,7 @@
 #include "GenerateDungeon/RRA.h"
-#include "GenerateDungeon/Const.h"
-#include "GenerateDungeon/Enum.h"
-std::random_device rra_seed;
-std::mt19937 rra_engine(rra_seed());
-std::uniform_int_distribution<int> rra_random_num(AREA_MAX, 100);
+
+extern std::mt19937 random_engine;
+extern std::uniform_int_distribution<int> random_num;
 
 void RRA::generate()
 {
@@ -17,10 +15,10 @@ SDL_Log("部屋生成\n");
     {
         if (total_area > FLOOR_W * FLOOR_H / 2)
             break;
-        int ax = rra_random_num(rra_engine) % FLOOR_W;
-        int ay = rra_random_num(rra_engine) % FLOOR_H;
-        int aw = rra_random_num(rra_engine) % AREA_SIZE_MIN + AREA_SIZE_MIN;
-        int ah = rra_random_num(rra_engine) % AREA_SIZE_MIN + AREA_SIZE_MIN;
+        int ax = random_num(random_engine) % FLOOR_W;
+        int ay = random_num(random_engine) % FLOOR_H;
+        int aw = random_num(random_engine) % AREA_SIZE_MIN + AREA_SIZE_MIN;
+        int ah = random_num(random_engine) % AREA_SIZE_MIN + AREA_SIZE_MIN;
         area = Area(ax, ay, aw, ah);
         if (area.x + area.w >= FLOOR_W)
         {
@@ -48,10 +46,10 @@ SDL_Log("rooms[%d](X: %d, Y: %d, W: %d, H: %d)\n", i, rooms[i].x, rooms[i].y, ro
     for (auto room_itr = rooms.begin() + 1; room_itr < rooms.end(); room_itr++)
     {
 SDL_Log("通路書き込み\n");
-        int aisle_x1 = (room_itr - 1)->x + (rra_random_num(rra_engine) % (room_itr - 1)->w);
-        int aisle_y1 = (room_itr - 1)->y + (rra_random_num(rra_engine) % (room_itr - 1)->h);
-        int aisle_x2 = room_itr->x + (rra_random_num(rra_engine) % room_itr->w);
-        int aisle_y2 = room_itr->y + (rra_random_num(rra_engine) % room_itr->h);
+        int aisle_x1 = (room_itr - 1)->x + (random_num(random_engine) % (room_itr - 1)->w);
+        int aisle_y1 = (room_itr - 1)->y + (random_num(random_engine) % (room_itr - 1)->h);
+        int aisle_x2 = room_itr->x + (random_num(random_engine) % room_itr->w);
+        int aisle_y2 = room_itr->y + (random_num(random_engine) % room_itr->h);
         int middle_x = (aisle_x1 + aisle_x2) / 2;
 
         int dx = 1;
@@ -92,13 +90,13 @@ SDL_Log("地形整形\n");
     outputMap();
 
 SDL_Log("階段生成\n");
-    int roomNum = rra_random_num(rra_engine) % areas.size();
+    int roomNum = random_num(random_engine) % areas.size();
     Room room = rooms[roomNum];
     glm::vec2 pos = glm::vec2(0.0f, 0.0f);
     while(floorTYPE[(int)pos.y][(int)pos.x] != FLOOR)
     {
-        pos.x = room.x + rra_random_num(rra_engine)%room.w;
-        pos.y = room.y + rra_random_num(rra_engine)%room.h;
+        pos.x = room.x + random_num(random_engine)%room.w;
+        pos.y = room.y + random_num(random_engine)%room.h;
 SDL_Log("pos(X: %.0f, Y: %.0f), room(X: %d, Y: %d, W: %d, H: %d)\n", pos.x, pos.y, room.x, room.y, room.w, room.h);
     }
     floorTYPE[(int)pos.y][(int)pos.x] = STEP;
