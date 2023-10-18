@@ -5,9 +5,8 @@
 #include "Scene/3_DungeonMenu.h"
 #include "Scene/4_Dungeon.h"
 
-extern SDL_Window *gWindow = nullptr;
-extern SDL_Surface *gSurface = nullptr;
-extern SDL_Renderer *gRenderer = nullptr;
+SDL_Window *gWindow;
+SDL_Renderer *gRenderer;
 
 SDL_atomic_t frames;
 
@@ -17,8 +16,8 @@ int anim_frame = 0;
 /* 設定された間隔で平均フレームレートの計算と表示を行う */
 Uint32 fps_timer_callback(Uint32 interval, void *data)
 {
-        const float f = SDL_AtomicGet(&frames);
-        const float iv = interval * 0.001f;
+        // const Uint32 f = SDL_AtomicGet(&frames);
+        // const iv = interval * 0.001f;
 
         /* 注意: printfがスレッドセーフであるかは環境に依存する */
 // SDL_Log("%.2f\tfps\n", f / iv);
@@ -38,7 +37,7 @@ Game::Game()
 
 Game::~Game()
 {
-    
+
 }
 
 bool Game::Init()
@@ -219,7 +218,7 @@ void Game::Shutdown()
     SDL_DestroyWindow(gWindow);
     gWindow = NULL;
     gRenderer = NULL;
-    
+
     IMG_Quit();
     TTF_Quit();
     Mix_Quit();

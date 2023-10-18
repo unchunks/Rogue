@@ -5,8 +5,8 @@ extern SDL_Renderer *gRenderer;
 Game *dungeon_g;
 
 //マップ画像のテクスチャ
-extern LTexture gTileTexture = LTexture();
-extern SDL_Rect gTileClips[ TOTAL_TILE_SPRITES ] = {{0, 0, 0, 0}};
+LTexture gTileTexture = LTexture();
+SDL_Rect gTileClips[ TOTAL_TILE_SPRITES ];
 
 //NOTE: Dungeonの関数
 
@@ -15,17 +15,16 @@ Dungeon::Dungeon(Game *game)
 {
     dungeon_g = game;
     mGame = game;
-    if(LoadData())
+    if(!LoadData())
     {
-		printf( "Failed to load media!\n" );
+		SDL_Log( "Failed to load media!\n" );
     }
 	player.mCharTexture.setW(player.mCharTexture.getWidth() * TILE_WIDTH / SPRITE_CHAR_WIDTH);
 	player.mCharTexture.setH(player.mCharTexture.getHeight() * TILE_HEIGHT / SPRITE_CHAR_HEIGHT);
 	camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-
 }
 
-// TODO: 削除予定
+// REVIEW: デバッグ用
 const char* get(DIRECTION _dir)
 {
     switch(_dir)
@@ -40,10 +39,10 @@ const char* get(DIRECTION _dir)
 
 void Dungeon::Input(SDL_Event event)
 {
-// std::cout << "Input\n";
+// SDL_Log("Input\n");
     // プレイヤーのアップデート
 // TODO: キーを長押しすると敵を無視して連続で動いてしまう
-    glm::vec2 front;
+    // glm::vec2 front;
     playerMoved = false;
 
 	if(player.mNowMoving)
@@ -54,7 +53,7 @@ void Dungeon::Input(SDL_Event event)
 	if(event.type == SDL_KEYDOWN)
 	{
 		player.mNowMoving = true;
-	
+
 		switch(event.key.keysym.sym)
 		{
 			case SDLK_w: playerMoved = true; player.mMovingDir = UP; break; //player.move(DIRECTION::UP);    break;
@@ -82,11 +81,12 @@ void Dungeon::Input(SDL_Event event)
 	// }
 
 // 階段を登ったときの処理
-	switch(dungeon_g->getNowScene())
+    if(playerMoved) switch(dungeon_g->getNowScene())
 	{
-	case DUNGEON_AREA_DIVIDE: goNextFloor = areaDivide.getFloor()[(int)player.getPos().y][(int)player.getPos().x] == STEP; break;
-	case DUNGEON_RRA: 		  goNextFloor = 	   rra.getFloor()[(int)player.getPos().y][(int)player.getPos().x] == STEP; break;
-	}
+	case DUNGEON_AREA_DIVIDE: goNextFloor = (areaDivide.buff[(int)player.getPos().y+1][(int)player.getPos().x+1] == STEP); break;
+	case DUNGEON_RRA: 		  goNextFloor = (	    rra.buff[(int)player.getPos().y+1][(int)player.getPos().x+1] == STEP); break;
+    default: break;
+    }
     if(goNextFloor) {
         return;
     }
@@ -94,15 +94,15 @@ void Dungeon::Input(SDL_Event event)
 
 void Dungeon::Update(int anim_frame)
 {
-// std::cout << "Update\n";
+// SDL_Log("Update\n");
     if(!inDungeon)
     {
 std::cout << "ダンジョン脱出\n";
 		quit(tileSet);
         dungeon_g->setNowScene(SCENE::HOME);
-		inDungeon = true;
         return;
     }
+
     if(goNextFloor)
     {
         InitDungeon();
@@ -119,11 +119,11 @@ std::cout << "ダンジョン脱出\n";
     {
         // std::cout << "残り距離　: " << e.getRouteSize() << std::endl;
         // std::cout << "経過ターン: " << e.getElapsedTurn() << std::endl;
-// std::cout << "Enemy updating\n";
+std::cout << "Enemy updating\n";
         switch(e.getState())
         {
             case SEARCH:
-// std::cout << "case SEARCH\n";
+std::cout << "case SEARCH\n";
 // std::cout << abs(e.getPos().x - player.getPos().x) + abs(e.getPos().y - player.getPos().y) << std::endl;
                 if(abs(e.getPos().x - player.getPos().x) + abs(e.getPos().y - player.getPos().y) <= ENEMY_FIND_RANGE) {
                     e.setState(FOUND);
@@ -136,12 +136,13 @@ std::cout << "ダンジョン脱出\n";
 					{
 					case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), getRandomPos(areaDivide.areaCount)); break;
 					case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), getRandomPos(	   rra.areaCount)); break;
-					}
+                    default: break;
+                    }
 				}
                 // e.walk();
             break;
             case FOUND:
-// std::cout << "case FOUND\n";
+std::cout << "case FOUND\n";
                 if(abs(e.getPos().x - player.getPos().x) + abs(e.getPos().y - player.getPos().y) > ENEMY_FIND_RANGE)
                     e.setState(SEARCH);
                 // 攻撃できるとき
@@ -157,15 +158,16 @@ std::cout << "ダンジョン脱出\n";
 					{
 					case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), player.getPos()); break;
 					case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), player.getPos()); break;
+                    default: break;
 					}
 				}
                 // e.walk();
             break;
             case ESCAPE:
-// std::cout << "case ESCAPE\n";
+std::cout << "case ESCAPE\n";
             break;
             case DEAD:
-// std::cout << "case DEAD\n";
+std::cout << "case DEAD\n";
                 deadEnemies.push_back(e);
             break;
 // その他
@@ -174,8 +176,9 @@ std::cout << "ダンジョン脱出\n";
 
         if(!canGetOn(e.getPos()));
             // e.back();
+std::cout << "Enemy updated\n";
     }
-    // std::cout << "Enemy updated\n";
+
 // 敵の死亡判定
     for(auto it = enemies.begin(); it < enemies.end(); it++)
         if(it->getState() == DEAD)
@@ -189,6 +192,7 @@ std::cout << "ダンジョン脱出\n";
 
 void Dungeon::Output(int anim_frame)
 {
+// SDL_Log("Output\n");
 	//Render level
 	for( int i = 0; i < TOTAL_TILES; ++i )
 	{
@@ -218,14 +222,14 @@ bool Dungeon::LoadData()
 	//プレイヤーのスプライトシートのテクスチャを読み込む
 	if( !player.mCharTexture.loadFromFile( "assets/character.png" ) )
 	{
-		printf( "Failed to load walking animation texture!\n" );
+		SDL_Log( "Failed to load walking animation texture!\n" );
 		success = false;
 	}
 	else
 	{
 		//REVIEW: スプライトクリップを設定する
 		player.mSpriteClips[ static_cast<int>(LEFT) + 0 ].x = SPRITE_CHAR_WIDTH*0;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 0 ].y = SPRITE_CHAR_HEIGHT*0;
+        player.mSpriteClips[ static_cast<int>(LEFT) + 0 ].y = SPRITE_CHAR_HEIGHT*0;
 		player.mSpriteClips[ static_cast<int>(LEFT) + 0 ].w = SPRITE_CHAR_WIDTH;
 		player.mSpriteClips[ static_cast<int>(LEFT) + 0 ].h = SPRITE_CHAR_HEIGHT;
 		player.mSpriteClips[ static_cast<int>(LEFT) + 1 ].x = SPRITE_CHAR_WIDTH*1;
@@ -296,7 +300,7 @@ bool Dungeon::LoadData()
 	//Load tile texture
 	if( !gTileTexture.loadFromFile( "assets/dungeon_tiles.png" ) )
 	{
-		printf( "Failed to load tile set texture!\n" );
+		SDL_Log( "Failed to load tile set texture!\n" );
 		success = false;
 	}
 
@@ -309,58 +313,56 @@ void Dungeon::PlayMusic()
 
 void Dungeon::InitDungeon()
 {
-std::cout << "ダンジョン初期化\n";
+std::cout << "ダンジョンを初期化\n";
     inDungeon = true;
     goNextFloor = false;
-    enemies.clear();
-    enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(SLIME));
 
 	switch(dungeon_g->getNowScene())
 	{
-	case DUNGEON_AREA_DIVIDE: 
-		areaDivide.initFloor();
+	case DUNGEON_AREA_DIVIDE:
 		//FIX: ここでエラーが発生することがある
 		areaDivide.generate();
-		areaDivide.outputMap();
 	break;
 	case DUNGEON_RRA:
-		rra.initFloor();
 		rra.generate();
-		rra.outputMap();
 	break;
+    default: break;
 	}
-
-    
 
 	//Load tile map
-	//FIX: 何故かここでifの中が実行される
 	if( !setTiles(tileSet) )
 	{
-		printf( "Failed to load tile set!\n" );
+		SDL_Log( "Failed to load tile set!\n" );
 	}
 
-    for(auto& e : enemies)
-    {
-        e = Enemy((ENEMY_TYPE)(rand() % ENEMY_TYPE_NUMBER));
-    }
-
 	glm::vec2 pos;
+std::cout << "プレイヤーを初期化\n";
 	switch(dungeon_g->getNowScene())
 	{
 	case DUNGEON_AREA_DIVIDE: pos = getRandomPos(areaDivide.getRoomNum()); 	 break;
 	case DUNGEON_RRA:		  pos = getRandomPos(	   	  rra.getRoomNum()); break;
-	}
+    default: break;
+    }
 std::cout << "初期スポーン地点(" << pos.x << ", " << pos.y << ")\n";
 	pos.x = pos.x*TILE_WIDTH + TILE_WIDTH/4;
 	pos.y = pos.y*TILE_HEIGHT + TILE_HEIGHT/4;
     player.setPos(pos);
+
+std::cout << "敵を初期化\n";
+    enemies.clear();
+    enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(SLIME));
+    for(auto& e : enemies)
+    {
+        e = Enemy((ENEMY_TYPE)(rand() % ENEMY_TYPE_NUMBER));
+    }
     for(auto& e : enemies)
     {
 		switch(dungeon_g->getNowScene())
 		{
 		case DUNGEON_AREA_DIVIDE: pos = getRandomPos(areaDivide.getRoomNum()); break;
 		case DUNGEON_RRA: 		  pos = getRandomPos(		rra.getRoomNum()); break;
-		}
+        default: break;
+        }
 		pos.x = pos.x*TILE_WIDTH + TILE_WIDTH/4;
 		pos.y = pos.y*TILE_HEIGHT + TILE_HEIGHT/4;
         e.setPos(pos);
@@ -373,19 +375,23 @@ std::cout << "初期スポーン地点(" << pos.x << ", " << pos.y << ")\n";
 
 void Dungeon::quit(Tile* tiles[])
 {
+    inDungeon = true;
+    goNextFloor = true;
+    player = Player(0, 0, PLAYER_HP, PLAYER_STR, PLAYER_VIT);
+    enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(SLIME));
 	//Deallocate tiles
-	for( int i = 0; i < TOTAL_TILES; ++i )
-	{
-		if( tiles[ i ] != NULL )
-		{
-			delete tiles[ i ];
-			tiles[ i ] = NULL;
-		}
-	}
+	// for( int i = 0; i < TOTAL_TILES; ++i )
+	// {
+	// 	if( tiles[ i ] != NULL )
+	// 	{
+	// 		delete tiles[ i ];
+	// 		tiles[ i ] = NULL;
+	// 	}
+	// }
 
 	//Free loaded images
-	player.mCharTexture.free();
-	gTileTexture.free();
+	// player.mCharTexture.free();
+	// gTileTexture.free();
 }
 
 int Dungeon::isOtherPos(glm::vec2 _pos)
@@ -401,22 +407,23 @@ int Dungeon::isOtherPos(glm::vec2 _pos)
     return sameNum;
 }
 
-bool Dungeon::canGetOn(glm::vec2 _pos) 
+bool Dungeon::canGetOn(glm::vec2 _pos)
 {
 	switch(dungeon_g->getNowScene())
 	{
-	case DUNGEON_AREA_DIVIDE: 
-		if((areaDivide.getFloor()[(int)_pos.y][(int)_pos.x] != FLOOR) 
-    	&& (areaDivide.getFloor()[(int)_pos.y][(int)_pos.x] != AISLE)
-    	&& (areaDivide.getFloor()[(int)_pos.y][(int)_pos.x] != STEP)) 
+	case DUNGEON_AREA_DIVIDE:
+		if((areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != FLOOR)
+    	&& (areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != AISLE)
+    	&& (areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != STEP))
         	return false;
 	break;
 	case DUNGEON_RRA:
-		if((rra.getFloor()[(int)_pos.y][(int)_pos.x] != FLOOR) 
-    	&& (rra.getFloor()[(int)_pos.y][(int)_pos.x] != AISLE)
-    	&& (rra.getFloor()[(int)_pos.y][(int)_pos.x] != STEP)) 
+		if((rra.buff[(int)_pos.y+1][(int)_pos.x+1] != FLOOR)
+    	&& (rra.buff[(int)_pos.y+1][(int)_pos.x+1] != AISLE)
+    	&& (rra.buff[(int)_pos.y+1][(int)_pos.x+1] != STEP))
         	return false;
 	break;
+    default: break;
 	}
     if(isOtherPos(_pos)  > 1)
         return false;
@@ -429,12 +436,13 @@ glm::vec2 Dungeon::getRandomPos(int _roomCount)
 	Room room;
 	switch(dungeon_g->getNowScene())
 	{
-	case DUNGEON_AREA_DIVIDE: 
+	case DUNGEON_AREA_DIVIDE:
 		room = areaDivide.getRoom(roomNum);
 	break;
 	case DUNGEON_RRA:
 		room = rra.getRoom(roomNum);
 	break;
+    default: break;
 	}
     glm::vec2 pos;
     pos.x = room.x + rand()%room.w;
@@ -488,7 +496,7 @@ bool setTiles( Tile* tiles[] )
 	//マップが読み込めなかった場合
     if( map.fail() )
     {
-		printf( "Unable to load map file!\n" );
+		SDL_Log( "Unable to load map file!\n" );
 		tilesLoaded = false;
     }
 	else
@@ -506,7 +514,7 @@ bool setTiles( Tile* tiles[] )
 			if( map.fail() )
 			{
 				//Stop loading map
-				printf( "Error loading map: Unexpected end of file!\n" );
+				SDL_Log( "Error loading map: Unexpected end of file!\n" );
 				tilesLoaded = false;
 				break;
 			}
@@ -520,7 +528,7 @@ bool setTiles( Tile* tiles[] )
 			else
 			{
 				//Stop loading map
-				printf( "Error loading map: Invalid tile type at %d!\n", i );
+				SDL_Log( "Error loading map: Invalid tile type at %d!\n", i );
 				tilesLoaded = false;
 				break;
 			}
@@ -538,7 +546,7 @@ bool setTiles( Tile* tiles[] )
 				y += TILE_HEIGHT;
 			}
 		}
-		
+
 		//Clip the sprite sheet
 		if( tilesLoaded )
 		{
@@ -651,4 +659,3 @@ bool setTiles( Tile* tiles[] )
     //If the map was loaded fine
     return tilesLoaded;
 }
-

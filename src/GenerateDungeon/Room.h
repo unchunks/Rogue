@@ -5,7 +5,7 @@
 
 const int ROOM_MARGIN = 2;
 
-class Room 
+class Room
 {
 public:
     Room(){};
@@ -17,6 +17,14 @@ public:
         y = area.y + ROOM_MARGIN;
         w = area.w - 2*ROOM_MARGIN;
         h = area.h - 2*ROOM_MARGIN;
+    }
+
+    void operator = (Room room)
+    {
+        x = room.x;
+        y = room.y;
+        w = room.w;
+        h = room.h;
     }
 
     int x, y, w, h;

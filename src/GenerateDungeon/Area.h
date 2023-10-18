@@ -1,6 +1,6 @@
 #pragma once
 
-class Area 
+class Area
 {
 public:
     Area(){};
@@ -14,6 +14,5 @@ public:
         y = area.y;
         w = area.w;
         h = area.h;
-        // return Area(area.x, area.y, area.w, area.h);
     }
 };

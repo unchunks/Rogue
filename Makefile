@@ -23,6 +23,9 @@ all : $(OBJS)
 do : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME) && ./$(OBJ_NAME)
 
+release : $(OBJS)
+	$(CC) $(OBJS) $(COMPILER_FLAGS) -O3 -s $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+
 
 commit-% :
 	git add -A

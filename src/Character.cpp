@@ -24,13 +24,8 @@ Character::Character()
 {
 }
 
-Character::Character
-    (
-        int _x, int _y, int _maxHP, int _STR, int _VIT, 
-        STATE _state, DIRECTION _dir, CHAR_TYPE _type
-    )
-: maxHP(_maxHP), nowHP(_maxHP), STR(_STR), VIT(_VIT)
-, mState(_state), mDir(_dir), mType(_type)
+Character::Character(int _x, int _y, int _maxHP, int _STR, int _VIT, STATE _state, DIRECTION _dir, CHAR_TYPE _type)
+: nowHP(_maxHP), maxHP(_maxHP), STR(_STR), VIT(_VIT), mState(_state), mDir(_dir), mType(_type)
 , mBox({TILE_WIDTH*2, TILE_HEIGHT*2, SPRITE_CHAR_WIDTH, SPRITE_CHAR_HEIGHT})
 {
     mNowMoving = false;
@@ -41,7 +36,7 @@ void Character::move( Tile *tiles[] )
 	//移動中の場合、次のマス目につくまで前フレームの移動を継続
 	if(!mNowMoving)
 		return;
-	
+
 	switch(mMovingDir)
 	{
     case LEFT:
@@ -126,7 +121,7 @@ void Character::setCamera( SDL_Rect& camera )
 
 	//Keep the camera in bounds
 	if( camera.x < 0 )
-	{ 
+	{
 		camera.x = 0;
 	}
 	if( camera.y < 0 )
@@ -162,4 +157,3 @@ bool Character::onTileCenter( Tile* tiles[] )
 		return true;
 	return false;
 }
-

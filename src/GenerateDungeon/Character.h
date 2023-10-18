@@ -49,8 +49,8 @@ public:
 protected:
     bool onTileCenter( Tile* tiles[] );
 
-    int maxHP, STR, VIT;
     int nowHP;
+    int maxHP, STR, VIT;
     STATE mState;
     DIRECTION mDir;
     CHAR_TYPE mType;
