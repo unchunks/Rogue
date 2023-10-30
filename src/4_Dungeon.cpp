@@ -1,6 +1,12 @@
 #include "Scene/4_Dungeon.h"
 
 extern SDL_Renderer *gRenderer;
+extern int anim_frame;
+
+extern std::mt19937 random_engine;
+extern std::uniform_int_distribution<int> random_num;
+
+#define DEBUG
 
 Game *dungeon_g;
 
@@ -15,13 +21,37 @@ Dungeon::Dungeon(Game *game)
 {
     dungeon_g = game;
     mGame = game;
+
+	tileSet.resize( TOTAL_TILES , Tile(0, 0, NONE));
+	mPlayerSpriteClips.resize( ANIMATION_FRAMES * static_cast<int>(NO_DIRECTION) , {0, 0, 0, 0} );
+	mEnemySpriteClips.resize( static_cast<int>(ENEMY_TYPE_NUMBER), std::vector<SDL_Rect>( ANIMATION_FRAMES * static_cast<int>(NO_DIRECTION) , {0, 0, 0, 0} ) );
     if(!LoadData())
     {
 		SDL_Log( "Failed to load media!\n" );
     }
+//REVIEW: これ要るのか？
 	player.mCharTexture.setW(player.mCharTexture.getWidth() * TILE_WIDTH / SPRITE_CHAR_WIDTH);
 	player.mCharTexture.setH(player.mCharTexture.getHeight() * TILE_HEIGHT / SPRITE_CHAR_HEIGHT);
 	camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+}
+
+Dungeon::~Dungeon()
+{
+	//Deallocate tiles
+	tileSet.clear();
+	tileSet.shrink_to_fit();
+
+	//Free loaded images
+	player.mSpriteClips.clear();
+	player.mSpriteClips.shrink_to_fit();
+	mEnemySpriteClips.clear();
+	mEnemySpriteClips.shrink_to_fit();
+
+    player.mCharTexture.free(); //別の場所で解放済み?
+	gTileTexture.free();
+
+	enemies.clear();
+	enemies.shrink_to_fit();
 }
 
 // REVIEW: デバッグ用
@@ -39,7 +69,7 @@ const char* get(DIRECTION _dir)
 
 void Dungeon::Input(SDL_Event event)
 {
-// SDL_Log("Input\n");
+// SDL_Log("Input\n"); 
     // プレイヤーのアップデート
 // TODO: キーを長押しすると敵を無視して連続で動いてしまう
     // glm::vec2 front;
@@ -56,10 +86,10 @@ void Dungeon::Input(SDL_Event event)
 
 		switch(event.key.keysym.sym)
 		{
-			case SDLK_w: playerMoved = true; player.mMovingDir = UP; break; //player.move(DIRECTION::UP);    break;
-			case SDLK_a: playerMoved = true; player.mMovingDir = LEFT; break; //player.move(DIRECTION::LEFT);  break;
-			case SDLK_s: playerMoved = true; player.mMovingDir = DOWN; break; //player.move(DIRECTION::DOWN);  break;
-			case SDLK_d: playerMoved = true; player.mMovingDir = RIGHT; break; //player.move(DIRECTION::RIGHT); break;
+			case SDLK_w: playerMoved = true; player.mMovingDir = UP; break;
+			case SDLK_a: playerMoved = true; player.mMovingDir = LEFT; break;
+			case SDLK_s: playerMoved = true; player.mMovingDir = DOWN; break;
+			case SDLK_d: playerMoved = true; player.mMovingDir = RIGHT; break;
 			// case SDLK_k:
 			// 	playerMoved = true;
 			// 	front = getFrontPos(player.getPos(), player.getDir());
@@ -67,24 +97,25 @@ void Dungeon::Input(SDL_Event event)
 			// 		break;
 			// 	player.attack(whichEnemy(front));
 			// break;
+#ifdef DEBUG
+			case SDLK_1: player.mNowMoving = false; player.mSpriteClips = mPlayerSpriteClips; break;
+			case SDLK_2: player.mNowMoving = false; player.mSpriteClips = mEnemySpriteClips[0]; break;
+			case SDLK_3: player.mNowMoving = false; player.mSpriteClips = mEnemySpriteClips[1]; break;
+#endif
 			case SDLK_q: inDungeon = false; break;
 		}
 	}
 	else if(event.type == SDL_KEYUP)
 	{
+		event.key.keysym.sym = 0;
 		player.mMovingDir = NO_DIRECTION;
 	}
-
-	// if(!canGetOn(player.getPos()))
-	// {
-	// 	player.back();
-	// }
 
 // 階段を登ったときの処理
     if(playerMoved) switch(dungeon_g->getNowScene())
 	{
-	case DUNGEON_AREA_DIVIDE: goNextFloor = (areaDivide.buff[(int)player.getPos().y+1][(int)player.getPos().x+1] == STEP); break;
-	case DUNGEON_RRA: 		  goNextFloor = (	    rra.buff[(int)player.getPos().y+1][(int)player.getPos().x+1] == STEP); break;
+	case DUNGEON_AREA_DIVIDE: goNextFloor = (areaDivide.buff[((int)player.getPos().y / FLOOR_H)+1][((int)player.getPos().x / FLOOR_W)+1] == STEP); break;
+	case DUNGEON_RRA: 		  goNextFloor = (	    rra.buff[((int)player.getPos().y / FLOOR_H)+1][((int)player.getPos().x / FLOOR_W)+1] == STEP); break;
     default: break;
     }
     if(goNextFloor) {
@@ -92,13 +123,13 @@ void Dungeon::Input(SDL_Event event)
     }
 }
 
-void Dungeon::Update(int anim_frame)
+void Dungeon::Update()
 {
 // SDL_Log("Update\n");
     if(!inDungeon)
     {
 std::cout << "ダンジョン脱出\n";
-		quit(tileSet);
+		quit();
         dungeon_g->setNowScene(SCENE::HOME);
         return;
     }
@@ -190,15 +221,21 @@ std::cout << "Enemy updated\n";
     }
 }
 
-void Dungeon::Output(int anim_frame)
+void Dungeon::Output()
 {
 // SDL_Log("Output\n");
 	//Render level
-	for( int i = 0; i < TOTAL_TILES; ++i )
+	for(auto tile : tileSet)
 	{
-		tileSet[ i ]->render( camera );
+		tile.render( camera );
 	}
 	player.render(camera, anim_frame);
+SDL_Log("プレイヤー(%d, %d)\n", (int)player.getPos().x / TILE_WIDTH, (int)player.getPos().y / TILE_HEIGHT);
+	for(auto e : enemies)
+	{
+		e.render(camera, anim_frame);
+SDL_Log("敵(%d, %d)\n", (int)e.getPos().x / TILE_WIDTH, (int)e.getPos().y / TILE_HEIGHT);
+	}
 
     // for(int y=0; y<FLOOR_H+2; y++) {
     //     for(int x=0; x<FLOOR_W+2; x++) {
@@ -225,77 +262,37 @@ bool Dungeon::LoadData()
 		SDL_Log( "Failed to load walking animation texture!\n" );
 		success = false;
 	}
-	else
+	else//Character.hにcharacter.pngを読み込ませる。その後enemySpriteClipsに座標情報を入力してそのポインタを各キャラクターに渡す.
 	{
-		//REVIEW: スプライトクリップを設定する
-		player.mSpriteClips[ static_cast<int>(LEFT) + 0 ].x = SPRITE_CHAR_WIDTH*0;
-        player.mSpriteClips[ static_cast<int>(LEFT) + 0 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 0 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 0 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 1 ].x = SPRITE_CHAR_WIDTH*1;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 1 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 1 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 1 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 2 ].x = SPRITE_CHAR_WIDTH*2;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 2 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 2 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 2 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 3 ].x = SPRITE_CHAR_WIDTH*3;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 3 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 3 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ static_cast<int>(LEFT) + 3 ].h = SPRITE_CHAR_HEIGHT;
-
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 0 ].x = SPRITE_CHAR_WIDTH*4;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 0 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 0 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 0 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 1 ].x = SPRITE_CHAR_WIDTH*5;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 1 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 1 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 1 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 2 ].x = SPRITE_CHAR_WIDTH*6;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 2 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 2 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 2 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 3 ].x = SPRITE_CHAR_WIDTH*7;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 3 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 3 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(RIGHT) * ANIMATION_FRAMES) + 3 ].h = SPRITE_CHAR_HEIGHT;
-
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 0 ].x = SPRITE_CHAR_WIDTH*8;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 0 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 0 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 0 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 1 ].x = SPRITE_CHAR_WIDTH*9;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 1 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 1 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 1 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 2 ].x = SPRITE_CHAR_WIDTH*10;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 2 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 2 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 2 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 3 ].x = SPRITE_CHAR_WIDTH*11;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 3 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 3 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(UP) * ANIMATION_FRAMES) + 3 ].h = SPRITE_CHAR_HEIGHT;
-
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 0 ].x = SPRITE_CHAR_WIDTH*12;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 0 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 0 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 0 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 1 ].x = SPRITE_CHAR_WIDTH*13;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 1 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 1 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 1 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 2 ].x = SPRITE_CHAR_WIDTH*14;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 2 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 2 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 2 ].h = SPRITE_CHAR_HEIGHT;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 3 ].x = SPRITE_CHAR_WIDTH*15;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 3 ].y = SPRITE_CHAR_HEIGHT*0;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 3 ].w = SPRITE_CHAR_WIDTH;
-		player.mSpriteClips[ (static_cast<int>(DOWN) * ANIMATION_FRAMES) + 3 ].h = SPRITE_CHAR_HEIGHT;
+		//プレイヤースプライトクリップを設定する
+		for(int sprite_dir = 0; sprite_dir < static_cast<int>(NO_DIRECTION); sprite_dir++)
+		{
+			for(int sprite_num = 0; sprite_num < ANIMATION_FRAMES; sprite_num++)
+			{
+				mPlayerSpriteClips.at( ( sprite_dir * ANIMATION_FRAMES ) + sprite_num ).x = SPRITE_CHAR_WIDTH * ( sprite_dir * ANIMATION_FRAMES + sprite_num );
+				mPlayerSpriteClips.at( ( sprite_dir * ANIMATION_FRAMES ) + sprite_num ).y = SPRITE_CHAR_HEIGHT*0;
+				mPlayerSpriteClips.at( ( sprite_dir * ANIMATION_FRAMES ) + sprite_num ).w = SPRITE_CHAR_WIDTH;
+				mPlayerSpriteClips.at( ( sprite_dir * ANIMATION_FRAMES ) + sprite_num ).h = SPRITE_CHAR_HEIGHT;
+			}
+		}
+		
+		//敵スプライトクリップを設定する
+		for(int enemy_num = 0; enemy_num < static_cast<int>(ENEMY_TYPE_NUMBER); enemy_num++)
+		{
+			for(int sprite_dir = 0; sprite_dir < static_cast<int>(NO_DIRECTION); sprite_dir++)
+			{
+				for(int sprite_num = 0; sprite_num < ANIMATION_FRAMES; sprite_num++)
+				{
+					mEnemySpriteClips.at( enemy_num ).at( ( sprite_dir * ANIMATION_FRAMES ) + sprite_num ).x = SPRITE_CHAR_WIDTH * ( sprite_dir * ANIMATION_FRAMES + sprite_num );
+					mEnemySpriteClips.at( enemy_num ).at( ( sprite_dir * ANIMATION_FRAMES ) + sprite_num ).y = SPRITE_CHAR_HEIGHT * ( enemy_num + 1 );
+					mEnemySpriteClips.at( enemy_num ).at( ( sprite_dir * ANIMATION_FRAMES ) + sprite_num ).w = SPRITE_CHAR_WIDTH;
+					mEnemySpriteClips.at( enemy_num ).at( ( sprite_dir * ANIMATION_FRAMES ) + sprite_num ).h = SPRITE_CHAR_HEIGHT;
+				}
+			}
+		}
 	}
+
+	player.mSpriteClips = mPlayerSpriteClips;
 
 	//Load tile texture
 	if( !gTileTexture.loadFromFile( "assets/dungeon_tiles.png" ) )
@@ -320,7 +317,6 @@ std::cout << "ダンジョンを初期化\n";
 	switch(dungeon_g->getNowScene())
 	{
 	case DUNGEON_AREA_DIVIDE:
-		//FIX: ここでエラーが発生することがある
 		areaDivide.generate();
 	break;
 	case DUNGEON_RRA:
@@ -330,7 +326,7 @@ std::cout << "ダンジョンを初期化\n";
 	}
 
 	//Load tile map
-	if( !setTiles(tileSet) )
+	if( !setTiles() )
 	{
 		SDL_Log( "Failed to load tile set!\n" );
 	}
@@ -353,10 +349,12 @@ std::cout << "敵を初期化\n";
     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
     for(auto& e : enemies)
     {
-        e = Enemy((ENEMY_TYPE)(rand() % ENEMY_TYPE_NUMBER));
-    }
-    for(auto& e : enemies)
-    {
+		// FIX: 敵の種類がランダムにならない
+        e = Enemy( static_cast<ENEMY_TYPE>( random_num( random_engine ) % static_cast<int>( ENEMY_TYPE_NUMBER ) ) );
+SDL_Log("%d :: ", (int)e.getType());
+		e.mSpriteClips = mEnemySpriteClips.at( static_cast<int>( e.getType() ) );
+SDL_Log("X: %d, Y: %d, W: %d, H: %d\n", e.mSpriteClips.at( 0 ).x, e.mSpriteClips.at( 0 ).y, e.mSpriteClips.at( 0 ).w, e.mSpriteClips.at( 0 ).h);
+
 		switch(dungeon_g->getNowScene())
 		{
 		case DUNGEON_AREA_DIVIDE: pos = getRandomPos(areaDivide.getRoomNum()); break;
@@ -366,32 +364,19 @@ std::cout << "敵を初期化\n";
 		pos.x = pos.x*TILE_WIDTH + TILE_WIDTH/4;
 		pos.y = pos.y*TILE_HEIGHT + TILE_HEIGHT/4;
         e.setPos(pos);
-    }
-    // for(auto e : enemies)
-    // {
-    //     std::cout << "(" << e.getPos().x << ", " << e.getPos().y << ")\n";
-    // }
+	}
+for(auto e : enemies)
+{
+	std::cout << "(" << (int)e.getPos().x/TILE_WIDTH << ", " << (int)e.getPos().y/TILE_WIDTH << ")\n";
+}
 }
 
-void Dungeon::quit(Tile* tiles[])
+void Dungeon::quit()
 {
     inDungeon = true;
     goNextFloor = true;
-    player = Player(0, 0, PLAYER_HP, PLAYER_STR, PLAYER_VIT);
+    player.reset();
     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
-	//Deallocate tiles
-	// for( int i = 0; i < TOTAL_TILES; ++i )
-	// {
-	// 	if( tiles[ i ] != NULL )
-	// 	{
-	// 		delete tiles[ i ];
-	// 		tiles[ i ] = NULL;
-	// 	}
-	// }
-
-	//Free loaded images
-	// player.mCharTexture.free();
-	// gTileTexture.free();
 }
 
 int Dungeon::isOtherPos(glm::vec2 _pos)
@@ -413,15 +398,15 @@ bool Dungeon::canGetOn(glm::vec2 _pos)
 	{
 	case DUNGEON_AREA_DIVIDE:
 		if((areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != FLOOR)
-    	&& (areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != AISLE)
-    	&& (areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != STEP))
-        	return false;
+		&& (areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != AISLE)
+		&& (areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != STEP))
+			return false;
 	break;
 	case DUNGEON_RRA:
 		if((rra.buff[(int)_pos.y+1][(int)_pos.x+1] != FLOOR)
-    	&& (rra.buff[(int)_pos.y+1][(int)_pos.x+1] != AISLE)
-    	&& (rra.buff[(int)_pos.y+1][(int)_pos.x+1] != STEP))
-        	return false;
+		&& (rra.buff[(int)_pos.y+1][(int)_pos.x+1] != AISLE)
+		&& (rra.buff[(int)_pos.y+1][(int)_pos.x+1] != STEP))
+			return false;
 	break;
     default: break;
 	}
@@ -478,9 +463,7 @@ glm::vec2 Dungeon::getFrontPos(glm::vec2 _pos, DIRECTION _dir)
     return _pos + front;
 }
 
-//NOTE: 独立した関数
-
-bool setTiles( Tile* tiles[] )
+bool Dungeon::setTiles()
 {
 	//Success flag
 	bool tilesLoaded = true;
@@ -522,7 +505,7 @@ bool setTiles( Tile* tiles[] )
 			//If the number is a valid tile number
 			if( ( tileType >= 0 ) && ( tileType < TOTAL_TILE_SPRITES ) )
 			{
-				tiles[ i ] = new Tile( x, y, static_cast<CELL_TYPE>(tileType) );
+				tileSet.at(i) = Tile( x, y, static_cast<CELL_TYPE>(tileType) );
 			}
 			//If we don't recognize the tile type
 			else

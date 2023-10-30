@@ -44,8 +44,13 @@ constexpr int PLAYER_HP = 100;
 constexpr int PLAYER_STR = 20;
 constexpr int PLAYER_VIT = 10;
 
-// TODO: キャラを作ったらEnum.hに名前を追加
 // デカ
 constexpr int   DEKA_HP   = 50;
 constexpr int   DEKA_STR  = 2;
 constexpr int   DEKA_VIT  = 5;
+
+// グリ
+constexpr int   GURI_HP   = 50;
+constexpr int   GURI_STR  = 2;
+constexpr int   GURI_VIT  = 5;
+

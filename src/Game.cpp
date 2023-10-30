@@ -37,7 +37,7 @@ Game::Game()
 
 Game::~Game()
 {
-
+    Shutdown();
 }
 
 bool Game::Init()
@@ -86,7 +86,6 @@ SDL_Log("Unable to initialize SDL_mixer: %s", Mix_GetError());
         return false;
     }
 
-
     // Create an SDL Window
     gWindow = SDL_CreateWindow(
         "Game Programming in C++ (Chapter 1)", // Window title
@@ -120,10 +119,18 @@ SDL_Log("Failed to load sound effect : %s", Mix_GetError());
         return false;
     }
 
+    mMusic = Mix_LoadMUS("assets/BGM.mp3");
+    if(mMusic == NULL) {
+SDL_Log("Failed to load BGM : %s", Mix_GetError());
+        return false;
+    }
+
     mStart = new Start(this);
     mHome = new Home(this);
     mDungeonMenu = new DungeonMenu(this);
     mDungeon = new Dungeon(this);
+
+    Mix_PlayMusic(mMusic, -1);
 
     return true;
 }
@@ -188,7 +195,7 @@ void Game::Update()
         case HOME:          mHome->Update();              break;
         case DUNGEON_MENU:  mDungeonMenu->Update();       break;
         case DUNGEON_AREA_DIVIDE:
-        case DUNGEON_RRA:   mDungeon->Update(anim_frame); break;
+        case DUNGEON_RRA:   mDungeon->Update(); break;
     }
 }
 
@@ -203,7 +210,7 @@ void Game::Output()
         case HOME:          mHome->Output();              break;
         case DUNGEON_MENU:  mDungeonMenu->Output();       break;
         case DUNGEON_AREA_DIVIDE:
-        case DUNGEON_RRA:   mDungeon->Output(anim_frame); break;
+        case DUNGEON_RRA:   mDungeon->Output(); break;
     }
 
     SDL_RenderPresent(gRenderer);
@@ -213,6 +220,18 @@ void Game::Shutdown()
 {
     Mix_FreeChunk(mClickEffect);
     mClickEffect = NULL;
+
+    Mix_HaltMusic();
+    Mix_FreeMusic(mMusic);
+    mMusic = NULL;
+    Mix_CloseAudio();
+    
+    TTF_CloseFont(mFont);
+
+    delete mStart;
+    delete mHome;
+    delete mDungeonMenu;
+    delete mDungeon;
 
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);

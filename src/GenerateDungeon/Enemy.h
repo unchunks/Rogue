@@ -13,6 +13,7 @@ class Enemy : public Character
 public:
     Enemy(ENEMY_TYPE _enemy_type);
     Enemy(int _x, int _y, int _maxHP, int _STR, int _VIT, const char* _icon);
+    ~Enemy();
     // void walk();
     void setGoal(CELL_TYPE dungeon[FLOOR_H][FLOOR_W], glm::vec2 _goal);
 

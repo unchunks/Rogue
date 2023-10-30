@@ -23,6 +23,7 @@ class Character
 public:
     Character();
     Character(int _x, int _y, int _maxHP, int _STR, int _VIT, STATE _state, DIRECTION _dir, CHAR_TYPE _type);
+    ~Character();
 
     virtual void attack(class Character& _enemy);
     void receiveDamage(int _damage);
@@ -38,16 +39,20 @@ public:
     CHAR_TYPE getType() {return mType;}
     glm::vec2 getPos() {return glm::vec2(mBox.x, mBox.y);}
 
-    void move(Tile *tiles[]);
-    void setCamera(SDL_Rect& camera);
-    void render(SDL_Rect& camera, int anim_frame);
-    LTexture mCharTexture;
+    void move(std::vector<Tile> _tiles);
+    void setCamera(SDL_Rect& _camera);
+    void render(SDL_Rect& _camera, int _anim_frame);
+
+    static LTexture mCharTexture;
+    // LTexture mCharTexture;
+
     bool mNowMoving;
     DIRECTION mMovingDir;
-    SDL_Rect mSpriteClips[ ANIMATION_FRAMES * NO_DIRECTION ];
+    std::vector<SDL_Rect> mSpriteClips;
 
 protected:
-    bool onTileCenter( Tile* tiles[] );
+    bool onTileCenter( std::vector<Tile> _tiles );
+    bool touchesWall(SDL_Rect box, std::vector<Tile> _tiles);
 
     int nowHP;
     int maxHP, STR, VIT;

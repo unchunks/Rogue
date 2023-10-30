@@ -25,22 +25,24 @@ class Dungeon
 {
 public:
     Dungeon(class Game *game);
+    ~Dungeon();
 
     void Input(SDL_Event event);
-    void Update(int anim_frame);
-    void Output(int anim_frame);
+    void Update();
+    void Output();
 
 // ダンジョン生成
     void InitDungeon();
-    void quit(Tile* tiles[]);
+    void quit();
 
     bool inDungeon;
-
-// TODO: ダンジョンを画像で表示
 
 private:
     bool LoadData();
     void PlayMusic();
+
+    //.mapファイルからタイルをセット
+    bool setTiles();
 
     class Game *mGame;
 
@@ -64,13 +66,10 @@ private:
     Enemy& whichEnemy(glm::vec2 _pos);
 
     //The level tiles
-	Tile* tileSet[ TOTAL_TILES ];
+	std::vector<Tile> tileSet;
 
     SDL_Rect camera;
+    std::vector<SDL_Rect> mPlayerSpriteClips;
+    std::vector<std::vector<SDL_Rect>> mEnemySpriteClips;
 };
 
-//ボックスとタイルの衝突判定
-bool touchesWall( SDL_Rect box, Tile* tiles[] );
-
-//.mapファイルからタイルをセット
-bool setTiles( Tile *tiles[] );

@@ -17,6 +17,9 @@
 class Generator
 {
 public:
+    Generator();
+    ~Generator();
+
     Area getArea(int id) { return areas[id]; }
     Room getRoom(int id) { return rooms[id]; }
     int getAreaNum() { return areas.size(); }

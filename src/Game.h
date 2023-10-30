@@ -41,6 +41,7 @@ private:
     SDL_Event event;
     TTF_Font *mFont;
     Mix_Chunk* mClickEffect;
+    Mix_Music* mMusic;
 
     bool mIsRunning;
 

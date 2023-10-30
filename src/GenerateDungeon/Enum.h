@@ -41,8 +41,8 @@ enum CHAR_TYPE {
     ENEMY
 };
 
-// TODO: キャラを作ったらConst.hでステータスを作成
 enum ENEMY_TYPE {
     DEKA,
+    GURI,
     ENEMY_TYPE_NUMBER
 };

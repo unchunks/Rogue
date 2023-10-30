@@ -21,10 +21,15 @@ all : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 
 do : $(OBJS)
-	$(CC) $(OBJS) $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME) && ./$(OBJ_NAME)
+	$(CC) $(OBJS) $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME) 
+	./$(OBJ_NAME)
 
 release : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) -O3 -s $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+
+debug : $(OBJS)
+	$(CC) $(OBJS) $(COMPILER_FLAGS) -g $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME) 
+	valgrind --track-origins=yes --leak-check=full ./$(OBJ_NAME)
 
 
 commit-% :

@@ -4,6 +4,18 @@ std::random_device random_seed;
 std::mt19937 random_engine(random_seed());
 std::uniform_int_distribution<int> random_num(AREA_MAX, 100);
 
+Generator::Generator()
+{
+}
+
+Generator::~Generator()
+{
+    areas.clear();
+    areas.shrink_to_fit();
+    rooms.clear();
+    rooms.shrink_to_fit();
+}
+
 void Generator::initFloor() {
     for(int y=0; y<FLOOR_H; y++) {
         for(int x=0; x<FLOOR_W; x++) {

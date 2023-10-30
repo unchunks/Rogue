@@ -12,6 +12,12 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
             VIT   = DEKA_VIT;
         break;
 
+        case GURI:
+            maxHP = GURI_HP;
+            STR   = GURI_STR;
+            VIT   = GURI_VIT;
+        break;
+
         case ENEMY_TYPE_NUMBER: break;
     }
     mBox.x = 0;
@@ -25,6 +31,12 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
 Enemy::Enemy(int _x, int _y, int _maxHP, int _STR, int _VIT, const char* _icon)
 : Character(_x, _y, _maxHP, _STR, _VIT, SEARCH, DOWN, ENEMY), elapsedTurn(0), icon(_icon)
 {
+}
+
+Enemy::~Enemy()
+{
+    route.clear();
+    route.shrink_to_fit();
 }
 
 // void Enemy::walk()
