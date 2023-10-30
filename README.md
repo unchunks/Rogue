@@ -9,8 +9,8 @@
 
 |敵の種族|アイコン|HP|ATK|DEF|備考|
 |:--:|:--:|--:|--:|--:|:--|
-|born（プレイヤー）|(sample/born.png)|未定|未定|未定|未定|
-|deka|(sample/deka.png)|未定|未定|未定|未定|
-|guri|(sample/guri.png)|未定|未定|未定|未定|
+|born（プレイヤー）|![born](sample/born.png)|未定|未定|未定|未定|
+|deka|![deka](sample/deka.png)|未定|未定|未定|未定|
+|guri|![guri](sample/guri.png)|未定|未定|未定|未定|
 
 ![参考画像](sample/sample.png)
