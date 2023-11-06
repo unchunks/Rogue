@@ -39,6 +39,8 @@ public:
     CHAR_TYPE getType() {return mType;}
     glm::vec2 getPos() {return glm::vec2(mBox.x, mBox.y);}
 
+    bool onTileCenter();
+
     void move(std::vector<Tile> _tiles);
     void setCamera(SDL_Rect& _camera);
     void render(SDL_Rect& _camera, int _anim_frame);
@@ -51,7 +53,6 @@ public:
     std::vector<SDL_Rect> mSpriteClips;
 
 protected:
-    bool onTileCenter( std::vector<Tile> _tiles );
     bool touchesWall(SDL_Rect box, std::vector<Tile> _tiles);
 
     int nowHP;

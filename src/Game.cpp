@@ -66,7 +66,7 @@ SDL_Log("Unable to initialize SDL_TTF: %s", TTF_GetError());
         return false;
     }
 
-    mFont = TTF_OpenFont("assets/JF-Dot-K14.ttf", 30);
+    mFont = TTF_OpenFont("assets/JF-Dot-K14B.ttf", 30);
     if (!mFont) {
 SDL_Log("TTF_OpenFont: %s\n", TTF_GetError());
         return false;
@@ -79,6 +79,7 @@ SDL_Log("TTF_OpenFont: %s\n", TTF_GetError());
 SDL_Log("Unable to initialize SDL_Mix: %s", Mix_GetError());
         return false;
     }
+    
     sdlResult = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
     if (sdlResult < 0)
     {

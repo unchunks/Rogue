@@ -10,7 +10,7 @@ constexpr int BUFF_FLOOR_H = FLOOR_H + 2;
 constexpr int AREA_MAX = 10;
 constexpr int AREA_SIZE_MIN = 10;
 
-constexpr int NUM_ENEMY = 3;
+constexpr int NUM_ENEMY = 1;
 constexpr int ENEMY_FIND_RANGE = 10;
 constexpr int ENEMY_SEARCH_INTERVAL = 10;
 
@@ -18,15 +18,15 @@ constexpr int ENEMY_SEARCH_INTERVAL = 10;
 constexpr int SCREEN_WIDTH = 996;
 constexpr int SCREEN_HEIGHT = 560;
 
-//レベルの寸法
-constexpr int LEVEL_WIDTH = 5120;
-constexpr int LEVEL_HEIGHT = 5120;
-
 //Tile 定数
 constexpr int TILE_WIDTH = 128;
 constexpr int TILE_HEIGHT = 128;
 constexpr int TOTAL_TILES = 1600;
 constexpr int TOTAL_TILE_SPRITES = 20;
+
+//レベルの寸法
+constexpr int LEVEL_WIDTH = TILE_WIDTH * FLOOR_W;
+constexpr int LEVEL_HEIGHT = TILE_HEIGHT * FLOOR_H;
 
 //キャラクターの寸法
 constexpr int SPRITE_CHAR_WIDTH = 64;

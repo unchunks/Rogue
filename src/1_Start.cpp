@@ -3,7 +3,7 @@
 extern SDL_Renderer *gRenderer;
 
 const int BUTTON_W = 500;
-const int BUTTON_H = 50;
+const int BUTTON_H = 80;
 
 Game *start_g;
 void startButton()
@@ -23,7 +23,7 @@ Start::Start(Game *game)
     mStartButton.create(
         gRenderer,
         (SCREEN_WIDTH - BUTTON_W) / 2,
-        (SCREEN_HEIGHT - BUTTON_H) / 3,
+        (SCREEN_HEIGHT - BUTTON_H) / 2,
         BUTTON_W,
         BUTTON_H,
         "S : Game Start",

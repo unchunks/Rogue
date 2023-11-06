@@ -83,6 +83,9 @@ SDL_Log("部屋書き込み\n");
     }
 
 SDL_Log("地形整形\n");
+
+    outputMap_forDebug();
+    
     fillSurround();
     randomEraseDeadEnd();
     identificationWallKind();

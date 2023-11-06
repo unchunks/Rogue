@@ -8,7 +8,8 @@
 
 #include "../Functions/Color.h"
 
-const int padding = 3;
+const int padding = 6;
+
 // const Mix_Chunk* mClickEffect = Mix_LoadWAV("../../assets/click.mp3");
 
 class Button
@@ -24,9 +25,11 @@ public:
 
         mButtonColor = buttonColor;
 
-        mBottomOutlineRect = {x, y+h-3, w, 3};
-        mRightOutlineRect = {x+w-3, y, 3, h-2};
-        mButtonRect = {x, y, w-3, h-3};
+        mTopOutlineRect  = {x, y, w, padding};
+        mBottomOutlineRect = {x, y+h-padding, w, padding};
+        mLeftOutlineRect  = {x, y, padding, h};
+        mRightOutlineRect = {x+w-padding, y, padding, h};
+        mButtonRect = {x+padding, y+padding, w-padding*2, h-padding*2};
 
         mTexture = SDL_CreateTextureFromSurface(mRenderer, surface);
 
@@ -44,11 +47,16 @@ public:
     }
     void Draw()
     {
-        SDL_SetRenderDrawColor(mRenderer, mButtonColor.r/2.5, mButtonColor.g/2.5, mButtonColor.b/2.5, mButtonColor.a);
+        ExpandColor exchange = ExpandColor(mButtonColor);
+        ExpandColor outColor = exchange + SDL_Color{100, 100, 100, 255};
+        SDL_SetRenderDrawColor(mRenderer, outColor.color.r, outColor.color.g, outColor.color.b, outColor.color.a);
         SDL_RenderFillRect(mRenderer, &mBottomOutlineRect);
-
-        SDL_SetRenderDrawColor(mRenderer, mButtonColor.r/3, mButtonColor.g/3, mButtonColor.b/3, mButtonColor.a);
         SDL_RenderFillRect(mRenderer, &mRightOutlineRect);
+        
+        outColor = exchange + SDL_Color{180, 180, 180, 255};
+        SDL_SetRenderDrawColor(mRenderer, outColor.color.r, outColor.color.g, outColor.color.b, outColor.color.a);
+        SDL_RenderFillRect(mRenderer, &mTopOutlineRect);
+        SDL_RenderFillRect(mRenderer, &mLeftOutlineRect);
 
         SDL_SetRenderDrawColor(mRenderer, mButtonColor.r, mButtonColor.g, mButtonColor.b, mButtonColor.a);
         SDL_RenderFillRect(mRenderer, &mButtonRect);
@@ -63,6 +71,6 @@ public:
 private:
     SDL_Renderer *mRenderer;
     SDL_Texture *mTexture;
-    SDL_Rect mBottomOutlineRect, mRightOutlineRect, mButtonRect, mTextRect;
+    SDL_Rect mTopOutlineRect, mBottomOutlineRect, mLeftOutlineRect, mRightOutlineRect, mButtonRect, mTextRect;
     SDL_Color mButtonColor;
 };

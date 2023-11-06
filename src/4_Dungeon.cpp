@@ -1,12 +1,12 @@
 #include "Scene/4_Dungeon.h"
 
+#define DEBUG
+
 extern SDL_Renderer *gRenderer;
 extern int anim_frame;
 
 extern std::mt19937 random_engine;
 extern std::uniform_int_distribution<int> random_num;
-
-#define DEBUG
 
 Game *dungeon_g;
 
@@ -69,11 +69,9 @@ const char* get(DIRECTION _dir)
 
 void Dungeon::Input(SDL_Event event)
 {
-// SDL_Log("Input\n"); 
     // プレイヤーのアップデート
 // TODO: キーを長押しすると敵を無視して連続で動いてしまう
     // glm::vec2 front;
-    playerMoved = false;
 
 	if(player.mNowMoving)
 	{
@@ -98,11 +96,12 @@ void Dungeon::Input(SDL_Event event)
 			// 	player.attack(whichEnemy(front));
 			// break;
 #ifdef DEBUG
-			case SDLK_1: player.mNowMoving = false; player.mSpriteClips = mPlayerSpriteClips; break;
-			case SDLK_2: player.mNowMoving = false; player.mSpriteClips = mEnemySpriteClips[0]; break;
-			case SDLK_3: player.mNowMoving = false; player.mSpriteClips = mEnemySpriteClips[1]; break;
+			case SDLK_1: playerMoved = false; player.mNowMoving = false; player.mSpriteClips = mPlayerSpriteClips; break;
+			case SDLK_2: playerMoved = false; player.mNowMoving = false; player.mSpriteClips = mEnemySpriteClips[0]; break;
+			case SDLK_3: playerMoved = false; player.mNowMoving = false; player.mSpriteClips = mEnemySpriteClips[1]; break;
 #endif
-			case SDLK_q: inDungeon = false; break;
+			case SDLK_q: playerMoved = false; player.mNowMoving = false; inDungeon = false; break;
+			default: playerMoved = false; break;
 		}
 	}
 	else if(event.type == SDL_KEYUP)
@@ -114,8 +113,8 @@ void Dungeon::Input(SDL_Event event)
 // 階段を登ったときの処理
     if(playerMoved) switch(dungeon_g->getNowScene())
 	{
-	case DUNGEON_AREA_DIVIDE: goNextFloor = (areaDivide.buff[((int)player.getPos().y / FLOOR_H)+1][((int)player.getPos().x / FLOOR_W)+1] == STEP); break;
-	case DUNGEON_RRA: 		  goNextFloor = (	    rra.buff[((int)player.getPos().y / FLOOR_H)+1][((int)player.getPos().x / FLOOR_W)+1] == STEP); break;
+	case DUNGEON_AREA_DIVIDE: goNextFloor = (areaDivide.buff[((int)player.getPos().y / TILE_HEIGHT)+1][((int)player.getPos().x / TILE_WIDTH)+1] == STEP); break;
+	case DUNGEON_RRA: 		  goNextFloor = (	    rra.buff[((int)player.getPos().y / TILE_HEIGHT)+1][((int)player.getPos().x / TILE_WIDTH)+1] == STEP); break;
     default: break;
     }
     if(goNextFloor) {
@@ -125,7 +124,6 @@ void Dungeon::Input(SDL_Event event)
 
 void Dungeon::Update()
 {
-// SDL_Log("Update\n");
     if(!inDungeon)
     {
 std::cout << "ダンジョン脱出\n";
@@ -141,74 +139,75 @@ std::cout << "ダンジョン脱出\n";
     }
 
 	player.move(tileSet);
+	if(player.onTileCenter() && playerMoved && !player.mNowMoving) enemyCanMove = true;
+	else enemyCanMove = false;
 // std::cout << "(" << (int)player.getPos().x/TILE_WIDTH << ", " << (int)player.getPos().y/TILE_WIDTH << ")\n";
 	player.setCamera(camera);
-
+std::cout << "敵の移動許可" << enemyCanMove << "\n";
 // 敵のアップデート
     glm::vec2 front;
-    if(playerMoved) for(auto& e : enemies)
-    {
-        // std::cout << "残り距離　: " << e.getRouteSize() << std::endl;
-        // std::cout << "経過ターン: " << e.getElapsedTurn() << std::endl;
-std::cout << "Enemy updating\n";
-        switch(e.getState())
-        {
-            case SEARCH:
+	SDL_Log("%d", enemyCanMove);
+    if(enemyCanMove)
+	{
+		for(auto& e : enemies)
+		{
+			switch(e.getState())
+			{
+				case SEARCH:
 std::cout << "case SEARCH\n";
-// std::cout << abs(e.getPos().x - player.getPos().x) + abs(e.getPos().y - player.getPos().y) << std::endl;
-                if(abs(e.getPos().x - player.getPos().x) + abs(e.getPos().y - player.getPos().y) <= ENEMY_FIND_RANGE) {
-                    e.setState(FOUND);
-                    e.routeClear();
-                }
-// std::cout << e.getRouteSize() << " : " << e.getElapsedTurn() << std::endl;
-                if((e.getRouteSize() < 1) || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
-				{
-					switch(dungeon_g->getNowScene())
-					{
-					case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), areaDivide.getRandomFloorPos()); break;
-					case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), rra.getRandomFloorPos());        break;
-                    default: break;
-                    }
-				}
-                // e.walk();
-            break;
-            case FOUND:
-std::cout << "case FOUND\n";
-                if(abs(e.getPos().x - player.getPos().x) + abs(e.getPos().y - player.getPos().y) > ENEMY_FIND_RANGE)
-                    e.setState(SEARCH);
-                // 攻撃できるとき
-                front = getFrontPos(e.getPos(), e.getDir());
-                if(player.getPos() == front) {
-                    e.attack(player);
-                    break;
-                }
-                // 攻撃できないとき
-                else if((e.getRouteSize() < 1) || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
-				{
-					switch(dungeon_g->getNowScene())
-					{
-					case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), player.getPos()); break;
-					case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), player.getPos()); break;
-                    default: break;
+					if(abs(e.getPos().x - player.getPos().x)/TILE_WIDTH + abs(e.getPos().y - player.getPos().y)/TILE_HEIGHT <= ENEMY_FIND_RANGE) {
+						e.setState(FOUND);
+						e.routeClear();
 					}
-				}
-                // e.walk();
-            break;
-            case ESCAPE:
+					if((e.getRouteSize() < 1) || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
+					{
+						switch(dungeon_g->getNowScene())
+						{
+						case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), areaDivide.getRandomFloorPos()); break;
+						case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), rra.getRandomFloorPos());        break;
+						default: break;
+						}
+					}
+					e.walk(tileSet);
+				break;
+				case FOUND:
+std::cout << "case FOUND\n";
+					if(abs(e.getPos().x - player.getPos().x)/TILE_WIDTH + abs(e.getPos().y - player.getPos().y)/TILE_HEIGHT > ENEMY_FIND_RANGE)
+						e.setState(SEARCH);
+					front = getFrontPos(e.getPos(), e.getDir());
+					// 攻撃できるとき
+					if(player.getPos() == front) {
+						e.attack(player);
+						break;
+					}
+					// 攻撃できないとき
+					else if((e.getRouteSize() < 1) || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
+					{
+						switch(dungeon_g->getNowScene())
+						{
+						case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), player.getPos()); break;
+						case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), player.getPos()); break;
+						default: break;
+						}
+					}
+					e.walk(tileSet);
+				break;
+				case ESCAPE:
 std::cout << "case ESCAPE\n";
-            break;
-            case DEAD:
+				break;
+				case DEAD:
 std::cout << "case DEAD\n";
-                deadEnemies.push_back(e);
-            break;
+					deadEnemies.push_back(e);
+				break;
 // その他
-            case ALIVE: break;
-        }
+				case ALIVE: break;
+			}
 
-        if(!canGetOn(e.getPos()));
-            // e.back();
-std::cout << "Enemy updated\n";
-    }
+			if(!canGetOn(e.getPos()));
+				// e.back();
+			enemyCanMove = false;
+    	}
+	}
 
 // 敵の死亡判定
     for(auto it = enemies.begin(); it < enemies.end(); it++)
@@ -223,31 +222,20 @@ std::cout << "Enemy updated\n";
 
 void Dungeon::Output()
 {
-// SDL_Log("Output\n");
 	//Render level
 	for(auto tile : tileSet)
 	{
 		tile.render( camera );
 	}
 	player.render(camera, anim_frame);
+if(playerMoved && player.mNowMoving)
 SDL_Log("プレイヤー(%d, %d)\n", (int)player.getPos().x / TILE_WIDTH, (int)player.getPos().y / TILE_HEIGHT);
 	for(auto e : enemies)
 	{
 		e.render(camera, anim_frame);
+if(playerMoved && player.mNowMoving)
 SDL_Log("敵(%d, %d)\n", (int)e.getPos().x / TILE_WIDTH, (int)e.getPos().y / TILE_HEIGHT);
 	}
-
-    // for(int y=0; y<FLOOR_H+2; y++) {
-    //     for(int x=0; x<FLOOR_W+2; x++) {
-    //         std::cout << static_cast<int>(areaDivide.buff[y][x]) << " ";
-    //     }
-    //     std::cout << std::endl;
-    // }
-    // std::cout << "　　　　　  | HP |向き|\n" ;
-    // std::cout << "プレイヤー: |" << std::setw(4) << player.getNowHP() << "| " << get(player.getDir()) << " |\n";
-    // for(auto e: enemies) {
-    // std::cout << "　　敵　　: |" << std::setw(4) << e.getNowHP() << "|\n";
-    // }
 }
 
 bool Dungeon::LoadData()

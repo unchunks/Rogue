@@ -62,6 +62,33 @@ void Generator::eraseDeadEnd() {
     }
 }
 
+void Generator::outputMap_forDebug() {
+    bool charDrawn = false;
+
+    std::ofstream writing_file;
+    std::string filename = "debug.map";
+    writing_file.open(filename, std::ios::out);
+    std::string writing_text = "";
+
+    for(int y=0; y<FLOOR_H; y++) {
+        for(int x=0; x<FLOOR_W; x++) {
+            charDrawn = false;
+            if(charDrawn)
+                continue;
+            switch(floorTYPE[y][x]) {
+                case NONE:      writing_text += "00 "; break; //std::cout << "~ ";
+                case WALL_ALL:  writing_text += "16 "; break; //std::cout << "■ ";
+                case FLOOR:     writing_text += "17 "; break; //std::cout << "  ";
+                case AISLE:     writing_text += "18 "; break; //std::cout << "  ";
+                default:        writing_text += "   ";
+            }
+        }
+        writing_text += "\n";
+    }
+    writing_file << writing_text << std::endl;
+    writing_file.close();
+}
+
 void Generator::randomEraseDeadEnd() {
     for(int y=0; y<FLOOR_H; y++) {
         for(int x=0; x<FLOOR_W; x++) {
@@ -74,18 +101,15 @@ void Generator::randomEraseDeadEnd() {
             if((n >= 3) && (random_num(random_engine)%5)) {
                 floorTYPE[y][x] = WALL_ALL;
             }
-        }
-    }
-    for(int y=FLOOR_H-1; y>=0; y--) {
-        for(int x=FLOOR_W-1; x>=0; x--) {
-            if(floorTYPE[y][x] == WALL_ALL) continue;
-            int n = 0;
-            if(floorTYPE[y+1][x] == WALL_ALL) n++;
-            if(floorTYPE[y-1][x] == WALL_ALL) n++;
-            if(floorTYPE[y][x+1] == WALL_ALL) n++;
-            if(floorTYPE[y][x-1] == WALL_ALL) n++;
+
+            if(floorTYPE[(FLOOR_H-1)-y][(FLOOR_W-1)-x] == WALL_ALL) continue;
+            n = 0;
+            if(floorTYPE[(FLOOR_H-1)-y+1][(FLOOR_W-1)-x] == WALL_ALL) n++;
+            if(floorTYPE[(FLOOR_H-1)-y-1][(FLOOR_W-1)-x] == WALL_ALL) n++;
+            if(floorTYPE[(FLOOR_H-1)-y][(FLOOR_W-1)-x+1] == WALL_ALL) n++;
+            if(floorTYPE[(FLOOR_H-1)-y][(FLOOR_W-1)-x-1] == WALL_ALL) n++;
             if((n >= 3) && (random_num(random_engine)%5)) {
-                floorTYPE[y][x] = WALL_ALL;
+                floorTYPE[(FLOOR_H-1)-y][(FLOOR_W-1)-x] = WALL_ALL;
             }
         }
     }

@@ -47,6 +47,7 @@ private:
     class Game *mGame;
 
     bool playerMoved = false;
+    bool enemyCanMove = false;
 
 // ダンジョン生成
     bool goNextFloor;

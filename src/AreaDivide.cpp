@@ -70,13 +70,14 @@ SDL_Log("部屋生成\n");
         rooms.push_back(room);
 
 SDL_Log("通路書き込み\n");
+        int aisle_num = random_num(random_engine);
         for(int y=area.y; y<area.y + area.h; y++) {
             floorTYPE[y][room.x + room.w + 1] = AISLE;
-            floorTYPE[y][room.x + (random_num(random_engine) % (room.w - 2)) + 1] = AISLE;
+            floorTYPE[y][room.x + (aisle_num % (room.w - 2)) + 1] = AISLE;
         }
         for(int x=area.x; x<area.x + area.w; x++) {
             floorTYPE[room.y + room.h + 1][x] = AISLE;
-            floorTYPE[room.y + (random_num(random_engine) % (room.h - 2)) + 1][x] = AISLE;
+            floorTYPE[room.y + (aisle_num % (room.h - 2)) + 1][x] = AISLE;
         }
 
 SDL_Log("部屋書き込み\n");
@@ -88,6 +89,9 @@ SDL_Log("部屋書き込み\n");
     }
 
 SDL_Log("地形整形\n");
+
+    outputMap_forDebug();
+
     fillSurround();
     randomEraseDeadEnd();
     identificationWallKind();

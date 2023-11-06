@@ -43,7 +43,7 @@ DungeonMenu::DungeonMenu(Game *game)
         (SCREEN_HEIGHT - BUTTON_H) / 2,
         BUTTON_W,
         BUTTON_H,
-        "2 : RRA",
+        "2 : 　 RRA 　",
         mGame->getFont(),
         Color::SDL_blue,
         Color::SDL_white);

@@ -1,4 +1,5 @@
 #include "GenerateDungeon/AStar.h"
+#include "iostream"
 
 // 4方向のベクトル設定
 POINT CheckMatrix[] = {
@@ -128,7 +129,6 @@ std::deque<glm::vec2> AStar::AStar(CELL_TYPE def_data[FLOOR_H][FLOOR_W], glm::ve
                 data[y][x].status = 2;	// 壁
 		}
 	}
-
 	// 開始位置をオープンに
     data[(int)start.y][(int)start.x].SearchStatus = SEARCH_OPEN;
     Search(0);

@@ -69,7 +69,7 @@ void Character::move(std::vector<Tile> _tiles)
     case NO_DIRECTION:
         break;
     }
-    if (onTileCenter(_tiles) && mNowMoving)
+    if (onTileCenter() && mNowMoving)
     {
         mNowMoving = false;
     }
@@ -154,7 +154,7 @@ void Character::render(SDL_Rect &_camera, int _anim_frame)
 
 // 以下private関数
 
-bool Character::onTileCenter(std::vector<Tile> _tiles)
+bool Character::onTileCenter()
 {
     if (((mBox.x + mBox.w / 2) % TILE_WIDTH == TILE_WIDTH / 2) &&
         ((mBox.y + mBox.h / 2) % TILE_HEIGHT == TILE_HEIGHT / 2))

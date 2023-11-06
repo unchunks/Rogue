@@ -69,8 +69,8 @@ Home::Home(Game *game)
     //トップボタン
     mWeaponButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 4),
-        0,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 4) - padding,
+        padding,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "武",
@@ -79,8 +79,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mArmorButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 3),
-        0,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 3) - padding,
+        padding,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "防",
@@ -89,8 +89,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mItemButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 2),
-        0,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 2) - padding,
+        padding,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "ア",
@@ -99,8 +99,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mOtherButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 1),
-        0,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 1) - padding,
+        padding,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "他",
@@ -111,8 +111,8 @@ Home::Home(Game *game)
     //サイドボタン
     mHaveButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W,
-        SIDE_BUTTON_H * 0,
+        SCREEN_WIDTH - SIDE_BUTTON_W - padding,
+        SIDE_BUTTON_H * 0 + padding,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         "もちもの",
@@ -121,8 +121,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mStorageButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W,
-        (SIDE_BUTTON_H + 10) * 1,
+        SCREEN_WIDTH - SIDE_BUTTON_W - padding,
+        (SIDE_BUTTON_H + 10) * 1 + padding,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         "　倉庫　",
@@ -131,8 +131,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mSaveButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W,
-        (SIDE_BUTTON_H + 10) * 2,
+        SCREEN_WIDTH - SIDE_BUTTON_W - padding,
+        (SIDE_BUTTON_H + 10) * 2 + padding,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         " セーブ ",
@@ -141,8 +141,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mDungeonButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W,
-        (SIDE_BUTTON_H + 10) * 3,
+        SCREEN_WIDTH - SIDE_BUTTON_W - padding,
+        (SIDE_BUTTON_H + 10) * 3 + padding,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         "ﾀﾞﾝｼﾞｮﾝ",
