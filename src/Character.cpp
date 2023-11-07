@@ -8,9 +8,8 @@ Character::Character()
 }
 
 Character::Character(int _x, int _y, int _maxHP, int _STR, int _VIT, STATE _state, DIRECTION _dir, CHAR_TYPE _type)
-    : nowHP(_maxHP), maxHP(_maxHP), STR(_STR), VIT(_VIT), mState(_state), mDir(_dir), mType(_type), mBox({TILE_WIDTH * 2, TILE_HEIGHT * 2, SPRITE_CHAR_WIDTH, SPRITE_CHAR_HEIGHT})
+    : isMoved(false), nowHP(_maxHP), maxHP(_maxHP), STR(_STR), VIT(_VIT), mState(_state), mDir(_dir), mType(_type), mBox({TILE_WIDTH * 2, TILE_HEIGHT * 2, SPRITE_CHAR_WIDTH, SPRITE_CHAR_HEIGHT}), mAnimFrame(0)
 {
-    mNowMoving = false;
 }
 
 Character::~Character()
@@ -19,59 +18,48 @@ Character::~Character()
     mSpriteClips.shrink_to_fit();
 }
 
-/// @brief mNowMoving のとき向いている方向に移動。当たり判定も含む
+/// @brief 向いている方向に移動。当たり判定も含む
 /// @param _tiles 当たり判定用の全タイルの配列
 void Character::move(std::vector<Tile> _tiles)
 {
-    // 移動中の場合、次のマス目につくまで前フレームの移動を継続
-    if (!mNowMoving)
-        return;
-
-    switch (mMovingDir)
+    // 次のマス目につくまで前フレームの移動を継続
+    switch (mDir)
     {
     case LEFT:
-        mDir = LEFT;
         mBox.x -= CHAR_VEL;
         // キャラクターが左右上下に行き過ぎた場合、または壁に触れた場合戻る
         if ((mBox.x < 0) || (mBox.x + SPRITE_CHAR_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, _tiles))
         {
             mBox.x += CHAR_VEL + TILE_WIDTH / 4;
-            mNowMoving = false;
         }
         break;
     case RIGHT:
-        mDir = RIGHT;
         mBox.x += CHAR_VEL;
         if ((mBox.x < 0) || (mBox.x + SPRITE_CHAR_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, _tiles))
         {
             mBox.x -= CHAR_VEL + TILE_WIDTH / 4;
-            mNowMoving = false;
         }
         break;
     case UP:
-        mDir = UP;
         mBox.y -= CHAR_VEL;
         if ((mBox.y < 0) || (mBox.y + SPRITE_CHAR_HEIGHT > LEVEL_HEIGHT) || touchesWall(mBox, _tiles))
         {
             mBox.y += CHAR_VEL + TILE_HEIGHT / 4;
-            mNowMoving = false;
         }
         break;
     case DOWN:
-        mDir = DOWN;
         mBox.y += CHAR_VEL;
         if ((mBox.y < 0) || (mBox.y + SPRITE_CHAR_HEIGHT > LEVEL_HEIGHT) || touchesWall(mBox, _tiles))
         {
             mBox.y -= CHAR_VEL + TILE_HEIGHT / 4;
-            mNowMoving = false;
         }
         break;
     case NO_DIRECTION:
         break;
     }
-    if (onTileCenter() && mNowMoving)
+    if(onTileCenter())
     {
-        mNowMoving = false;
+        SDL_Log("移動完了");
     }
     // SDL_Log("(x: %d, y: %d)\n", ( mBox.x + mBox.w / 2 ) % TILE_WIDTH, ( mBox.y + mBox.h / 2 ) % TILE_HEIGHT);
 }
@@ -95,12 +83,18 @@ void Character::receiveDamage(int _damage)
     }
 }
 
+
+/// @brief 座標テレポート
+/// @param _x X座標(画像系の座標)
+/// @param _y Y座標(画像系の座標)
 void Character::setPos(int _x, int _y)
 {
     mBox.x = _x;
     mBox.y = _y;
 }
 
+/// @brief 座標テレポート
+/// @param _pos 座標(画像系の座標)
 void Character::setPos(glm::vec2 _pos)
 {
     mBox.x = _pos.x;
@@ -142,22 +136,30 @@ void Character::setCamera(SDL_Rect &_camera)
     }
 }
 
-void Character::render(SDL_Rect &_camera, int _anim_frame)
+void Character::render(SDL_Rect &_camera)
 {
-    int p_sprite_num = (static_cast<int>(mDir) * ANIMATION_FRAMES);
-    // 移動中はアニメーション
-    if (mNowMoving)
-        p_sprite_num += (_anim_frame * ANIM_SPEED / FPS);
+    int c_sprite_num = (static_cast<int>(mDir) * ANIMATION_FRAMES);
+    if(isMoved)
+    {
+        c_sprite_num += (mAnimFrame++ * ANIM_SPEED / FPS);
+    }
+    else
+    {
+        mAnimFrame = 0;
+    }
+    if(mAnimFrame >= ANIMATION_FRAMES * FPS / ANIM_SPEED)
+        mAnimFrame = 0;
     // プレイヤーを表示
-    mCharTexture.render(mBox.x - _camera.x, mBox.y - _camera.y, &mSpriteClips[p_sprite_num]);
+    mCharTexture.render(mBox.x - _camera.x, mBox.y - _camera.y, &mSpriteClips[c_sprite_num]);
 }
 
 // 以下private関数
 
 bool Character::onTileCenter()
 {
-    if (((mBox.x + mBox.w / 2) % TILE_WIDTH == TILE_WIDTH / 2) &&
-        ((mBox.y + mBox.h / 2) % TILE_HEIGHT == TILE_HEIGHT / 2))
+// SDL_Log("タイル内座標(x: %d, y: %d)\n", (mBox.x % TILE_WIDTH), (mBox.y % TILE_HEIGHT));
+    if ((mBox.x % TILE_WIDTH == TILE_WIDTH / 4) &&
+        (mBox.y % TILE_HEIGHT == TILE_HEIGHT / 4))
         return true;
     return false;
 }

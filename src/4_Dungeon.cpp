@@ -3,7 +3,6 @@
 #define DEBUG
 
 extern SDL_Renderer *gRenderer;
-extern int anim_frame;
 
 extern std::mt19937 random_engine;
 extern std::uniform_int_distribution<int> random_num;
@@ -47,8 +46,8 @@ Dungeon::~Dungeon()
 	mEnemySpriteClips.clear();
 	mEnemySpriteClips.shrink_to_fit();
 
-    player.mCharTexture.free(); //別の場所で解放済み?
-	gTileTexture.free();
+    // player.mCharTexture.free(); //別の場所で解放済み?
+	// gTileTexture.free();
 
 	enemies.clear();
 	enemies.shrink_to_fit();
@@ -69,54 +68,63 @@ const char* get(DIRECTION _dir)
 
 void Dungeon::Input(SDL_Event event)
 {
+	if(!inDungeon || goNextFloor)
+    {
+        return;
+    }
+
     // プレイヤーのアップデート
 // TODO: キーを長押しすると敵を無視して連続で動いてしまう
     // glm::vec2 front;
+	player.isMoved = false;
 
-	if(player.mNowMoving)
+	// 前の行動が終わっていないときはその続きをする
+	if(!player.onTileCenter())
 	{
-		return;
+		player.isMoved = true;
 	}
-
-	if(event.type == SDL_KEYDOWN)
+	else if(event.type == SDL_KEYDOWN)
 	{
-		player.mNowMoving = true;
-
 		switch(event.key.keysym.sym)
 		{
-			case SDLK_w: playerMoved = true; player.mMovingDir = UP; break;
-			case SDLK_a: playerMoved = true; player.mMovingDir = LEFT; break;
-			case SDLK_s: playerMoved = true; player.mMovingDir = DOWN; break;
-			case SDLK_d: playerMoved = true; player.mMovingDir = RIGHT; break;
+			case SDLK_w: player.isMoved = true; player.setDir(UP); break;
+			case SDLK_a: player.isMoved = true; player.setDir(LEFT); break;
+			case SDLK_s: player.isMoved = true; player.setDir(DOWN); break;
+			case SDLK_d: player.isMoved = true; player.setDir(RIGHT); break;
 			// case SDLK_k:
-			// 	playerMoved = true;
+			// 	player.isMoved = true;
 			// 	front = getFrontPos(player.getPos(), player.getDir());
 			// 	if(!isOtherPos(front))
 			// 		break;
 			// 	player.attack(whichEnemy(front));
 			// break;
 #ifdef DEBUG
-			case SDLK_1: playerMoved = false; player.mNowMoving = false; player.mSpriteClips = mPlayerSpriteClips; break;
-			case SDLK_2: playerMoved = false; player.mNowMoving = false; player.mSpriteClips = mEnemySpriteClips[0]; break;
-			case SDLK_3: playerMoved = false; player.mNowMoving = false; player.mSpriteClips = mEnemySpriteClips[1]; break;
+			case SDLK_1: player.isMoved = false; player.mSpriteClips = mPlayerSpriteClips; break;
+			case SDLK_2: player.isMoved = false; player.mSpriteClips = mEnemySpriteClips[0]; break;
+			case SDLK_3: player.isMoved = false; player.mSpriteClips = mEnemySpriteClips[1]; break;
+			case SDLK_t: 
+				player.isMoved = false; 
+				player.setPos(
+					enemies.at(0).getPos().x, 
+					enemies.at(0).getPos().y + TILE_HEIGHT*2
+				); 
+				break;
 #endif
-			case SDLK_q: playerMoved = false; player.mNowMoving = false; inDungeon = false; break;
-			default: playerMoved = false; break;
+			case SDLK_q: player.isMoved = false; inDungeon = false; break;
+			default: player.isMoved = false; break;
 		}
-	}
-	else if(event.type == SDL_KEYUP)
-	{
-		event.key.keysym.sym = 0;
-		player.mMovingDir = NO_DIRECTION;
 	}
 
 // 階段を登ったときの処理
-    if(playerMoved) switch(dungeon_g->getNowScene())
+    if(player.isMoved)
 	{
-	case DUNGEON_AREA_DIVIDE: goNextFloor = (areaDivide.buff[((int)player.getPos().y / TILE_HEIGHT)+1][((int)player.getPos().x / TILE_WIDTH)+1] == STEP); break;
-	case DUNGEON_RRA: 		  goNextFloor = (	    rra.buff[((int)player.getPos().y / TILE_HEIGHT)+1][((int)player.getPos().x / TILE_WIDTH)+1] == STEP); break;
-    default: break;
-    }
+		switch(dungeon_g->getNowScene())
+		{
+		case DUNGEON_AREA_DIVIDE: goNextFloor = (areaDivide.buff[((int)player.getPos().y / TILE_HEIGHT)+1][((int)player.getPos().x / TILE_WIDTH)+1] == STEP); break;
+		case DUNGEON_RRA: 		  goNextFloor = (	    rra.buff[((int)player.getPos().y / TILE_HEIGHT)+1][((int)player.getPos().x / TILE_WIDTH)+1] == STEP); break;
+		default: goNextFloor = false; break;
+		}
+	}
     if(goNextFloor) {
         return;
     }
@@ -134,20 +142,22 @@ std::cout << "ダンジョン脱出\n";
 
     if(goNextFloor)
     {
+std::cout << "次の階へ移動\n";
         InitDungeon();
         return;
     }
 
-	player.move(tileSet);
-	if(player.onTileCenter() && playerMoved && !player.mNowMoving) enemyCanMove = true;
-	else enemyCanMove = false;
-// std::cout << "(" << (int)player.getPos().x/TILE_WIDTH << ", " << (int)player.getPos().y/TILE_WIDTH << ")\n";
+	if(player.isMoved)
+	{
+		player.move(tileSet);
+	}
 	player.setCamera(camera);
-std::cout << "敵の移動許可" << enemyCanMove << "\n";
+
+// std::cout << "(" << (int)player.getPos().x/TILE_WIDTH << ", " << (int)player.getPos().y/TILE_WIDTH << ")\n";
+std::cout << "敵の移動許可" << player.isMoved << "\n";
 // 敵のアップデート
     glm::vec2 front;
-	SDL_Log("%d", enemyCanMove);
-    if(enemyCanMove)
+    if(player.isMoved)
 	{
 		for(auto& e : enemies)
 		{
@@ -205,7 +215,6 @@ std::cout << "case DEAD\n";
 
 			if(!canGetOn(e.getPos()));
 				// e.back();
-			enemyCanMove = false;
     	}
 	}
 
@@ -222,19 +231,20 @@ std::cout << "case DEAD\n";
 
 void Dungeon::Output()
 {
+	if(!inDungeon || goNextFloor)
+    {
+        return;
+    }
+
 	//Render level
 	for(auto tile : tileSet)
 	{
 		tile.render( camera );
 	}
-	player.render(camera, anim_frame);
-if(playerMoved && player.mNowMoving)
-SDL_Log("プレイヤー(%d, %d)\n", (int)player.getPos().x / TILE_WIDTH, (int)player.getPos().y / TILE_HEIGHT);
+	player.render(camera);
 	for(auto e : enemies)
 	{
-		e.render(camera, anim_frame);
-if(playerMoved && player.mNowMoving)
-SDL_Log("敵(%d, %d)\n", (int)e.getPos().x / TILE_WIDTH, (int)e.getPos().y / TILE_HEIGHT);
+		e.render(camera);
 	}
 }
 
@@ -337,7 +347,6 @@ std::cout << "敵を初期化\n";
     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
     for(auto& e : enemies)
     {
-		// FIX: 敵の種類がランダムにならない
         e = Enemy( static_cast<ENEMY_TYPE>( random_num( random_engine ) % static_cast<int>( ENEMY_TYPE_NUMBER ) ) );
 SDL_Log("%d :: ", (int)e.getType());
 		e.mSpriteClips = mEnemySpriteClips.at( static_cast<int>( e.getType() ) );

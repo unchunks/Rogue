@@ -222,6 +222,7 @@ void Generator::outputMap() {
     writing_file.close();
 }
 
+/// @brief ランダムなデータ系座標を返す
 glm::vec2 Generator::getRandomFloorPos()
 {
     int roomNum = random_num(random_engine) % rooms.size();

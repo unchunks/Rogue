@@ -41,25 +41,34 @@ Enemy::~Enemy()
 
 void Enemy::walk(std::vector<Tile> _tiles)
 {
-    nextPos = route[0];
-    mNowMoving = true;
-    if(nextPos.x < mBox.x/TILE_WIDTH) mDir = LEFT;
-    if(nextPos.x > mBox.x/TILE_WIDTH) mDir = RIGHT;
-    if(nextPos.y < mBox.y/TILE_HEIGHT) mDir = UP;
-    if(nextPos.y > mBox.y/TILE_HEIGHT) mDir = DOWN;
-    mMovingDir = mDir;
-    move(_tiles);
     if(onTileCenter())
+    {
+        nextPos = route[0];
+        if(nextPos.x > mBox.x/TILE_WIDTH) mDir = LEFT;
+        if(nextPos.x < mBox.x/TILE_WIDTH) mDir = RIGHT;
+        if(nextPos.y > mBox.y/TILE_HEIGHT) mDir = UP;
+        if(nextPos.y < mBox.y/TILE_HEIGHT) mDir = DOWN;
         route.pop_front();
-    elapsedTurn++;
+        elapsedTurn++;
+        SDL_Log("elapsedTurn: %d\n", elapsedTurn);
+    }
+    move(_tiles);
 }
 
-void Enemy::setGoal(CELL_TYPE dungeon[FLOOR_H][FLOOR_W], glm::vec2 _goal)
+/// @brief 目的地を設定し、ルートを検索
+/// @param dungeon データ系のマップ情報
+/// @param _goal データ系の目的地の座標
+void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], glm::vec2 _goal)
 {
+    if(_goal.x > FLOOR_W || _goal.y > FLOOR_H || _goal.x < 0 || _goal.y < 0)
+    {
+        return;
+    }
     goal = _goal;
     std::cout << "GOAL ==> (" << goal.x << ", " << goal.y << ")\n";
     route.clear();
-    route = AStar::AStar(dungeon, glm::vec2(mBox.x / TILE_WIDTH, mBox.y / TILE_HEIGHT), goal);
+    route = AStar::AStar(_dungeon, glm::vec2(mBox.x / TILE_WIDTH, mBox.y / TILE_HEIGHT), goal);
+    // 現在地をポップ
     route.pop_front();
     elapsedTurn = 0;
 }

@@ -10,9 +10,6 @@ SDL_Renderer *gRenderer;
 
 SDL_atomic_t frames;
 
-//現在のアニメーション フレーム
-int anim_frame = 0;
-
 /* 設定された間隔で平均フレームレートの計算と表示を行う */
 Uint32 fps_timer_callback(Uint32 interval, void *data)
 {
@@ -131,7 +128,7 @@ SDL_Log("Failed to load BGM : %s", Mix_GetError());
     mDungeonMenu = new DungeonMenu(this);
     mDungeon = new Dungeon(this);
 
-    Mix_PlayMusic(mMusic, -1);
+    // Mix_PlayMusic(mMusic, -1);
 
     return true;
 }
@@ -153,12 +150,7 @@ void Game::RunLoop()
         Update();
         Output();
 
-        //次のフレームに移動
-		anim_frame++;
-		//サイクルアニメーション
-		if( anim_frame >= ANIMATION_FRAMES / ANIM_SPEED * FPS )
-			anim_frame = 0;
-
+	
         /* フレーム数に1を加える */
         SDL_AtomicAdd(&frames, 1);
         afterTime = SDL_GetTicks();
@@ -170,11 +162,11 @@ void Game::RunLoop()
 
 void Game::Input()
 {
-    while (SDL_PollEvent(&event))
+    SDL_PollEvent(&event);
+    do
     {
-        // if (event.type != SDL_KEYDOWN) continue;
+        if(event.type != SDL_KEYDOWN && event.type != SDL_KEYUP) continue;
         if (event.type == SDL_QUIT) mIsRunning = false;
-// SDL_Log("%d\n", getNowScene());
         switch (getNowScene())
         {
             case START:         mStart->Input(event);       break;
@@ -183,11 +175,12 @@ void Game::Input()
             case DUNGEON_AREA_DIVIDE:
             case DUNGEON_RRA:   mDungeon->Input(event);     break;
         }
-    }
+    } while (SDL_PollEvent(&event));
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_ESCAPE]) mIsRunning = false;
 }
 
+//画面の切り替わり後はここから
 void Game::Update()
 {
     switch (getNowScene())

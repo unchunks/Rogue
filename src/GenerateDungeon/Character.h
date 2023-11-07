@@ -43,14 +43,14 @@ public:
 
     void move(std::vector<Tile> _tiles);
     void setCamera(SDL_Rect& _camera);
-    void render(SDL_Rect& _camera, int _anim_frame);
+    void render(SDL_Rect& _camera);
 
     static LTexture mCharTexture;
     // LTexture mCharTexture;
 
-    bool mNowMoving;
-    DIRECTION mMovingDir;
     std::vector<SDL_Rect> mSpriteClips;
+
+    bool isMoved;
 
 protected:
     bool touchesWall(SDL_Rect box, std::vector<Tile> _tiles);
@@ -63,4 +63,6 @@ protected:
 
     //プレイヤーの衝突判定
     SDL_Rect mBox;
+
+    int mAnimFrame;
 };

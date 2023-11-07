@@ -10,5 +10,4 @@ void Player::reset()
     nowHP = maxHP;
     mState = ALIVE;
     mDir = DOWN;
-    mNowMoving = false;
 }

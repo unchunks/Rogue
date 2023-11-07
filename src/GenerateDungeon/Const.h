@@ -37,7 +37,7 @@ constexpr int CHAR_VEL = ((TILE_WIDTH + TILE_HEIGHT) / FPS);// - (TILE_WIDTH % (
 
 //歩行アニメーション
 constexpr int ANIMATION_FRAMES = 4;
-constexpr int ANIM_SPEED = 4; //スプライト毎秒
+constexpr int ANIM_SPEED = 8; //スプライト毎秒
 
 // プレイヤー
 constexpr int PLAYER_HP = 100;

@@ -7,11 +7,14 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
+                "/home/yuthika/Rogue/src/*.cpp",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}",
+                "/home/yuthika/Rogue/game",
                 "`sdl2-config --cflags --libs`",
-                "-lSDL2"
+                "-lSDL2",
+                "-lSDL2_ttf",
+                "-lSDL2_image",
+                "-lSDL2_mixer"
             ],
             "options": {
                 "cwd": "${fileDirname}"
