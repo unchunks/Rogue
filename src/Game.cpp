@@ -162,10 +162,14 @@ void Game::RunLoop()
 
 void Game::Input()
 {
+    Button staticButton;
     SDL_PollEvent(&event);
     do
     {
-        if(event.type != SDL_KEYDOWN && event.type != SDL_KEYUP) continue;
+        if(event.type != SDL_KEYDOWN && event.type != SDL_KEYUP)
+        {
+            continue;
+        }
         if (event.type == SDL_QUIT) mIsRunning = false;
         switch (getNowScene())
         {

@@ -69,8 +69,8 @@ Home::Home(Game *game)
     //トップボタン
     mWeaponButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 4) - padding,
-        padding,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 4) - PADDING,
+        PADDING,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "武",
@@ -79,8 +79,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mArmorButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 3) - padding,
-        padding,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 3) - PADDING,
+        PADDING,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "防",
@@ -89,8 +89,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mItemButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 2) - padding,
-        padding,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 2) - PADDING,
+        PADDING,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "ア",
@@ -99,8 +99,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mOtherButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 1) - padding,
-        padding,
+        SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 1) - PADDING,
+        PADDING,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "他",
@@ -111,8 +111,8 @@ Home::Home(Game *game)
     //サイドボタン
     mHaveButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - padding,
-        SIDE_BUTTON_H * 0 + padding,
+        SCREEN_WIDTH - SIDE_BUTTON_W - PADDING,
+        SIDE_BUTTON_H * 0 + PADDING,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         "もちもの",
@@ -121,8 +121,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mStorageButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - padding,
-        (SIDE_BUTTON_H + 10) * 1 + padding,
+        SCREEN_WIDTH - SIDE_BUTTON_W - PADDING,
+        (SIDE_BUTTON_H + 10) * 1 + PADDING,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         "　倉庫　",
@@ -131,8 +131,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mSaveButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - padding,
-        (SIDE_BUTTON_H + 10) * 2 + padding,
+        SCREEN_WIDTH - SIDE_BUTTON_W - PADDING,
+        (SIDE_BUTTON_H + 10) * 2 + PADDING,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         " セーブ ",
@@ -141,8 +141,8 @@ Home::Home(Game *game)
         Color::SDL_white);
     mDungeonButton.create(
         gRenderer,
-        SCREEN_WIDTH - SIDE_BUTTON_W - padding,
-        (SIDE_BUTTON_H + 10) * 3 + padding,
+        SCREEN_WIDTH - SIDE_BUTTON_W - PADDING,
+        (SIDE_BUTTON_H + 10) * 3 + PADDING,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         "ﾀﾞﾝｼﾞｮﾝ",
@@ -157,32 +157,73 @@ void Home::LoadData()
 
 void Home::Input(SDL_Event event)
 {
-    switch(event.key.keysym.sym)
+    if(event.type == SDL_KEYDOWN)
     {
-        case SDLK_1:
-            mWeaponButton.onClick();
-            break;
-        case SDLK_2:
-            mArmorButton.onClick();
-            break;
-        case SDLK_3:
-            mItemButton.onClick();
-            break;
-        case SDLK_4:
-            mOtherButton.onClick();
-            break;
-        case SDLK_5:
-            mHaveButton.onClick();
-            break;
-        case SDLK_6:
-            mStorageButton.onClick();
-            break;
-        case SDLK_7:
-            mSaveButton.onClick();
-            break;
-        case SDLK_8:
-            mDungeonButton.onClick();
-            break;
+        switch(event.key.keysym.sym)
+        {
+            case SDLK_1:
+                mWeaponButton.press();
+                break;
+            case SDLK_2:
+                mArmorButton.press();
+                break;
+            case SDLK_3:
+                mItemButton.press();
+                break;
+            case SDLK_4:
+                mOtherButton.press();
+                break;
+            case SDLK_5:
+                mHaveButton.press();
+                break;
+            case SDLK_6:
+                mStorageButton.press();
+                break;
+            case SDLK_7:
+                mSaveButton.press();
+                break;
+            case SDLK_8:
+                mDungeonButton.press();
+                break;
+        }
+    }
+    else
+    {
+        switch(event.key.keysym.sym)
+        {
+            case SDLK_1:
+                mWeaponButton.release();
+                mWeaponButton.onClick();
+                break;
+            case SDLK_2:
+                mArmorButton.release();
+                mArmorButton.onClick();
+                break;
+            case SDLK_3:
+                mItemButton.release();
+                mItemButton.onClick();
+                break;
+            case SDLK_4:
+                mOtherButton.release();
+                mOtherButton.onClick();
+                break;
+            case SDLK_5:
+                mHaveButton.release();
+                mHaveButton.onClick();
+                break;
+            case SDLK_6:
+                mStorageButton.release();
+                mStorageButton.onClick();
+                break;
+            case SDLK_7:
+                mSaveButton.release();
+                mSaveButton.onClick();
+                break;
+            case SDLK_8:
+                mDungeonButton.release();
+                mDungeonButton.onClick();
+                break;
+        }
     }
 }
 

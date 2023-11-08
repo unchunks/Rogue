@@ -35,9 +35,19 @@ Start::Start(Game *game)
 
 void Start::Input(SDL_Event event)
 {
-    switch(event.key.keysym.sym)
+    if(event.type == SDL_KEYDOWN)
     {
-    case SDLK_s:    mStartButton.onClick();  break;
+        switch(event.key.keysym.sym)
+        {
+        case SDLK_s:    mStartButton.press();  break;
+        }
+    }
+    else
+    {
+        switch(event.key.keysym.sym)
+        {
+        case SDLK_s:    mStartButton.release(); mStartButton.onClick();  break;
+        }
     }
 }
 

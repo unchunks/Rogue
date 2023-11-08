@@ -55,10 +55,31 @@ void DungeonMenu::LoadData()
 
 void DungeonMenu::Input(SDL_Event event)
 {
-    switch(event.key.keysym.sym)
+    if(event.type == SDL_KEYDOWN)
     {
-    case SDLK_1:    mAreaDivide.onClick();  break;
-    case SDLK_2:    mRRA.onClick();         break;
+        switch(event.key.keysym.sym)
+        {
+        case SDLK_1:
+            mAreaDivide.press();
+            break;
+        case SDLK_2:
+            mRRA.press();
+            break;
+        }
+    }
+    else
+    {
+        switch(event.key.keysym.sym)
+        {
+        case SDLK_1:
+            mAreaDivide.release();
+            mAreaDivide.onClick();
+            break;
+        case SDLK_2:
+            mRRA.release();
+            mRRA.onClick();
+            break;
+        }
     }
 }
 

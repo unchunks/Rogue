@@ -149,7 +149,12 @@ std::cout << "次の階へ移動\n";
 
 	if(player.isMoved)
 	{
-		player.move(tileSet);
+		std::vector<Character> otherCharacters;
+		for(auto enemy : enemies)
+		{
+			otherCharacters.push_back(enemy);
+		}
+		player.move(tileSet, otherCharacters);
 	}
 	player.setCamera(camera);
 
@@ -169,16 +174,8 @@ std::cout << "case SEARCH\n";
 						e.setState(FOUND);
 						e.routeClear();
 					}
-					if((e.getRouteSize() < 1) || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
-					{
-						switch(dungeon_g->getNowScene())
-						{
-						case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), areaDivide.getRandomFloorPos()); break;
-						case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), rra.getRandomFloorPos());        break;
-						default: break;
-						}
-					}
-					e.walk(tileSet);
+					updateEnemyRoute(e, RANDOM_POS);
+					e.walk(tileSet, player, enemies);
 				break;
 				case FOUND:
 std::cout << "case FOUND\n";
@@ -191,16 +188,9 @@ std::cout << "case FOUND\n";
 						break;
 					}
 					// 攻撃できないとき
-					else if((e.getRouteSize() < 1) || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
-					{
-						switch(dungeon_g->getNowScene())
-						{
-						case DUNGEON_AREA_DIVIDE: e.setGoal(areaDivide.getFloor(), player.getPos()); break;
-						case DUNGEON_RRA: 		  e.setGoal(	   rra.getFloor(), player.getPos()); break;
-						default: break;
-						}
-					}
-					e.walk(tileSet);
+					else
+						updateEnemyRoute(e, PLAYER_POS);
+					e.walk(tileSet, player, enemies);
 				break;
 				case ESCAPE:
 std::cout << "case ESCAPE\n";
@@ -638,4 +628,25 @@ bool Dungeon::setTiles()
 
     //If the map was loaded fine
     return tilesLoaded;
+}
+
+void Dungeon::updateEnemyRoute(Enemy& _enemy, GOAL_TYPE _goleType)
+{
+	if((_enemy.getRouteSize() < 1) || (_enemy.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
+	{
+		glm::vec2 goal;
+		switch(_goleType)
+		{
+			case RANDOM_POS: 
+				switch(dungeon_g->getNowScene())
+				{
+				case DUNGEON_AREA_DIVIDE: goal =  areaDivide.getRandomFloorPos(); break;
+				case DUNGEON_RRA: 		  goal =  rra.getRandomFloorPos();        break;
+				default: break;
+				}
+				break;
+			case PLAYER_POS: goal = player.getPos(); break;
+		}
+		_enemy.setGoal(areaDivide.getFloor(), goal);
+	}
 }

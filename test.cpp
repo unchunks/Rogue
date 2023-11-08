@@ -107,10 +107,10 @@ SDL_Log("Failed to create renderer: %s", SDL_GetError());
 	Button button;
 	button.create(
 		renderer,
-		(640 - 200) / 2,
-		(480 - 50) / 3,
+		SCREEN_WIDTH/2-100,
+		SCREEN_HEIGHT/2-100,
+	    200,
 		200,
-		50,
 		"Test Button",
 		mFont,
 		Color::SDL_blue,
@@ -130,7 +130,7 @@ SDL_Log("Failed to create renderer: %s", SDL_GetError());
 				goto quit;
 			}
 		}
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     	SDL_RenderClear(renderer);
 
 		button.Draw();

@@ -32,8 +32,8 @@ debug : $(OBJS)
 	valgrind --track-origins=yes --leak-check=full ./$(OBJ_NAME)
 
 test : test.cpp
-	$(CC) test.cpp $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME) 
-	./$(OBJ_NAME)
+	$(CC) test.cpp $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o test
+	./test
 
 commit-% :
 	git add -A

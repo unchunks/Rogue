@@ -28,6 +28,8 @@ constexpr int TOTAL_TILE_SPRITES = 20;
 constexpr int LEVEL_WIDTH = TILE_WIDTH * FLOOR_W;
 constexpr int LEVEL_HEIGHT = TILE_HEIGHT * FLOOR_H;
 
+constexpr int PADDING = 5;
+
 //キャラクターの寸法
 constexpr int SPRITE_CHAR_WIDTH = 64;
 constexpr int SPRITE_CHAR_HEIGHT = 64;

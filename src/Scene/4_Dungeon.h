@@ -21,6 +21,12 @@
 
 #include "../Game.h"
 
+enum GOAL_TYPE
+{
+    RANDOM_POS,
+    PLAYER_POS
+};
+
 class Dungeon
 {
 public:
@@ -43,6 +49,8 @@ private:
 
     //.mapファイルからタイルをセット
     bool setTiles();
+
+    void updateEnemyRoute(Enemy& _enemy, GOAL_TYPE _goleType);
 
     class Game *mGame;
 

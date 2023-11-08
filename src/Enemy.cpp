@@ -39,7 +39,7 @@ Enemy::~Enemy()
     route.shrink_to_fit();
 }
 
-void Enemy::walk(std::vector<Tile> _tiles)
+void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<Enemy> _otherEnemies)
 {
     if(onTileCenter())
     {
@@ -52,7 +52,13 @@ void Enemy::walk(std::vector<Tile> _tiles)
         elapsedTurn++;
         SDL_Log("elapsedTurn: %d\n", elapsedTurn);
     }
-    move(_tiles);
+    std::vector<Character> otherCharacters;
+    otherCharacters.push_back(_player);
+    for(auto enemy : _otherEnemies)
+    {
+        otherCharacters.push_back(enemy);
+    }
+    move(_tiles, otherCharacters);
 }
 
 /// @brief 目的地を設定し、ルートを検索

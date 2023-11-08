@@ -41,7 +41,7 @@ public:
 
     bool onTileCenter();
 
-    void move(std::vector<Tile> _tiles);
+    void move(std::vector<class Tile> _tiles, std::vector<class Character> _otherCharacters);
     void setCamera(SDL_Rect& _camera);
     void render(SDL_Rect& _camera);
 
@@ -53,7 +53,9 @@ public:
     bool isMoved;
 
 protected:
-    bool touchesWall(SDL_Rect box, std::vector<Tile> _tiles);
+    bool touchWall(SDL_Rect box, std::vector<Tile> _tiles);
+    bool touchChar(std::vector<class Character> _otherCharacters);
+    bool mapOver();
 
     int nowHP;
     int maxHP, STR, VIT;

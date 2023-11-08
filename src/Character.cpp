@@ -20,7 +20,7 @@ Character::~Character()
 
 /// @brief 向いている方向に移動。当たり判定も含む
 /// @param _tiles 当たり判定用の全タイルの配列
-void Character::move(std::vector<Tile> _tiles)
+void Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherCharacters)
 {
     // 次のマス目につくまで前フレームの移動を継続
     switch (mDir)
@@ -28,28 +28,28 @@ void Character::move(std::vector<Tile> _tiles)
     case LEFT:
         mBox.x -= CHAR_VEL;
         // キャラクターが左右上下に行き過ぎた場合、または壁に触れた場合戻る
-        if ((mBox.x < 0) || (mBox.x + SPRITE_CHAR_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, _tiles))
+        if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
         {
             mBox.x += CHAR_VEL + TILE_WIDTH / 4;
         }
         break;
     case RIGHT:
         mBox.x += CHAR_VEL;
-        if ((mBox.x < 0) || (mBox.x + SPRITE_CHAR_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, _tiles))
+        if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
         {
             mBox.x -= CHAR_VEL + TILE_WIDTH / 4;
         }
         break;
     case UP:
         mBox.y -= CHAR_VEL;
-        if ((mBox.y < 0) || (mBox.y + SPRITE_CHAR_HEIGHT > LEVEL_HEIGHT) || touchesWall(mBox, _tiles))
+        if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
         {
             mBox.y += CHAR_VEL + TILE_HEIGHT / 4;
         }
         break;
     case DOWN:
         mBox.y += CHAR_VEL;
-        if ((mBox.y < 0) || (mBox.y + SPRITE_CHAR_HEIGHT > LEVEL_HEIGHT) || touchesWall(mBox, _tiles))
+        if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
         {
             mBox.y -= CHAR_VEL + TILE_HEIGHT / 4;
         }
@@ -167,7 +167,7 @@ bool Character::onTileCenter()
 /// @brief 矩形とタイルの衝突判定
 /// @param box 移動している物体の当たり判定
 /// @param _tiles 全タイルの配列
-bool Character::touchesWall(SDL_Rect box, std::vector<Tile> _tiles)
+bool Character::touchWall(SDL_Rect box, std::vector<Tile> _tiles)
 {
     // Go through the tiles
     for (auto _tile : _tiles)
@@ -185,4 +185,28 @@ bool Character::touchesWall(SDL_Rect box, std::vector<Tile> _tiles)
 
     // If no wall tiles were touched
     return false;
+}
+
+bool Character::touchChar(std::vector<Character> _otherCharacters)
+{
+    for(auto _otherCharacter : _otherCharacters)
+    {
+        if( (mBox.x + mBox.w > _otherCharacter.mBox.x)
+         && (mBox.x < _otherCharacter.mBox.x + _otherCharacter.mBox.w)
+         && (mBox.y + mBox.h > _otherCharacter.mBox.y)
+         && (mBox.y < _otherCharacter.mBox.y + _otherCharacter.mBox.h) )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Character::mapOver()
+{
+    if( (mBox.x < 0) || (mBox.x + SPRITE_CHAR_WIDTH > LEVEL_WIDTH)
+     || (mBox.y < 0) || (mBox.y + SPRITE_CHAR_HEIGHT > LEVEL_HEIGHT))
+        return true;
+    else
+        return false;
 }

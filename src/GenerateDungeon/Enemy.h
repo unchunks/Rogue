@@ -14,7 +14,7 @@ public:
     Enemy(ENEMY_TYPE _enemy_type);
     Enemy(int _x, int _y, int _maxHP, int _STR, int _VIT);
     ~Enemy();
-    void walk(std::vector<Tile> _tiles);
+    void walk(std::vector<class Tile> _tiles, class Character _player, std::vector<class Enemy> _otherEnemies);
     void setGoal(CELL_TYPE dungeon[FLOOR_H][FLOOR_W], glm::vec2 _goal);
 
     void attack(class Character& _enemy) override;
