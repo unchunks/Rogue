@@ -41,7 +41,7 @@ public:
 
     bool onTileCenter();
 
-    void move(std::vector<class Tile> _tiles, std::vector<class Character> _otherCharacters);
+    bool move(std::vector<class Tile> _tiles, std::vector<class Character> _otherCharacters);
     void setCamera(SDL_Rect& _camera);
     void render(SDL_Rect& _camera);
 

@@ -118,12 +118,11 @@ void Dungeon::Input(SDL_Event event)
 // 階段を登ったときの処理
     if(player.isMoved)
 	{
-		switch(dungeon_g->getNowScene())
-		{
-		case DUNGEON_AREA_DIVIDE: goNextFloor = (areaDivide.buff[((int)player.getPos().y / TILE_HEIGHT)+1][((int)player.getPos().x / TILE_WIDTH)+1] == STEP); break;
-		case DUNGEON_RRA: 		  goNextFloor = (	    rra.buff[((int)player.getPos().y / TILE_HEIGHT)+1][((int)player.getPos().x / TILE_WIDTH)+1] == STEP); break;
-		default: goNextFloor = false; break;
-		}
+		SDL_Log("player(%d, %d) == %s", 
+			(int)player.getPos().x / TILE_HEIGHT, 
+			(int)player.getPos().y / TILE_HEIGHT, 
+			floor[((int)player.getPos().y / TILE_HEIGHT)+1][((int)player.getPos().x / TILE_WIDTH)+1] == STEP? "階段" : "床");
+		goNextFloor = (floor[((int)player.getPos().y / TILE_HEIGHT)][((int)player.getPos().x / TILE_WIDTH)] == STEP);
 	}
     if(goNextFloor) {
         return;
@@ -158,12 +157,11 @@ std::cout << "次の階へ移動\n";
 	}
 	player.setCamera(camera);
 
-// std::cout << "(" << (int)player.getPos().x/TILE_WIDTH << ", " << (int)player.getPos().y/TILE_WIDTH << ")\n";
-std::cout << "敵の移動許可" << player.isMoved << "\n";
 // 敵のアップデート
     glm::vec2 front;
     if(player.isMoved)
 	{
+std::cout << "敵移動\n";
 		for(auto& e : enemies)
 		{
 			switch(e.getState())
@@ -174,7 +172,8 @@ std::cout << "case SEARCH\n";
 						e.setState(FOUND);
 						e.routeClear();
 					}
-					updateEnemyRoute(e, RANDOM_POS);
+					if(e.getRouteSize() < 1 || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
+						updateEnemyRoute(e, RANDOM_POS);
 					e.walk(tileSet, player, enemies);
 				break;
 				case FOUND:
@@ -188,7 +187,7 @@ std::cout << "case FOUND\n";
 						break;
 					}
 					// 攻撃できないとき
-					else
+					else if((e.getRouteSize() < 1) || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
 						updateEnemyRoute(e, PLAYER_POS);
 					e.walk(tileSet, player, enemies);
 				break;
@@ -306,9 +305,23 @@ std::cout << "ダンジョンを初期化\n";
 	{
 	case DUNGEON_AREA_DIVIDE:
 		areaDivide.generate();
+		for(int y=0; y<FLOOR_H; y++)
+		{
+			for(int x=0; x<FLOOR_W; x++)
+			{
+				floor[y][x] = areaDivide.buff[y+1][x+1];
+			}
+		}
 	break;
 	case DUNGEON_RRA:
 		rra.generate();
+		for(int y=0; y<FLOOR_H; y++)
+		{
+			for(int x=0; x<FLOOR_W; x++)
+			{
+				floor[y][x] = rra.buff[y+1][x+1];
+			}
+		}
 	break;
     default: break;
 	}
@@ -323,8 +336,8 @@ std::cout << "ダンジョンを初期化\n";
 std::cout << "プレイヤーを初期化\n";
 	switch(dungeon_g->getNowScene())
 	{
-	case DUNGEON_AREA_DIVIDE: pos = getRandomPos(areaDivide.getRoomNum()); 	 break;
-	case DUNGEON_RRA:		  pos = getRandomPos(	   	  rra.getRoomNum()); break;
+	case DUNGEON_AREA_DIVIDE: pos = getRandomPos(areaDivide.getRoomNum()); break;
+	case DUNGEON_RRA:		  pos = getRandomPos(	    rra.getRoomNum()); break;
     default: break;
     }
 std::cout << "初期スポーン地点(" << pos.x << ", " << pos.y << ")\n";
@@ -352,10 +365,6 @@ SDL_Log("X: %d, Y: %d, W: %d, H: %d\n", e.mSpriteClips.at( 0 ).x, e.mSpriteClips
 		pos.y = pos.y*TILE_HEIGHT + TILE_HEIGHT/4;
         e.setPos(pos);
 	}
-for(auto e : enemies)
-{
-	std::cout << "(" << (int)e.getPos().x/TILE_WIDTH << ", " << (int)e.getPos().y/TILE_WIDTH << ")\n";
-}
 }
 
 void Dungeon::quit()
@@ -381,22 +390,10 @@ int Dungeon::isOtherPos(glm::vec2 _pos)
 
 bool Dungeon::canGetOn(glm::vec2 _pos)
 {
-	switch(dungeon_g->getNowScene())
-	{
-	case DUNGEON_AREA_DIVIDE:
-		if((areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != FLOOR)
-		&& (areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != AISLE)
-		&& (areaDivide.buff[(int)_pos.y+1][(int)_pos.x+1] != STEP))
-			return false;
-	break;
-	case DUNGEON_RRA:
-		if((rra.buff[(int)_pos.y+1][(int)_pos.x+1] != FLOOR)
-		&& (rra.buff[(int)_pos.y+1][(int)_pos.x+1] != AISLE)
-		&& (rra.buff[(int)_pos.y+1][(int)_pos.x+1] != STEP))
-			return false;
-	break;
-    default: break;
-	}
+	if((floor[(int)_pos.y][(int)_pos.x] != FLOOR)
+	&& (floor[(int)_pos.y][(int)_pos.x] != AISLE)
+	&& (floor[(int)_pos.y][(int)_pos.x] != STEP))
+		return false;
     if(isOtherPos(_pos)  > 1)
         return false;
     return true;
@@ -632,21 +629,18 @@ bool Dungeon::setTiles()
 
 void Dungeon::updateEnemyRoute(Enemy& _enemy, GOAL_TYPE _goleType)
 {
-	if((_enemy.getRouteSize() < 1) || (_enemy.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
+	glm::vec2 goal;
+	switch(_goleType)
 	{
-		glm::vec2 goal;
-		switch(_goleType)
-		{
-			case RANDOM_POS: 
-				switch(dungeon_g->getNowScene())
-				{
-				case DUNGEON_AREA_DIVIDE: goal =  areaDivide.getRandomFloorPos(); break;
-				case DUNGEON_RRA: 		  goal =  rra.getRandomFloorPos();        break;
-				default: break;
-				}
-				break;
-			case PLAYER_POS: goal = player.getPos(); break;
-		}
-		_enemy.setGoal(areaDivide.getFloor(), goal);
+		case RANDOM_POS: 
+			switch(dungeon_g->getNowScene())
+			{
+			case DUNGEON_AREA_DIVIDE: goal =  areaDivide.getRandomFloorPos(); break;
+			case DUNGEON_RRA: 		  goal =  rra.getRandomFloorPos();        break;
+			default: break;
+			}
+			break;
+		case PLAYER_POS: goal = player.getPos(); break;
 	}
+	_enemy.setGoal(floor, goal);
 }

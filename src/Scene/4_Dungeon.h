@@ -59,6 +59,8 @@ private:
     bool goNextFloor;
     char input = 'a';
 
+    CELL_TYPE floor[FLOOR_H][FLOOR_W];
+
     AreaDivide areaDivide;
     RRA rra;
 

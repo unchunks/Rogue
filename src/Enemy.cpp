@@ -50,7 +50,8 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
         if(nextPos.y < mBox.y/TILE_HEIGHT) mDir = DOWN;
         route.pop_front();
         elapsedTurn++;
-        SDL_Log("elapsedTurn: %d\n", elapsedTurn);
+        SDL_Log("elapsedTurn: %d, route size: %d\n", elapsedTurn, static_cast<int>(route.size()));
+
     }
     std::vector<Character> otherCharacters;
     otherCharacters.push_back(_player);
@@ -58,7 +59,10 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
     {
         otherCharacters.push_back(enemy);
     }
-    move(_tiles, otherCharacters);
+    if(move(_tiles, otherCharacters))
+    {
+        elapsedTurn = ENEMY_SEARCH_INTERVAL;
+    }
 }
 
 /// @brief 目的地を設定し、ルートを検索
@@ -71,7 +75,6 @@ void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], glm::vec2 _goal)
         return;
     }
     goal = _goal;
-    std::cout << "GOAL ==> (" << goal.x << ", " << goal.y << ")\n";
     route.clear();
     route = AStar::AStar(_dungeon, glm::vec2(mBox.x / TILE_WIDTH, mBox.y / TILE_HEIGHT), goal);
     // 現在地をポップ

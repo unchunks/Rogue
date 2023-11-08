@@ -20,8 +20,9 @@ Character::~Character()
 
 /// @brief 向いている方向に移動。当たり判定も含む
 /// @param _tiles 当たり判定用の全タイルの配列
-void Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherCharacters)
+bool Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherCharacters)
 {
+    bool touched = false;
     // 次のマス目につくまで前フレームの移動を継続
     switch (mDir)
     {
@@ -31,6 +32,11 @@ void Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherChar
         if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
         {
             mBox.x += CHAR_VEL + TILE_WIDTH / 4;
+            touched = true;
+        }
+        if(mBox.y % TILE_HEIGHT == TILE_HEIGHT / 4)
+        {
+            mBox.y += (TILE_HEIGHT / 4) - (mBox.y % TILE_HEIGHT);
         }
         break;
     case RIGHT:
@@ -38,6 +44,11 @@ void Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherChar
         if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
         {
             mBox.x -= CHAR_VEL + TILE_WIDTH / 4;
+            touched = true;
+        }
+        if(mBox.y % TILE_HEIGHT == TILE_HEIGHT / 4)
+        {
+            mBox.y += (TILE_HEIGHT / 4) - (mBox.y % TILE_HEIGHT);
         }
         break;
     case UP:
@@ -45,6 +56,11 @@ void Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherChar
         if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
         {
             mBox.y += CHAR_VEL + TILE_HEIGHT / 4;
+            touched = true;
+        }
+        if(mBox.x % TILE_WIDTH == TILE_WIDTH / 4)
+        {
+            mBox.x += (TILE_WIDTH / 4) - (mBox.x % TILE_WIDTH);
         }
         break;
     case DOWN:
@@ -52,6 +68,11 @@ void Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherChar
         if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
         {
             mBox.y -= CHAR_VEL + TILE_HEIGHT / 4;
+            touched = true;
+        }
+        if(mBox.x % TILE_WIDTH == TILE_WIDTH / 4)
+        {
+            mBox.x += (TILE_WIDTH / 4) - (mBox.x % TILE_WIDTH);
         }
         break;
     case NO_DIRECTION:
@@ -61,6 +82,7 @@ void Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherChar
     {
         SDL_Log("移動完了");
     }
+    return touched;
     // SDL_Log("(x: %d, y: %d)\n", ( mBox.x + mBox.w / 2 ) % TILE_WIDTH, ( mBox.y + mBox.h / 2 ) % TILE_HEIGHT);
 }
 

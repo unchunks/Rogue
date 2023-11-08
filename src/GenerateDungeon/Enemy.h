@@ -21,7 +21,7 @@ public:
 
     void routeClear() {route.clear();}
 
-    int getRouteSize() {return route.size();}
+    int getRouteSize() {return static_cast<int>(route.size());}
     int getElapsedTurn() {return elapsedTurn;}
     ENEMY_TYPE getEnemyType() {return enemy_type;}
 

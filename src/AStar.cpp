@@ -112,22 +112,35 @@ void AStar::TraceRoute(int x, int y)
 	TraceRoute(x + parent_way->x, y + parent_way->y);
 }
 
+
 std::deque<glm::vec2> AStar::AStar(CELL_TYPE def_data[FLOOR_H][FLOOR_W], glm::vec2 _start, glm::vec2 _goal)
 {
 	route.clear();
 	start = _start;
 	goal = _goal;
 	for(int y = 0; y < FLOOR_H; y++)
+	{
 		for(int x = 0; x < FLOOR_W; x++)
+		{
 			data[y][x] = MAPCELL();
+		}
+	}
 	// マップ変換
     for(int y = 0; y < FLOOR_H; y++){
 		for(int x = 0; x < FLOOR_W; x++){
-            if((def_data[y][x] == FLOOR) || (def_data[y][x] == AISLE))
+            if((def_data[y][x] == FLOOR) || (def_data[y][x] == AISLE) || (def_data[y][x] == STEP))
                 data[y][x].status = 0;	// 床
             else 
                 data[y][x].status = 2;	// 壁
+
+			if(x == goal.x && y == goal.y)
+				std::cout << "G ";
+			else if(x == start.x && y == start.y)
+				std::cout << "S ";
+			else
+				std::cout << ((data[y][x].status==0)? " " : "W") << " ";
 		}
+		std::cout << "\n";
 	}
 	// 開始位置をオープンに
     data[(int)start.y][(int)start.x].SearchStatus = SEARCH_OPEN;

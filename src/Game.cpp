@@ -128,7 +128,7 @@ SDL_Log("Failed to load BGM : %s", Mix_GetError());
     mDungeonMenu = new DungeonMenu(this);
     mDungeon = new Dungeon(this);
 
-    // Mix_PlayMusic(mMusic, -1);
+    Mix_PlayMusic(mMusic, -1);
 
     return true;
 }
