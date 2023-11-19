@@ -10,8 +10,8 @@ Tile::Tile( int x, int y, CELL_TYPE tileType )
     mBox.y = y;
 
 	//コリジョンボックスを設定する
-    mBox.w = TILE_WIDTH;
-    mBox.h = TILE_HEIGHT;
+    mBox.w = TILE_W;
+    mBox.h = TILE_H;
 
 	//タイルの種類を取得する
     mType = tileType;

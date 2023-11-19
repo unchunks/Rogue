@@ -76,10 +76,10 @@ void Generator::outputMap_forDebug() {
             if(charDrawn)
                 continue;
             switch(floorTYPE[y][x]) {
-                case NONE:      writing_text += "00 "; break; //std::cout << "~ ";
-                case WALL_ALL:  writing_text += "16 "; break; //std::cout << "■ ";
-                case FLOOR:     writing_text += "17 "; break; //std::cout << "  ";
-                case AISLE:     writing_text += "18 "; break; //std::cout << "  ";
+                case NONE:      writing_text += "00 "; break;
+                case WALL_ALL:  writing_text += "16 "; break;
+                case FLOOR:     writing_text += "17 "; break;
+                case AISLE:     writing_text += "18 "; break;
                 default:        writing_text += "   ";
             }
         }
@@ -186,43 +186,40 @@ void Generator::outputMap() {
     writing_file.open(filename, std::ios::out);
     std::string writing_text = "";
 
-    std::cout << "1\n";
     for(int y=0; y<FLOOR_H; y++) {
         for(int x=0; x<FLOOR_W; x++) {
             charDrawn = false;
             if(charDrawn)
                 continue;
             switch(floorTYPE[y][x]) {
-                case NONE:              buff[y+1][x+1] = NONE;              writing_text += "00 "; break; //std::cout << "~ ";
-                case PILLAR:            buff[y+1][x+1] = PILLAR;            writing_text += "01 "; break; //std::cout << "・";
-                case WALL_LEFT:         buff[y+1][x+1] = WALL_LEFT;         writing_text += "02 "; break; //std::cout << "| ";
-                case WALL_RIGHT:        buff[y+1][x+1] = WALL_RIGHT;        writing_text += "03 "; break; //std::cout << " |";
-                case WALL_TOP:          buff[y+1][x+1] = WALL_TOP;          writing_text += "04 "; break; //std::cout << "￣";
-                case WALL_BOTTOM:       buff[y+1][x+1] = WALL_BOTTOM;       writing_text += "05 "; break; //std::cout << "＿";
-                case WALL_LEFT_TOP:     buff[y+1][x+1] = WALL_LEFT_TOP;     writing_text += "06 "; break; //std::cout << "┏ ";
-                case WALL_LEFT_BOTTOM:  buff[y+1][x+1] = WALL_LEFT_BOTTOM;  writing_text += "07 "; break; //std::cout << "┗ ";
-                case WALL_RIGHT_TOP:    buff[y+1][x+1] = WALL_RIGHT_TOP;    writing_text += "08 "; break; //std::cout << " ┓";
-                case WALL_RIGHT_BOTTOM: buff[y+1][x+1] = WALL_RIGHT_BOTTOM; writing_text += "09 "; break; //std::cout << " ┛";
-                case WALL_SIDE_LR:      buff[y+1][x+1] = WALL_SIDE_LR;      writing_text += "10 "; break; //std::cout << "||";
-                case WALL_SIDE_TB:      buff[y+1][x+1] = WALL_SIDE_TB;      writing_text += "11 "; break; //std::cout << "二";
-                case WALL_END_LEFT:     buff[y+1][x+1] = WALL_END_LEFT;     writing_text += "12 "; break; //std::cout << "＞";
-                case WALL_END_RIGHT:    buff[y+1][x+1] = WALL_END_RIGHT;    writing_text += "13 "; break; //std::cout << "＜";
-                case WALL_END_TOP:      buff[y+1][x+1] = WALL_END_TOP;      writing_text += "14 "; break; //std::cout << "Ｖ";
-                case WALL_END_BOTTOM:   buff[y+1][x+1] = WALL_END_BOTTOM;   writing_text += "15 "; break; //std::cout << "Ａ";
-                case WALL_ALL:          buff[y+1][x+1] = WALL_ALL;          writing_text += "16 "; break; //std::cout << "■ ";
-                case FLOOR:             buff[y+1][x+1] = FLOOR;             writing_text += "17 "; break; //std::cout << "  ";
-                case AISLE:             buff[y+1][x+1] = AISLE;             writing_text += "18 "; break; //std::cout << "  ";
-                case STEP:              buff[y+1][x+1] = STEP;              writing_text += "19 "; break; //std::cout << "▃▅";
+                case NONE:              buff[y+1][x+1] = NONE;              writing_text += "00 "; break;
+                case PILLAR:            buff[y+1][x+1] = PILLAR;            writing_text += "01 "; break;
+                case WALL_LEFT:         buff[y+1][x+1] = WALL_LEFT;         writing_text += "02 "; break;
+                case WALL_RIGHT:        buff[y+1][x+1] = WALL_RIGHT;        writing_text += "03 "; break;
+                case WALL_TOP:          buff[y+1][x+1] = WALL_TOP;          writing_text += "04 "; break;
+                case WALL_BOTTOM:       buff[y+1][x+1] = WALL_BOTTOM;       writing_text += "05 "; break;
+                case WALL_LEFT_TOP:     buff[y+1][x+1] = WALL_LEFT_TOP;     writing_text += "06 "; break;
+                case WALL_LEFT_BOTTOM:  buff[y+1][x+1] = WALL_LEFT_BOTTOM;  writing_text += "07 "; break;
+                case WALL_RIGHT_TOP:    buff[y+1][x+1] = WALL_RIGHT_TOP;    writing_text += "08 "; break;
+                case WALL_RIGHT_BOTTOM: buff[y+1][x+1] = WALL_RIGHT_BOTTOM; writing_text += "09 "; break;
+                case WALL_SIDE_LR:      buff[y+1][x+1] = WALL_SIDE_LR;      writing_text += "10 "; break;
+                case WALL_SIDE_TB:      buff[y+1][x+1] = WALL_SIDE_TB;      writing_text += "11 "; break;
+                case WALL_END_LEFT:     buff[y+1][x+1] = WALL_END_LEFT;     writing_text += "12 "; break;
+                case WALL_END_RIGHT:    buff[y+1][x+1] = WALL_END_RIGHT;    writing_text += "13 "; break;
+                case WALL_END_TOP:      buff[y+1][x+1] = WALL_END_TOP;      writing_text += "14 "; break;
+                case WALL_END_BOTTOM:   buff[y+1][x+1] = WALL_END_BOTTOM;   writing_text += "15 "; break;
+                case WALL_ALL:          buff[y+1][x+1] = WALL_ALL;          writing_text += "16 "; break;
+                case FLOOR:             buff[y+1][x+1] = FLOOR;             writing_text += "17 "; break;
+                case AISLE:             buff[y+1][x+1] = AISLE;             writing_text += "18 "; break;
+                case STEP:              buff[y+1][x+1] = STEP;              writing_text += "19 "; break;
             }
         }
         writing_text += "\n";
     }
-    std::cout << "2\n";
     writing_file << writing_text << std::endl;
     writing_file.close();
 }
 
-/// @brief ランダムなデータ系座標を返す
 glm::vec2 Generator::getRandomFloorPos()
 {
     int roomNum = random_num(random_engine) % rooms.size();
@@ -231,8 +228,8 @@ glm::vec2 Generator::getRandomFloorPos()
     pos.x = room.x + random_num(random_engine)%room.w;
     pos.y = room.y + random_num(random_engine)%room.h;
     while(floorTYPE[static_cast<int>(pos.y)][static_cast<int>(pos.x)] != FLOOR) {
-        pos.x = room.x + random_num(random_engine)%room.w;
-        pos.y = room.y + random_num(random_engine)%room.h;
+        pos.x = room.x + random_num(random_engine) % room.w;
+        pos.y = room.y + random_num(random_engine) % room.h;
     }
     return pos;
 }

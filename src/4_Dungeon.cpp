@@ -13,6 +13,8 @@ Game *dungeon_g;
 LTexture gTileTexture = LTexture();
 SDL_Rect gTileClips[ TOTAL_TILE_SPRITES ];
 
+int turn = 0;
+
 //NOTE: Dungeonの関数
 
 Dungeon::Dungeon(Game *game)
@@ -26,11 +28,11 @@ Dungeon::Dungeon(Game *game)
 	mEnemySpriteClips.resize( static_cast<int>(ENEMY_TYPE_NUMBER), std::vector<SDL_Rect>( ANIMATION_FRAMES * static_cast<int>(NO_DIRECTION) , {0, 0, 0, 0} ) );
     if(!LoadData())
     {
-		SDL_Log( "Failed to load media!\n" );
+		printf( "Failed to load media!\n" );
     }
 //REVIEW: これ要るのか？
-	player.mCharTexture.setW(player.mCharTexture.getWidth() * TILE_WIDTH / SPRITE_CHAR_WIDTH);
-	player.mCharTexture.setH(player.mCharTexture.getHeight() * TILE_HEIGHT / SPRITE_CHAR_HEIGHT);
+	// player.mCharTexture.setW(player.mCharTexture.getWidth() * TILE_W / SPRITE_CHAR_WIDTH);
+	// player.mCharTexture.setH(player.mCharTexture.getHeight() * TILE_H / SPRITE_CHAR_HEIGHT);
 	camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 }
 
@@ -87,13 +89,13 @@ void Dungeon::Input(SDL_Event event)
 	{
 		switch(event.key.keysym.sym)
 		{
-			case SDLK_w: player.isMoved = true; player.setDir(UP); break;
-			case SDLK_a: player.isMoved = true; player.setDir(LEFT); break;
-			case SDLK_s: player.isMoved = true; player.setDir(DOWN); break;
-			case SDLK_d: player.isMoved = true; player.setDir(RIGHT); break;
+			case SDLK_w: turn++; player.isMoved = true; player.setDir(UP); break;
+			case SDLK_a: turn++; player.isMoved = true; player.setDir(LEFT); break;
+			case SDLK_s: turn++; player.isMoved = true; player.setDir(DOWN); break;
+			case SDLK_d: turn++; player.isMoved = true; player.setDir(RIGHT); break;
 			// case SDLK_k:
 			// 	player.isMoved = true;
-			// 	front = getFrontPos(player.getPos(), player.getDir());
+			// 	front = getFrontPos(player.getImagePos(), player.getDir());
 			// 	if(!isOtherPos(front))
 			// 		break;
 			// 	player.attack(whichEnemy(front));
@@ -105,35 +107,27 @@ void Dungeon::Input(SDL_Event event)
 			case SDLK_t: 
 				player.isMoved = false; 
 				player.setPos(
-					enemies.at(0).getPos().x, 
-					enemies.at(0).getPos().y + TILE_HEIGHT*2
+					enemies.at(0).getImagePos().x, 
+					enemies.at(0).getImagePos().y + TILE_H*2
 				); 
 				break;
 #endif
 			case SDLK_q: player.isMoved = false; inDungeon = false; break;
 			default: player.isMoved = false; break;
 		}
+		if(player.isMoved)
+		{
+			SDL_Log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			SDL_Log("Input: 現在%dターン目", turn);
+		}
 	}
-
-// 階段を登ったときの処理
-    if(player.isMoved)
-	{
-		SDL_Log("player(%d, %d) == %s", 
-			(int)player.getPos().x / TILE_HEIGHT, 
-			(int)player.getPos().y / TILE_HEIGHT, 
-			floor[((int)player.getPos().y / TILE_HEIGHT)+1][((int)player.getPos().x / TILE_WIDTH)+1] == STEP? "階段" : "床");
-		goNextFloor = (floor[((int)player.getPos().y / TILE_HEIGHT)][((int)player.getPos().x / TILE_WIDTH)] == STEP);
-	}
-    if(goNextFloor) {
-        return;
-    }
 }
 
 void Dungeon::Update()
 {
     if(!inDungeon)
     {
-std::cout << "ダンジョン脱出\n";
+		// SDL_Log("ダンジョン脱出");
 		quit();
         dungeon_g->setNowScene(SCENE::HOME);
         return;
@@ -141,7 +135,7 @@ std::cout << "ダンジョン脱出\n";
 
     if(goNextFloor)
     {
-std::cout << "次の階へ移動\n";
+		// SDL_Log("次の階へ移動");
         InitDungeon();
         return;
     }
@@ -154,64 +148,92 @@ std::cout << "次の階へ移動\n";
 			otherCharacters.push_back(enemy);
 		}
 		player.move(tileSet, otherCharacters);
+
+// 階段を登ったときの処理
+		goNextFloor = (floor[((int)player.getDataPos().y)][((int)player.getDataPos().x)] == STEP);
+		if(goNextFloor) {
+			return;
+		}
 	}
 	player.setCamera(camera);
 
 // 敵のアップデート
-    glm::vec2 front;
     if(player.isMoved)
 	{
-std::cout << "敵移動\n";
+		// SDL_Log("敵移動");
 		for(auto& e : enemies)
 		{
+			e.isMoved = true;
 			switch(e.getState())
 			{
-				case SEARCH:
-std::cout << "case SEARCH\n";
-					if(abs(e.getPos().x - player.getPos().x)/TILE_WIDTH + abs(e.getPos().y - player.getPos().y)/TILE_HEIGHT <= ENEMY_FIND_RANGE) {
-						e.setState(FOUND);
-						e.routeClear();
-					}
-					if(e.getRouteSize() < 1 || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
-						updateEnemyRoute(e, RANDOM_POS);
-					e.walk(tileSet, player, enemies);
-				break;
-				case FOUND:
-std::cout << "case FOUND\n";
-					if(abs(e.getPos().x - player.getPos().x)/TILE_WIDTH + abs(e.getPos().y - player.getPos().y)/TILE_HEIGHT > ENEMY_FIND_RANGE)
-						e.setState(SEARCH);
-					front = getFrontPos(e.getPos(), e.getDir());
-					// 攻撃できるとき
-					if(player.getPos() == front) {
-						e.attack(player);
-						break;
-					}
-					// 攻撃できないとき
-					else if((e.getRouteSize() < 1) || (e.getElapsedTurn() > ENEMY_SEARCH_INTERVAL))
-						updateEnemyRoute(e, PLAYER_POS);
-					e.walk(tileSet, player, enemies);
-				break;
-				case ESCAPE:
-std::cout << "case ESCAPE\n";
-				break;
-				case DEAD:
-std::cout << "case DEAD\n";
-					deadEnemies.push_back(e);
-				break;
-// その他
-				case ALIVE: break;
+			case SEARCH:
+				if(e.find(player))
+				{
+					// SDL_Log("プレイヤーを発見した");
+					e.setState(FOUND);
+					e.routeClear();
+				}
+				if(e.onTileCenter() && e.mustUpdateRoute())
+				{
+					updateEnemyRoute(e, RANDOM_POS);
+				}
+				e.walk(tileSet, player, enemies);
+			break;
+			case FOUND:
+				if(!e.find(player))
+				{
+					// SDL_Log("プレイヤーを見失った");
+					e.setState(SEARCH);
+				}
+				// 攻撃できるとき
+				if(e.onTileCenter() && e.adjacent(player))
+				{
+					// SDL_Log("プレイヤーを攻撃");
+					e.attack(player);
+					break;
+				}
+				// 攻撃できないとき
+				else if(e.onTileCenter() && e.mustUpdateRoute())
+				{
+					updateEnemyRoute(e, PLAYER_POS);
+				}
+				e.walk(tileSet, player, enemies);
+			break;
+			case ESCAPE:
+			break;
+			case DEAD:
+				deadEnemies.push_back(e);
+			break;
+			case ALIVE: break;
 			}
-
-			if(!canGetOn(e.getPos()));
-				// e.back();
+			if(e.collided(tileSet, std::vector<Character>(0)))
+			{	
+				SDL_Log("Update: 壁に埋まっている");
+				switch(dungeon_g->getNowScene())
+				{
+				case DUNGEON_AREA_DIVIDE: e.setPos(getRandomPos(areaDivide.getRoomNum()));	break;
+				case DUNGEON_RRA:		  e.setPos(getRandomPos(	    rra.getRoomNum()));	break;
+				default: break;
+				}
+			}
     	}
+	}
+	else
+	{
+		for(auto& e : enemies)
+		{
+			e.isMoved = false;
+		}
 	}
 
 // 敵の死亡判定
+// SDL_Log("Update: 敵の死亡判定");
     for(auto it = enemies.begin(); it < enemies.end(); it++)
         if(it->getState() == DEAD)
             enemies.erase(it);
+
 // プレイヤーの死亡判定
+//SDL_Log("Update: プレイヤーの死亡判定");
     if(player.getState() == DEAD) {
         inDungeon = false;
         goNextFloor = true;
@@ -246,7 +268,7 @@ bool Dungeon::LoadData()
 	//プレイヤーのスプライトシートのテクスチャを読み込む
 	if( !player.mCharTexture.loadFromFile( "assets/character.png" ) )
 	{
-		SDL_Log( "Failed to load walking animation texture!\n" );
+		printf( "Failed to load walking animation texture!\n" );
 		success = false;
 	}
 	else//Character.hにcharacter.pngを読み込ませる。その後enemySpriteClipsに座標情報を入力してそのポインタを各キャラクターに渡す.
@@ -284,7 +306,7 @@ bool Dungeon::LoadData()
 	//Load tile texture
 	if( !gTileTexture.loadFromFile( "assets/dungeon_tiles.png" ) )
 	{
-		SDL_Log( "Failed to load tile set texture!\n" );
+		printf( "Failed to load tile set texture!\n" );
 		success = false;
 	}
 
@@ -297,7 +319,7 @@ void Dungeon::PlayMusic()
 
 void Dungeon::InitDungeon()
 {
-std::cout << "ダンジョンを初期化\n";
+SDL_Log("ダンジョンを初期化\n");
     inDungeon = true;
     goNextFloor = false;
 
@@ -329,41 +351,42 @@ std::cout << "ダンジョンを初期化\n";
 	//Load tile map
 	if( !setTiles() )
 	{
-		SDL_Log( "Failed to load tile set!\n" );
+		printf( "Failed to load tile set!\n" );
 	}
 
 	glm::vec2 pos;
-std::cout << "プレイヤーを初期化\n";
+	SDL_Log("プレイヤーを初期化");
 	switch(dungeon_g->getNowScene())
 	{
 	case DUNGEON_AREA_DIVIDE: pos = getRandomPos(areaDivide.getRoomNum()); break;
 	case DUNGEON_RRA:		  pos = getRandomPos(	    rra.getRoomNum()); break;
     default: break;
     }
-std::cout << "初期スポーン地点(" << pos.x << ", " << pos.y << ")\n";
-	pos.x = pos.x*TILE_WIDTH + TILE_WIDTH/4;
-	pos.y = pos.y*TILE_HEIGHT + TILE_HEIGHT/4;
+	SDL_Log("初期スポーン地点(%d, %d)", (int)pos.x, (int)pos.y);
+	pos.x = pos.x*TILE_W + TILE_W/4;
+	pos.y = pos.y*TILE_H + TILE_H/4;
     player.setPos(pos);
 
-std::cout << "敵を初期化\n";
+	SDL_Log("敵を初期化");
     enemies.clear();
     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
     for(auto& e : enemies)
     {
+		SDL_Log("敵を初期化");
         e = Enemy( static_cast<ENEMY_TYPE>( random_num( random_engine ) % static_cast<int>( ENEMY_TYPE_NUMBER ) ) );
-SDL_Log("%d :: ", (int)e.getType());
-		e.mSpriteClips = mEnemySpriteClips.at( static_cast<int>( e.getType() ) );
-SDL_Log("X: %d, Y: %d, W: %d, H: %d\n", e.mSpriteClips.at( 0 ).x, e.mSpriteClips.at( 0 ).y, e.mSpriteClips.at( 0 ).w, e.mSpriteClips.at( 0 ).h);
+		e.mSpriteClips = mEnemySpriteClips.at( static_cast<int>( e.getEnemyType() ) );
 
+		SDL_Log("敵の位置を初期化");
 		switch(dungeon_g->getNowScene())
 		{
 		case DUNGEON_AREA_DIVIDE: pos = getRandomPos(areaDivide.getRoomNum()); break;
 		case DUNGEON_RRA: 		  pos = getRandomPos(		rra.getRoomNum()); break;
         default: break;
         }
-		pos.x = pos.x*TILE_WIDTH + TILE_WIDTH/4;
-		pos.y = pos.y*TILE_HEIGHT + TILE_HEIGHT/4;
+		pos.x = pos.x*TILE_W + TILE_W/4;
+		pos.y = pos.y*TILE_H + TILE_H/4;
         e.setPos(pos);
+		SDL_Log("敵の位置(%d, %d)", (int)e.getDataPos().x, (int)e.getDataPos().y);
 	}
 }
 
@@ -378,11 +401,11 @@ void Dungeon::quit()
 int Dungeon::isOtherPos(glm::vec2 _pos)
 {
     int sameNum = 0;
-    if(player.getPos() == _pos)
+    if(player.getImagePos() == _pos)
             sameNum++;
     for(auto e : enemies)
     {
-        if(e.getPos() == _pos)
+        if(e.getImagePos() == _pos)
             sameNum++;
     }
     return sameNum;
@@ -427,7 +450,7 @@ Enemy& Dungeon::whichEnemy(glm::vec2 _pos)
 {
     for(auto& e : enemies)
     {
-        if((e.getPos().x == _pos.x) && (e.getPos().y == _pos.y))
+        if((e.getImagePos().x == _pos.x) && (e.getImagePos().y == _pos.y))
             return e;
     }
     throw std::runtime_error("Enemy not found");
@@ -463,7 +486,7 @@ bool Dungeon::setTiles()
 	//マップが読み込めなかった場合
     if( map.fail() )
     {
-		SDL_Log( "Unable to load map file!\n" );
+		printf( "Unable to load map file!\n" );
 		tilesLoaded = false;
     }
 	else
@@ -481,7 +504,7 @@ bool Dungeon::setTiles()
 			if( map.fail() )
 			{
 				//Stop loading map
-				SDL_Log( "Error loading map: Unexpected end of file!\n" );
+				printf( "Error loading map: Unexpected end of file!\n" );
 				tilesLoaded = false;
 				break;
 			}
@@ -495,13 +518,13 @@ bool Dungeon::setTiles()
 			else
 			{
 				//Stop loading map
-				SDL_Log( "Error loading map: Invalid tile type at %d!\n", i );
+				printf( "Error loading map: Invalid tile type at %d!\n", i );
 				tilesLoaded = false;
 				break;
 			}
 
 			//Move to next tile spot
-			x += TILE_WIDTH;
+			x += TILE_W;
 
 			//If we've gone too far
 			if( x >= LEVEL_WIDTH )
@@ -510,7 +533,7 @@ bool Dungeon::setTiles()
 				x = 0;
 
 				//Move to the next row
-				y += TILE_HEIGHT;
+				y += TILE_H;
 			}
 		}
 
@@ -520,103 +543,103 @@ bool Dungeon::setTiles()
 
 			gTileClips[ static_cast<int>(NONE) ].x = 0;
 			gTileClips[ static_cast<int>(NONE) ].y = 0;
-			gTileClips[ static_cast<int>(NONE) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(NONE) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(NONE) ].w = TILE_W;
+			gTileClips[ static_cast<int>(NONE) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(PILLAR) ].x = TILE_WIDTH*2;
+			gTileClips[ static_cast<int>(PILLAR) ].x = TILE_W*2;
 			gTileClips[ static_cast<int>(PILLAR) ].y = 0;
-			gTileClips[ static_cast<int>(PILLAR) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(PILLAR) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(PILLAR) ].w = TILE_W;
+			gTileClips[ static_cast<int>(PILLAR) ].h = TILE_H;
 
 			gTileClips[ static_cast<int>(WALL_LEFT) ].x = 0;
-			gTileClips[ static_cast<int>(WALL_LEFT) ].y = TILE_HEIGHT;
-			gTileClips[ static_cast<int>(WALL_LEFT) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_LEFT) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_LEFT) ].y = TILE_H;
+			gTileClips[ static_cast<int>(WALL_LEFT) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_LEFT) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(WALL_RIGHT) ].x = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_RIGHT) ].y = TILE_HEIGHT;
-			gTileClips[ static_cast<int>(WALL_RIGHT) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_RIGHT) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_RIGHT) ].x = TILE_W;
+			gTileClips[ static_cast<int>(WALL_RIGHT) ].y = TILE_H;
+			gTileClips[ static_cast<int>(WALL_RIGHT) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_RIGHT) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(WALL_TOP) ].x = TILE_WIDTH*2;
-			gTileClips[ static_cast<int>(WALL_TOP) ].y = TILE_HEIGHT;
-			gTileClips[ static_cast<int>(WALL_TOP) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_TOP) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_TOP) ].x = TILE_W*2;
+			gTileClips[ static_cast<int>(WALL_TOP) ].y = TILE_H;
+			gTileClips[ static_cast<int>(WALL_TOP) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_TOP) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(WALL_BOTTOM) ].x = TILE_WIDTH*3;
-			gTileClips[ static_cast<int>(WALL_BOTTOM) ].y = TILE_HEIGHT;
-			gTileClips[ static_cast<int>(WALL_BOTTOM) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_BOTTOM) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_BOTTOM) ].x = TILE_W*3;
+			gTileClips[ static_cast<int>(WALL_BOTTOM) ].y = TILE_H;
+			gTileClips[ static_cast<int>(WALL_BOTTOM) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_BOTTOM) ].h = TILE_H;
 
 			gTileClips[ static_cast<int>(WALL_LEFT_TOP) ].x = 0;
-			gTileClips[ static_cast<int>(WALL_LEFT_TOP) ].y = TILE_HEIGHT*2;
-			gTileClips[ static_cast<int>(WALL_LEFT_TOP) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_LEFT_TOP) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_LEFT_TOP) ].y = TILE_H*2;
+			gTileClips[ static_cast<int>(WALL_LEFT_TOP) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_LEFT_TOP) ].h = TILE_H;
 
 			gTileClips[ static_cast<int>(WALL_LEFT_BOTTOM) ].x = 0;
-			gTileClips[ static_cast<int>(WALL_LEFT_BOTTOM) ].y = TILE_HEIGHT*3;
-			gTileClips[ static_cast<int>(WALL_LEFT_BOTTOM) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_LEFT_BOTTOM) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_LEFT_BOTTOM) ].y = TILE_H*3;
+			gTileClips[ static_cast<int>(WALL_LEFT_BOTTOM) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_LEFT_BOTTOM) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(WALL_RIGHT_TOP) ].x = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_RIGHT_TOP) ].y = TILE_HEIGHT*2;
-			gTileClips[ static_cast<int>(WALL_RIGHT_TOP) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_RIGHT_TOP) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_RIGHT_TOP) ].x = TILE_W;
+			gTileClips[ static_cast<int>(WALL_RIGHT_TOP) ].y = TILE_H*2;
+			gTileClips[ static_cast<int>(WALL_RIGHT_TOP) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_RIGHT_TOP) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(WALL_RIGHT_BOTTOM) ].x = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_RIGHT_BOTTOM) ].y = TILE_HEIGHT*3;
-			gTileClips[ static_cast<int>(WALL_RIGHT_BOTTOM) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_RIGHT_BOTTOM) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_RIGHT_BOTTOM) ].x = TILE_W;
+			gTileClips[ static_cast<int>(WALL_RIGHT_BOTTOM) ].y = TILE_H*3;
+			gTileClips[ static_cast<int>(WALL_RIGHT_BOTTOM) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_RIGHT_BOTTOM) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(WALL_SIDE_LR) ].x = TILE_WIDTH*3;
+			gTileClips[ static_cast<int>(WALL_SIDE_LR) ].x = TILE_W*3;
 			gTileClips[ static_cast<int>(WALL_SIDE_LR) ].y = 0;
-			gTileClips[ static_cast<int>(WALL_SIDE_LR) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_SIDE_LR) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_SIDE_LR) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_SIDE_LR) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(WALL_SIDE_TB) ].x = TILE_WIDTH*4;
+			gTileClips[ static_cast<int>(WALL_SIDE_TB) ].x = TILE_W*4;
 			gTileClips[ static_cast<int>(WALL_SIDE_TB) ].y = 0;
-			gTileClips[ static_cast<int>(WALL_SIDE_TB) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_SIDE_TB) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_SIDE_TB) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_SIDE_TB) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(WALL_END_LEFT) ].x = TILE_WIDTH*3;
-			gTileClips[ static_cast<int>(WALL_END_LEFT) ].y = TILE_HEIGHT*2;
-			gTileClips[ static_cast<int>(WALL_END_LEFT) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_END_LEFT) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_END_LEFT) ].x = TILE_W*3;
+			gTileClips[ static_cast<int>(WALL_END_LEFT) ].y = TILE_H*2;
+			gTileClips[ static_cast<int>(WALL_END_LEFT) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_END_LEFT) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(WALL_END_RIGHT) ].x = TILE_WIDTH*2;
-			gTileClips[ static_cast<int>(WALL_END_RIGHT) ].y = TILE_HEIGHT*2;
-			gTileClips[ static_cast<int>(WALL_END_RIGHT) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_END_RIGHT) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_END_RIGHT) ].x = TILE_W*2;
+			gTileClips[ static_cast<int>(WALL_END_RIGHT) ].y = TILE_H*2;
+			gTileClips[ static_cast<int>(WALL_END_RIGHT) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_END_RIGHT) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(WALL_END_TOP) ].x = TILE_WIDTH*3;
-			gTileClips[ static_cast<int>(WALL_END_TOP) ].y = TILE_HEIGHT*3;
-			gTileClips[ static_cast<int>(WALL_END_TOP) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_END_TOP) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_END_TOP) ].x = TILE_W*3;
+			gTileClips[ static_cast<int>(WALL_END_TOP) ].y = TILE_H*3;
+			gTileClips[ static_cast<int>(WALL_END_TOP) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_END_TOP) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(WALL_END_BOTTOM) ].x = TILE_WIDTH*2;
-			gTileClips[ static_cast<int>(WALL_END_BOTTOM) ].y = TILE_HEIGHT*3;
-			gTileClips[ static_cast<int>(WALL_END_BOTTOM) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_END_BOTTOM) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_END_BOTTOM) ].x = TILE_W*2;
+			gTileClips[ static_cast<int>(WALL_END_BOTTOM) ].y = TILE_H*3;
+			gTileClips[ static_cast<int>(WALL_END_BOTTOM) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_END_BOTTOM) ].h = TILE_H;
 
 			gTileClips[ static_cast<int>(WALL_ALL) ].x = 0;
 			gTileClips[ static_cast<int>(WALL_ALL) ].y = 0;
-			gTileClips[ static_cast<int>(WALL_ALL) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(WALL_ALL) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(WALL_ALL) ].w = TILE_W;
+			gTileClips[ static_cast<int>(WALL_ALL) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(FLOOR) ].x = TILE_WIDTH;
+			gTileClips[ static_cast<int>(FLOOR) ].x = TILE_W;
 			gTileClips[ static_cast<int>(FLOOR) ].y = 0;
-			gTileClips[ static_cast<int>(FLOOR) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(FLOOR) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(FLOOR) ].w = TILE_W;
+			gTileClips[ static_cast<int>(FLOOR) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(AISLE) ].x = TILE_WIDTH;
+			gTileClips[ static_cast<int>(AISLE) ].x = TILE_W;
 			gTileClips[ static_cast<int>(AISLE) ].y = 0;
-			gTileClips[ static_cast<int>(AISLE) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(AISLE) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(AISLE) ].w = TILE_W;
+			gTileClips[ static_cast<int>(AISLE) ].h = TILE_H;
 
-			gTileClips[ static_cast<int>(STEP) ].x = TILE_WIDTH*4;
-			gTileClips[ static_cast<int>(STEP) ].y = TILE_HEIGHT;
-			gTileClips[ static_cast<int>(STEP) ].w = TILE_WIDTH;
-			gTileClips[ static_cast<int>(STEP) ].h = TILE_HEIGHT;
+			gTileClips[ static_cast<int>(STEP) ].x = TILE_W*4;
+			gTileClips[ static_cast<int>(STEP) ].y = TILE_H;
+			gTileClips[ static_cast<int>(STEP) ].w = TILE_W;
+			gTileClips[ static_cast<int>(STEP) ].h = TILE_H;
 		}
 	}
 
@@ -627,20 +650,31 @@ bool Dungeon::setTiles()
     return tilesLoaded;
 }
 
-void Dungeon::updateEnemyRoute(Enemy& _enemy, GOAL_TYPE _goleType)
+void Dungeon::updateEnemyRoute(Enemy& _enemy, GOAL_TYPE _goalType)
 {
-	glm::vec2 goal;
-	switch(_goleType)
+	glm::vec2 goal(0, 0);
+	switch(_goalType)
 	{
-		case RANDOM_POS: 
+	case RANDOM_POS: 
+		while(!canGetOn(goal))
+		{
 			switch(dungeon_g->getNowScene())
 			{
-			case DUNGEON_AREA_DIVIDE: goal =  areaDivide.getRandomFloorPos(); break;
-			case DUNGEON_RRA: 		  goal =  rra.getRandomFloorPos();        break;
+			case DUNGEON_AREA_DIVIDE: goal = areaDivide.getRandomFloorPos(); break;
+			case DUNGEON_RRA: 		  goal = rra.getRandomFloorPos();        break;
 			default: break;
 			}
-			break;
-		case PLAYER_POS: goal = player.getPos(); break;
+			SDL_Log("updateEnemyRoute: GOAL(%d, %d)", (int)goal.x, (int)goal.y);
+		}
+		break;
+	case PLAYER_POS:
+		goal = player.getImagePos();
+		goal.x /= TILE_W;
+		goal.x++;
+		goal.y /= TILE_H;
+		goal.y++; 
+		SDL_Log("updateEnemyRoute: GOAL(%d, %d)", (int)goal.x, (int)goal.y);
+		break;
 	}
 	_enemy.setGoal(floor, goal);
 }

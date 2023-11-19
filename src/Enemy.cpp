@@ -43,15 +43,17 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
 {
     if(onTileCenter())
     {
+SDL_Log("walk: nextPos(%d, %d)", (int)nextPos.x, (int)nextPos.y);
+SDL_Log("walk: enemPos(%d, %d)", (int)mBox.x/TILE_W + 1, (int)mBox.y/TILE_H + 1);
+        if(nextPos.x < mBox.x/TILE_W + 1) mDir = LEFT;
+        else if(nextPos.x > mBox.x/TILE_W + 1) mDir = RIGHT;
+        else if(nextPos.y < mBox.y/TILE_H + 1) mDir = UP;
+        else if(nextPos.y > mBox.y/TILE_H + 1) mDir = DOWN;
+
         nextPos = route[0];
-        if(nextPos.x > mBox.x/TILE_WIDTH) mDir = LEFT;
-        if(nextPos.x < mBox.x/TILE_WIDTH) mDir = RIGHT;
-        if(nextPos.y > mBox.y/TILE_HEIGHT) mDir = UP;
-        if(nextPos.y < mBox.y/TILE_HEIGHT) mDir = DOWN;
         route.pop_front();
         elapsedTurn++;
-        SDL_Log("elapsedTurn: %d, route size: %d\n", elapsedTurn, static_cast<int>(route.size()));
-
+        SDL_Log("walk: elapsedTurn = %d, route size = %d\n", elapsedTurn, static_cast<int>(route.size()));
     }
     std::vector<Character> otherCharacters;
     otherCharacters.push_back(_player);
@@ -59,15 +61,13 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
     {
         otherCharacters.push_back(enemy);
     }
-    if(move(_tiles, otherCharacters))
+    bool touched = move(_tiles, otherCharacters);
+    if(touched)
     {
-        elapsedTurn = ENEMY_SEARCH_INTERVAL;
+        elapsedTurn = ENEMY_SEARCH_INTERVAL + 1;
     }
 }
 
-/// @brief 目的地を設定し、ルートを検索
-/// @param dungeon データ系のマップ情報
-/// @param _goal データ系の目的地の座標
 void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], glm::vec2 _goal)
 {
     if(_goal.x > FLOOR_W || _goal.y > FLOOR_H || _goal.x < 0 || _goal.y < 0)
@@ -76,13 +76,44 @@ void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], glm::vec2 _goal)
     }
     goal = _goal;
     route.clear();
-    route = AStar::AStar(_dungeon, glm::vec2(mBox.x / TILE_WIDTH, mBox.y / TILE_HEIGHT), goal);
+    route = AStar::AStar(_dungeon, glm::vec2(mBox.x / TILE_W, mBox.y / TILE_H), goal);
     // 現在地をポップ
+    route.pop_front();
+    if(route.size() == 0)
+    {
+        return;
+    }
+    // SDL_Log("setGoal: 更新後のルート一覧");
+    // for(auto vec2 : route)
+    // {
+    // SDL_Log("setGoal: (%d, %d)", (int)vec2.x, (int)vec2.y);
+    // }
+
+    nextPos = route.at(0);
     route.pop_front();
     elapsedTurn = 0;
 }
 
-void Enemy::attack(Character& _opponent) {
+void Enemy::attack(Character& _opponent)
+{
     elapsedTurn++;
     _opponent.receiveDamage(STR);
+}
+
+bool Enemy::find(Character _opponent)
+{
+    return 
+      ( abs(mBox.x - _opponent.getImagePos().x) / TILE_W 
+      + abs(mBox.y - _opponent.getImagePos().y) / TILE_H 
+            <= ENEMY_FIND_RANGE);
+}
+
+bool Enemy::mustUpdateRoute()
+{
+    bool result = ((static_cast<int>(route.size()) < 1) || (elapsedTurn > ENEMY_SEARCH_INTERVAL));
+    if(result)
+    {
+        SDL_Log("mustUpdateRoute: 更新要求");
+    }
+    return result;
 }

@@ -24,6 +24,7 @@ public:
     Room getRoom(int id) { return rooms[id]; }
     int getAreaNum() { return areas.size(); }
     int getRoomNum() { return rooms.size(); }
+    /// @brief ランダムなデータ系座標を返す
     glm::vec2 getRandomFloorPos();
 
     int areaCount = 0;

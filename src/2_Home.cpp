@@ -11,44 +11,44 @@ Game *home_g;
 void weaponButton()
 {
     Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
-    SDL_Log("weaponButton\n");
+    printf("weaponButton\n");
 }
 void armorButton()
 {
     Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
-    SDL_Log("armorButton\n");
+    printf("armorButton\n");
 }
 void itemButton()
 {
     Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
-    SDL_Log("itemButton\n");
+    printf("itemButton\n");
 }
 void otherButton()
 {
     Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
-    SDL_Log("otherButton\n");
+    printf("otherButton\n");
 }
 
 void haveButton()
 {
     Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
-    SDL_Log("haveButton\n");
+    printf("haveButton\n");
 }
 void storageButton()
 {
     Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
-    SDL_Log("storageButton\n");
+    printf("storageButton\n");
 }
 void saveButton()
 {
     Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
-    SDL_Log("saveButton\n");
+    printf("saveButton\n");
 }
 void dungeonButton()
 {
     Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
     home_g->setNowScene(SCENE::DUNGEON_MENU);
-    SDL_Log("dungeonButton\n");
+    printf("dungeonButton\n");
 }
 
 

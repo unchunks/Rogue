@@ -10,7 +10,7 @@ void startButton()
 {
     Mix_PlayChannel(-1, start_g->getClickEffect(), 0);
     start_g->setNowScene(SCENE::HOME);
-    SDL_Log("startButton\n");
+    printf("startButton\n");
 }
 
 Start::Start(Game *game)

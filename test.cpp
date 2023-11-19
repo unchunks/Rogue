@@ -1,8 +1,3 @@
-/* これはFPSをカウントするサンプルである
- *
- * SDLタイマは別のスレッドで動いている
- * そのためデータ競合を防ぐ必要である
- */
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -33,7 +28,7 @@ int main(int argc, char **argv)
     int sdlResult = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     if (sdlResult != 0)
     {
-SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+        printf("Unable to initialize SDL: %s", SDL_GetError());
         return false;
     }
 
@@ -41,7 +36,7 @@ SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
     sdlResult = IMG_Init(IMG_INIT_PNG);
     if (!(sdlResult & IMG_INIT_PNG))
     {
-SDL_Log("Unable to initialize SDL_IMG: %s", IMG_GetError());
+        printf("Unable to initialize SDL_IMG: %s", IMG_GetError());
         return false;
     }
 
@@ -49,13 +44,13 @@ SDL_Log("Unable to initialize SDL_IMG: %s", IMG_GetError());
     sdlResult = TTF_Init();
     if (sdlResult != 0)
     {
-SDL_Log("Unable to initialize SDL_TTF: %s", TTF_GetError());
+        printf("Unable to initialize SDL_TTF: %s", TTF_GetError());
         return false;
     }
 
     TTF_Font *mFont = TTF_OpenFont("assets/JF-Dot-K14B.ttf", 30);
     if (!mFont) {
-SDL_Log("TTF_OpenFont: %s\n", TTF_GetError());
+        printf("TTF_OpenFont: %s\n", TTF_GetError());
         return false;
     }
 
@@ -63,14 +58,14 @@ SDL_Log("TTF_OpenFont: %s\n", TTF_GetError());
     sdlResult = Mix_Init(MIX_INIT_MP3);
     if (sdlResult < 0)
     {
-SDL_Log("Unable to initialize SDL_Mix: %s", Mix_GetError());
+        printf("Unable to initialize SDL_Mix: %s", Mix_GetError());
         return false;
     }
     
     sdlResult = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
     if (sdlResult < 0)
     {
-SDL_Log("Unable to initialize SDL_mixer: %s", Mix_GetError());
+        printf("Unable to initialize SDL_mixer: %s", Mix_GetError());
         return false;
     }
 
@@ -86,7 +81,7 @@ SDL_Log("Unable to initialize SDL_mixer: %s", Mix_GetError());
 
     if (!win)
     {
-SDL_Log("Failed to create window: %s", SDL_GetError());
+        printf("Failed to create window: %s", SDL_GetError());
         return false;
     }
 
@@ -97,7 +92,7 @@ SDL_Log("Failed to create window: %s", SDL_GetError());
         SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!renderer)
     {
-SDL_Log("Failed to create renderer: %s", SDL_GetError());
+        printf("Failed to create renderer: %s", SDL_GetError());
         return false;
     }
 

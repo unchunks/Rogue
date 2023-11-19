@@ -5,10 +5,10 @@ extern std::uniform_int_distribution<int> random_num;
 
 void RRA::generate()
 {
-SDL_Log("生成開始\n");
+    printf("生成開始\n");
     initFloor();
 
-SDL_Log("部屋生成\n");
+    printf("部屋生成\n");
     int total_area = 0;
     Area area;
     for (int i = 0; i < AREA_MAX; i++)
@@ -39,17 +39,18 @@ SDL_Log("部屋生成\n");
             rooms.push_back(Room(area));
         }
         total_area += area.w * area.h;
-
-SDL_Log("rooms[%d](X: %d, Y: %d, W: %d, H: %d)\n", i, rooms[i].x, rooms[i].y, rooms[i].w, rooms[i].h);
     }
 
-    for (auto room_itr = rooms.begin() + 1; room_itr < rooms.end(); room_itr++)
+    Room centerRoom = rooms[0];
+    for (auto room : rooms)
     {
-SDL_Log("通路書き込み\n");
-        int aisle_x1 = (room_itr - 1)->x + (random_num(random_engine) % (room_itr - 1)->w);
-        int aisle_y1 = (room_itr - 1)->y + (random_num(random_engine) % (room_itr - 1)->h);
-        int aisle_x2 = room_itr->x + (random_num(random_engine) % room_itr->w);
-        int aisle_y2 = room_itr->y + (random_num(random_engine) % room_itr->h);
+        printf("room(X: %d, Y: %d, W: %d, H: %d)\n", room.x, room.y, room.w, room.h);
+
+        printf("通路書き込み\n");
+        int aisle_x1 = centerRoom.x + (random_num(random_engine) % centerRoom.w);
+        int aisle_y1 = centerRoom.y + (random_num(random_engine) % centerRoom.h);
+        int aisle_x2 = room.x + (random_num(random_engine) % room.w);
+        int aisle_y2 = room.y + (random_num(random_engine) % room.h);
         int middle_x = (aisle_x1 + aisle_x2) / 2;
 
         int dx = 1;
@@ -74,15 +75,15 @@ SDL_Log("通路書き込み\n");
             floorTYPE[y][middle_x] = AISLE;
         }
 
-SDL_Log("部屋書き込み\n");
-        for(int y=room_itr->y; y<room_itr->y + room_itr->h; y++) {
-            for(int x=room_itr->x; x<room_itr->x + room_itr->w; x++) {
+        printf("部屋書き込み\n");
+        for(int y = room.y; y < (room.y + room.h); y++) {
+            for(int x = room.x; x < (room.x + room.w); x++) {
                 floorTYPE[y][x] = FLOOR;
             }
         }
     }
 
-SDL_Log("地形整形\n");
+    printf("地形整形\n");
 
     outputMap_forDebug();
     
@@ -92,7 +93,7 @@ SDL_Log("地形整形\n");
 
     outputMap();
 
-SDL_Log("階段生成\n");
+    printf("階段生成\n");
     int roomNum = random_num(random_engine) % areas.size();
     Room room = rooms[roomNum];
     glm::vec2 pos = glm::vec2(0.0f, 0.0f);
@@ -100,13 +101,13 @@ SDL_Log("階段生成\n");
     {
         pos.x = room.x + random_num(random_engine)%room.w;
         pos.y = room.y + random_num(random_engine)%room.h;
-SDL_Log("pos(X: %.0f, Y: %.0f), room(X: %d, Y: %d, W: %d, H: %d)\n", pos.x, pos.y, room.x, room.y, room.w, room.h);
+    printf("pos(X: %.0f, Y: %.0f), room(X: %d, Y: %d, W: %d, H: %d)\n", pos.x, pos.y, room.x, room.y, room.w, room.h);
     }
     floorTYPE[(int)pos.y][(int)pos.x] = STEP;
-SDL_Log("階段(%.0f, %.0f)\n", pos.x, pos.y);
+    printf("階段(%.0f, %.0f)\n", pos.x, pos.y);
 
-SDL_Log("dungeon.mapに書き出し\n");
+    printf("dungeon.mapに書き出し\n");
     outputMap();
 
-SDL_Log("生成終了\n");
+    printf("生成終了\n");
 }

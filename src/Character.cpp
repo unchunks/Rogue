@@ -8,7 +8,7 @@ Character::Character()
 }
 
 Character::Character(int _x, int _y, int _maxHP, int _STR, int _VIT, STATE _state, DIRECTION _dir, CHAR_TYPE _type)
-    : isMoved(false), nowHP(_maxHP), maxHP(_maxHP), STR(_STR), VIT(_VIT), mState(_state), mDir(_dir), mType(_type), mBox({TILE_WIDTH * 2, TILE_HEIGHT * 2, SPRITE_CHAR_WIDTH, SPRITE_CHAR_HEIGHT}), mAnimFrame(0)
+    : isMoved(false), nowHP(_maxHP), maxHP(_maxHP), STR(_STR), VIT(_VIT), mState(_state), mDir(_dir), mType(_type), mBox({TILE_W * 2, TILE_H * 2, SPRITE_CHAR_WIDTH, SPRITE_CHAR_HEIGHT}), mAnimFrame(0)
 {
 }
 
@@ -18,8 +18,6 @@ Character::~Character()
     mSpriteClips.shrink_to_fit();
 }
 
-/// @brief 向いている方向に移動。当たり判定も含む
-/// @param _tiles 当たり判定用の全タイルの配列
 bool Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherCharacters)
 {
     bool touched = false;
@@ -27,63 +25,109 @@ bool Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherChar
     switch (mDir)
     {
     case LEFT:
+        SDL_Log("move: 左に移動");
         mBox.x -= CHAR_VEL;
         // キャラクターが左右上下に行き過ぎた場合、または壁に触れた場合戻る
-        if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
+        if (collided(_tiles, _otherCharacters))
         {
-            mBox.x += CHAR_VEL + TILE_WIDTH / 4;
+            // mBox.x += CHAR_VEL;// + TILE_W / 4;
+            mBox.x += (TILE_W / 4) - (mBox.x % TILE_W);
             touched = true;
         }
-        if(mBox.y % TILE_HEIGHT == TILE_HEIGHT / 4)
+        if(mBox.y % TILE_H == TILE_H / 4)
         {
-            mBox.y += (TILE_HEIGHT / 4) - (mBox.y % TILE_HEIGHT);
+            mBox.y += (TILE_H / 4) - (mBox.y % TILE_H);
         }
         break;
     case RIGHT:
+        SDL_Log("move: 右に移動");
         mBox.x += CHAR_VEL;
-        if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
+        if (collided(_tiles, _otherCharacters))
         {
-            mBox.x -= CHAR_VEL + TILE_WIDTH / 4;
+            // mBox.x -= CHAR_VEL;// + TILE_W / 4;
+            mBox.x += (TILE_W / 4) - (mBox.x % TILE_W);
             touched = true;
         }
-        if(mBox.y % TILE_HEIGHT == TILE_HEIGHT / 4)
+        if(mBox.y % TILE_H == TILE_H / 4)
         {
-            mBox.y += (TILE_HEIGHT / 4) - (mBox.y % TILE_HEIGHT);
+            mBox.y += (TILE_H / 4) - (mBox.y % TILE_H);
         }
         break;
     case UP:
+        SDL_Log("move: 上に移動");
         mBox.y -= CHAR_VEL;
-        if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
+        if (collided(_tiles, _otherCharacters))
         {
-            mBox.y += CHAR_VEL + TILE_HEIGHT / 4;
+            // mBox.y += CHAR_VEL;// + TILE_H / 4;
+            mBox.y += (TILE_H / 4) - (mBox.y % TILE_H);
             touched = true;
         }
-        if(mBox.x % TILE_WIDTH == TILE_WIDTH / 4)
+        if(mBox.x % TILE_W == TILE_W / 4)
         {
-            mBox.x += (TILE_WIDTH / 4) - (mBox.x % TILE_WIDTH);
+            mBox.x += (TILE_W / 4) - (mBox.x % TILE_W);
         }
         break;
     case DOWN:
+        SDL_Log("move: 下に移動");
         mBox.y += CHAR_VEL;
-        if (mapOver() || touchWall(mBox, _tiles) || touchChar(_otherCharacters))
+        if (collided(_tiles, _otherCharacters))
         {
-            mBox.y -= CHAR_VEL + TILE_HEIGHT / 4;
+            // mBox.y -= CHAR_VEL;// + TILE_H / 4;
+            mBox.y += (TILE_H / 4) - (mBox.y % TILE_H);
             touched = true;
         }
-        if(mBox.x % TILE_WIDTH == TILE_WIDTH / 4)
+        if(mBox.x % TILE_W == TILE_W / 4)
         {
-            mBox.x += (TILE_WIDTH / 4) - (mBox.x % TILE_WIDTH);
+            mBox.x += (TILE_W / 4) - (mBox.x % TILE_W);
         }
         break;
     case NO_DIRECTION:
         break;
     }
-    if(onTileCenter())
-    {
-        SDL_Log("移動完了");
-    }
     return touched;
-    // SDL_Log("(x: %d, y: %d)\n", ( mBox.x + mBox.w / 2 ) % TILE_WIDTH, ( mBox.y + mBox.h / 2 ) % TILE_HEIGHT);
+    // SDL_Log("move: (x: %d, y: %d)\n", ( mBox.x + mBox.w / 2 ) % TILE_W, ( mBox.y + mBox.h / 2 ) % TILE_H);
+}
+
+//FIX 斜めでも反応する
+bool Character::adjacent(Character _opponent)
+{
+    Character oppo = _opponent;
+
+    oppo.mBox.y -= TILE_H;
+    if( touchChar(oppo) )
+    {
+        mDir = UP;
+        SDL_Log("adjacent: キャラに隣接（上）");
+        return true;
+    }
+
+    oppo.mBox = _opponent.mBox;
+    oppo.mBox.y += TILE_H;
+    if( touchChar(oppo) )
+    {
+        mDir = DOWN;
+        SDL_Log("adjacent: キャラに隣接（下）");
+        return true;
+    }
+
+    oppo.mBox = _opponent.mBox;
+    oppo.mBox.x -= TILE_W;
+    if( touchChar(oppo) )
+    {
+        mDir = LEFT;
+        SDL_Log("adjacent: キャラに隣接（左）");
+        return true;
+    }
+
+    oppo.mBox = _opponent.mBox;
+    oppo.mBox.x += TILE_W;
+    if( touchChar(oppo) )
+    {
+        mDir = RIGHT;
+        SDL_Log("adjacent: キャラに隣接（右）");
+        return true;
+    }
+    return false;
 }
 
 void Character::attack(Character &_opponent)
@@ -105,18 +149,12 @@ void Character::receiveDamage(int _damage)
     }
 }
 
-
-/// @brief 座標テレポート
-/// @param _x X座標(画像系の座標)
-/// @param _y Y座標(画像系の座標)
 void Character::setPos(int _x, int _y)
 {
     mBox.x = _x;
     mBox.y = _y;
 }
 
-/// @brief 座標テレポート
-/// @param _pos 座標(画像系の座標)
 void Character::setPos(glm::vec2 _pos)
 {
     mBox.x = _pos.x;
@@ -171,7 +209,7 @@ void Character::render(SDL_Rect &_camera)
     }
     if(mAnimFrame >= ANIMATION_FRAMES * FPS / ANIM_SPEED)
         mAnimFrame = 0;
-    // プレイヤーを表示
+    // キャラクターを表示
     mCharTexture.render(mBox.x - _camera.x, mBox.y - _camera.y, &mSpriteClips[c_sprite_num]);
 }
 
@@ -179,29 +217,37 @@ void Character::render(SDL_Rect &_camera)
 
 bool Character::onTileCenter()
 {
-// SDL_Log("タイル内座標(x: %d, y: %d)\n", (mBox.x % TILE_WIDTH), (mBox.y % TILE_HEIGHT));
-    if ((mBox.x % TILE_WIDTH == TILE_WIDTH / 4) &&
-        (mBox.y % TILE_HEIGHT == TILE_HEIGHT / 4))
+// SDL_Log("タイル内座標(x: %d, y: %d)\n", (mBox.x % TILE_W), (mBox.y % TILE_H));
+    if ( ( abs( ( mBox.x % TILE_W ) - ( TILE_W / 4 ) ) < 5 )
+      && ( abs( ( mBox.y % TILE_H )  - ( TILE_H / 4 ) ) < 5) )
+    {
+        mBox.x = (mBox.x / TILE_W) * TILE_W + TILE_W / 4;
+        mBox.y = (mBox.y / TILE_H) * TILE_H + TILE_H / 4;
         return true;
+    }
     return false;
 }
 
-/// @brief 矩形とタイルの衝突判定
-/// @param box 移動している物体の当たり判定
-/// @param _tiles 全タイルの配列
-bool Character::touchWall(SDL_Rect box, std::vector<Tile> _tiles)
+bool Character::collided(std::vector<Tile> _tiles, std::vector<class Character> _otherCharacters)
+{
+    return (mapOver() || touchWall(_tiles) || touchChars(_otherCharacters));
+}
+
+bool Character::touchWall(std::vector<Tile> _tiles)
 {
     // Go through the tiles
     for (auto _tile : _tiles)
     {
         // If the tile is a wall type tile
-        if ((_tile.getType() != FLOOR) && (_tile.getType() != AISLE) && (_tile.getType() != STEP))
+        if ((_tile.getType() == FLOOR) || (_tile.getType() == AISLE) || (_tile.getType() == STEP))
         {
-            // If the collision box touches the wall tile
-            if (checkCollision(box, _tile.getBox()))
-            {
-                return true;
-            }
+            continue;
+        }
+        // If the collision box touches the wall tile
+        if (checkCollision(mBox, _tile.getBox()))
+        {
+            SDL_Log("touchWall: 壁に接触");
+            return true;
         }
     }
 
@@ -209,17 +255,28 @@ bool Character::touchWall(SDL_Rect box, std::vector<Tile> _tiles)
     return false;
 }
 
-bool Character::touchChar(std::vector<Character> _otherCharacters)
+bool Character::touchChars(std::vector<Character> _otherCharacters)
 {
     for(auto _otherCharacter : _otherCharacters)
     {
-        if( (mBox.x + mBox.w > _otherCharacter.mBox.x)
-         && (mBox.x < _otherCharacter.mBox.x + _otherCharacter.mBox.w)
-         && (mBox.y + mBox.h > _otherCharacter.mBox.y)
-         && (mBox.y < _otherCharacter.mBox.y + _otherCharacter.mBox.h) )
+        if( (mBox.x / TILE_W + 1 == _otherCharacter.mBox.x / TILE_W + 1)
+         && (mBox.y / TILE_H + 1 == _otherCharacter.mBox.y/ TILE_H + 1) )
         {
+            SDL_Log("touchChars: キャラクターに接触");
             return true;
         }
+    }
+    return false;
+}
+
+bool Character::touchChar(Character  _otherCharacter)
+{
+    if( (mBox.x / TILE_W + 1 == _otherCharacter.mBox.x / TILE_W + 1)
+        && (mBox.y / TILE_H + 1 == _otherCharacter.mBox.y/ TILE_H + 1) )
+    {
+        SDL_Log("touchChar: キャラクターに接触");
+        SDL_Log("touchChar: (%d, %d) == (%d, %d)?", mBox.x / TILE_W + 1, mBox.y / TILE_H + 1, _otherCharacter.mBox.x / TILE_W + 1, _otherCharacter.mBox.y / TILE_H + 1);
+        return true;
     }
     return false;
 }
@@ -228,7 +285,10 @@ bool Character::mapOver()
 {
     if( (mBox.x < 0) || (mBox.x + SPRITE_CHAR_WIDTH > LEVEL_WIDTH)
      || (mBox.y < 0) || (mBox.y + SPRITE_CHAR_HEIGHT > LEVEL_HEIGHT))
+    {
+        SDL_Log("mapOver: 範囲外");
         return true;
+    }
     else
         return false;
 }

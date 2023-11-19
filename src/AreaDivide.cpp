@@ -48,17 +48,17 @@ void AreaDivide::divide(int ID)
 
 void AreaDivide::generate()
 {
-SDL_Log("生成開始\n");
+    printf("生成開始");
     initFloor();
 
     areas = std::vector<Area>(1, Area(0, 0, FLOOR_W, FLOOR_H));
     areaCount = 0;
 
-SDL_Log("エリア分割\n");
+    printf("エリア分割");
     divide(areaCount);
     if(areaCount < 5) divide(areaCount);
 
-SDL_Log("部屋生成\n");
+    printf("部屋生成");
 // 各エリアに対する処理
     for(auto area : areas) {
         Room room = Room(
@@ -69,7 +69,7 @@ SDL_Log("部屋生成\n");
         );
         rooms.push_back(room);
 
-SDL_Log("通路書き込み\n");
+printf("通路書き込み\n");
         int aisle_num = random_num(random_engine);
         for(int y=area.y; y<area.y + area.h; y++) {
             floorTYPE[y][room.x + room.w + 1] = AISLE;
@@ -80,7 +80,7 @@ SDL_Log("通路書き込み\n");
             floorTYPE[room.y + (aisle_num % (room.h - 2)) + 1][x] = AISLE;
         }
 
-SDL_Log("部屋書き込み\n");
+printf("部屋書き込み\n");
         for(int y=room.y; y<room.y + room.h; y++) {
             for(int x=room.x; x<room.x + room.w; x++) {
                 floorTYPE[y][x] = FLOOR;
@@ -88,7 +88,7 @@ SDL_Log("部屋書き込み\n");
         }
     }
 
-SDL_Log("地形整形\n");
+printf("地形整形\n");
 
     outputMap_forDebug();
 
@@ -96,7 +96,7 @@ SDL_Log("地形整形\n");
     randomEraseDeadEnd();
     identificationWallKind();
 
-SDL_Log("階段生成\n");
+printf("階段生成\n");
     int roomNum = random_num(random_engine) % areaCount;
     Room room = rooms[roomNum];
     glm::vec2 pos = glm::vec2(0, 0);
@@ -106,10 +106,10 @@ SDL_Log("階段生成\n");
         pos.y = room.y + random_num(random_engine)%room.h;
     }
     floorTYPE[(int)pos.y][(int)pos.x] = STEP;
-SDL_Log("階段(%.0f, %.0f)\n", pos.x, pos.y);
+printf("階段(%.0f, %.0f)\n", pos.x, pos.y);
 
-SDL_Log("dungeon.mapに書き出し\n");
+printf("dungeon.mapに書き出し\n");
     outputMap();
 
-SDL_Log("生成終了\n");
+printf("生成終了\n");
 }

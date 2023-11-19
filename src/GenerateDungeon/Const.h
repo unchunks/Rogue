@@ -19,14 +19,14 @@ constexpr int SCREEN_WIDTH = 996;
 constexpr int SCREEN_HEIGHT = 560;
 
 //Tile 定数
-constexpr int TILE_WIDTH = 128;
-constexpr int TILE_HEIGHT = 128;
+constexpr int TILE_W = 128;
+constexpr int TILE_H = 128;
 constexpr int TOTAL_TILES = 1600;
 constexpr int TOTAL_TILE_SPRITES = 20;
 
 //レベルの寸法
-constexpr int LEVEL_WIDTH = TILE_WIDTH * FLOOR_W;
-constexpr int LEVEL_HEIGHT = TILE_HEIGHT * FLOOR_H;
+constexpr int LEVEL_WIDTH = TILE_W * FLOOR_W;
+constexpr int LEVEL_HEIGHT = TILE_H * FLOOR_H;
 
 constexpr int PADDING = 5;
 
@@ -35,7 +35,7 @@ constexpr int SPRITE_CHAR_WIDTH = 64;
 constexpr int SPRITE_CHAR_HEIGHT = 64;
 
 //軸方向の最大速度
-constexpr int CHAR_VEL = ((TILE_WIDTH + TILE_HEIGHT) / FPS);// - (TILE_WIDTH % ((TILE_WIDTH + TILE_HEIGHT) / FPS));
+constexpr int CHAR_VEL = ((TILE_W + TILE_H) / FPS);// - (TILE_W % ((TILE_W + TILE_H) / FPS));
 
 //歩行アニメーション
 constexpr int ANIMATION_FRAMES = 4;
