@@ -69,6 +69,11 @@ private:
     std::vector<Enemy> deadEnemies;
 
     int isOtherPos(glm::vec2 _pos);
+
+    /**
+     * @brief 引数の位置に移動できるか判定する
+     * @param _pos データ系座標
+    */
     bool canGetOn(glm::vec2 _pos);
     glm::vec2 getRandomPos(int _roomCount);
     glm::vec2 getFrontPos(glm::vec2 _pos, DIRECTION _dir);
@@ -80,5 +85,7 @@ private:
     SDL_Rect camera;
     std::vector<SDL_Rect> mPlayerSpriteClips;
     std::vector<std::vector<SDL_Rect>> mEnemySpriteClips;
+
+    CHAR_TYPE nowTurn;
 };
 

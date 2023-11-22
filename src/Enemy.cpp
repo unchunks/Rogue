@@ -1,7 +1,7 @@
 #include "GenerateDungeon/Enemy.h"
 
 Enemy::Enemy(ENEMY_TYPE _enemy_type)
-: Character()
+: Character(), elapsedTurn(0)
 {
     enemy_type = _enemy_type;
     switch(enemy_type)
@@ -43,8 +43,8 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
 {
     if(onTileCenter())
     {
-SDL_Log("walk: nextPos(%d, %d)", (int)nextPos.x, (int)nextPos.y);
-SDL_Log("walk: enemPos(%d, %d)", (int)mBox.x/TILE_W + 1, (int)mBox.y/TILE_H + 1);
+        SDL_Log("walk: nextPos(%d, %d)", (int)nextPos.x, (int)nextPos.y);
+        SDL_Log("walk: enemPos(%d, %d)", (int)mBox.x/TILE_W + 1, (int)mBox.y/TILE_H + 1);
         if(nextPos.x < mBox.x/TILE_W + 1) mDir = LEFT;
         else if(nextPos.x > mBox.x/TILE_W + 1) mDir = RIGHT;
         else if(nextPos.y < mBox.y/TILE_H + 1) mDir = UP;
@@ -83,11 +83,11 @@ void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], glm::vec2 _goal)
     {
         return;
     }
-    // SDL_Log("setGoal: 更新後のルート一覧");
-    // for(auto vec2 : route)
-    // {
-    // SDL_Log("setGoal: (%d, %d)", (int)vec2.x, (int)vec2.y);
-    // }
+    SDL_Log("setGoal: 更新後のルート一覧");
+    for(auto vec2 : route)
+    {
+    SDL_Log("setGoal: (%d, %d)", (int)vec2.x, (int)vec2.y);
+    }
 
     nextPos = route.at(0);
     route.pop_front();
@@ -96,12 +96,18 @@ void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], glm::vec2 _goal)
 
 void Enemy::attack(Character& _opponent)
 {
+    if(!onTileCenter())
+        return;
+
     elapsedTurn++;
     _opponent.receiveDamage(STR);
 }
 
 bool Enemy::find(Character _opponent)
 {
+    if(!onTileCenter())
+        return false;
+
     return 
       ( abs(mBox.x - _opponent.getImagePos().x) / TILE_W 
       + abs(mBox.y - _opponent.getImagePos().y) / TILE_H 
@@ -110,10 +116,44 @@ bool Enemy::find(Character _opponent)
 
 bool Enemy::mustUpdateRoute()
 {
+    if(!onTileCenter())
+        return false;
+
     bool result = ((static_cast<int>(route.size()) < 1) || (elapsedTurn > ENEMY_SEARCH_INTERVAL));
+    if( static_cast<int>(route.size()) < 1 )
+    {
+        SDL_Log("mustUpdateRoute: ルートサイズが少ない %d", static_cast<int>(route.size()));
+    }
+    if( elapsedTurn > ENEMY_SEARCH_INTERVAL )
+    {
+        SDL_Log("mustUpdateRoute: 経過ターン超過 %d", elapsedTurn);
+    }
     if(result)
     {
         SDL_Log("mustUpdateRoute: 更新要求");
     }
     return result;
+}
+
+bool Enemy::changeState(Character _opponent)
+{
+    if(!onTileCenter())
+        return false;
+
+    if (find(_opponent) && mState != FOUND)
+    {
+        SDL_Log("プレイヤー発見");
+        setState(FOUND);
+        routeClear();
+        return true;
+    }
+    else if(!find(_opponent) && mState != SEARCH)
+    {
+        SDL_Log("プレイヤー未発見");
+        setState(SEARCH);
+        routeClear();
+        return false;
+    }
+
+    return false;
 }

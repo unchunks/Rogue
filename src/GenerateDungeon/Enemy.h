@@ -24,6 +24,7 @@ public:
     void attack(class Character& _opponent) override;
     bool find(class Character _opponent);
     bool mustUpdateRoute();
+    bool changeState(class Character _opponent);
 
     void routeClear() {route.clear(); elapsedTurn = ENEMY_SEARCH_INTERVAL + 1;}
 

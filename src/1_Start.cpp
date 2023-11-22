@@ -27,7 +27,7 @@ Start::Start(Game *game)
         BUTTON_W,
         BUTTON_H,
         "S : Game Start",
-        mGame->getFont(),
+        mGame->getFontB(),
         Color::SDL_blue,
         Color::SDL_white
     );
@@ -46,7 +46,12 @@ void Start::Input(SDL_Event event)
     {
         switch(event.key.keysym.sym)
         {
-        case SDLK_s:    mStartButton.release(); mStartButton.onClick();  break;
+        case SDLK_s:
+            if(mStartButton.isPressed)
+            {
+                mStartButton.release(); mStartButton.onClick();
+            }
+            break;
         }
     }
 }

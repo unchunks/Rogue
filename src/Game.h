@@ -27,7 +27,8 @@ public:
     void RunLoop();
     void Shutdown();
 
-    TTF_Font *getFont() const { return mFont; }
+    TTF_Font *getFontN() const { return mFontN; }
+    TTF_Font *getFontB() const { return mFontB; }
     Mix_Chunk *getClickEffect() const { return mClickEffect; }
 
     void setNowScene(const SCENE nextScene) { mNowScene = nextScene; }
@@ -39,7 +40,7 @@ private:
     void Output();
 
     SDL_Event event;
-    TTF_Font *mFont;
+    TTF_Font *mFontN, *mFontB;
     Mix_Chunk* mClickEffect;
     Mix_Music* mMusic;
 

@@ -34,7 +34,7 @@ DungeonMenu::DungeonMenu(Game *game)
         BUTTON_W,
         BUTTON_H,
         "1 : 区域分割法",
-        mGame->getFont(),
+        mGame->getFontN(),
         Color::SDL_blue,
         Color::SDL_white);
     mRRA.create(
@@ -44,7 +44,7 @@ DungeonMenu::DungeonMenu(Game *game)
         BUTTON_W,
         BUTTON_H,
         "2 : 　 RRA 　",
-        mGame->getFont(),
+        mGame->getFontN(),
         Color::SDL_blue,
         Color::SDL_white);
 }
@@ -72,12 +72,18 @@ void DungeonMenu::Input(SDL_Event event)
         switch(event.key.keysym.sym)
         {
         case SDLK_1:
-            mAreaDivide.release();
-            mAreaDivide.onClick();
+            if(mAreaDivide.isPressed)
+            {
+                mAreaDivide.release();
+                mAreaDivide.onClick();
+            }
             break;
         case SDLK_2:
-            mRRA.release();
-            mRRA.onClick();
+            if(mRRA.isPressed)
+            {
+                mRRA.release();
+                mRRA.onClick();
+            }
             break;
         }
     }

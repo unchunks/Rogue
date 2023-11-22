@@ -43,7 +43,7 @@ bool Game::Init()
     int sdlResult = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     if (sdlResult != 0)
     {
-printf("Unable to initialize SDL: %s", SDL_GetError());
+        printf("Unable to initialize SDL: %s", SDL_GetError());
         return false;
     }
 
@@ -51,7 +51,7 @@ printf("Unable to initialize SDL: %s", SDL_GetError());
     sdlResult = IMG_Init(IMG_INIT_PNG);
     if (!(sdlResult & IMG_INIT_PNG))
     {
-printf("Unable to initialize SDL_IMG: %s", IMG_GetError());
+        printf("Unable to initialize SDL_IMG: %s", IMG_GetError());
         return false;
     }
 
@@ -59,13 +59,18 @@ printf("Unable to initialize SDL_IMG: %s", IMG_GetError());
     sdlResult = TTF_Init();
     if (sdlResult != 0)
     {
-printf("Unable to initialize SDL_TTF: %s", TTF_GetError());
+        printf("Unable to initialize SDL_TTF: %s", TTF_GetError());
         return false;
     }
 
-    mFont = TTF_OpenFont("assets/JF-Dot-K14B.ttf", 30);
-    if (!mFont) {
-printf("TTF_OpenFont: %s\n", TTF_GetError());
+    mFontN = TTF_OpenFont("assets/JF-Dot-K14.ttf", 30);
+    if (!mFontN) {
+        printf("TTF_OpenFont: %s\n", TTF_GetError());
+        return false;
+    }
+    mFontB = TTF_OpenFont("assets/JF-Dot-K14B.ttf", 30);
+    if (!mFontB) {
+        printf("TTF_OpenFont: %s\n", TTF_GetError());
         return false;
     }
 
@@ -73,14 +78,14 @@ printf("TTF_OpenFont: %s\n", TTF_GetError());
     sdlResult = Mix_Init(MIX_INIT_MP3);
     if (sdlResult < 0)
     {
-printf("Unable to initialize SDL_Mix: %s", Mix_GetError());
+        printf("Unable to initialize SDL_Mix: %s", Mix_GetError());
         return false;
     }
     
     sdlResult = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
     if (sdlResult < 0)
     {
-printf("Unable to initialize SDL_mixer: %s", Mix_GetError());
+        printf("Unable to initialize SDL_mixer: %s", Mix_GetError());
         return false;
     }
 
@@ -146,8 +151,11 @@ void Game::RunLoop()
     {
         beforTime = SDL_GetTicks();
 
+        // SDL_Log("Input");
         Input();
+        // SDL_Log("Update");
         Update();
+        // SDL_Log("Output");
         Output();
 
 	
@@ -170,14 +178,28 @@ void Game::Input()
         {
             continue;
         }
-        if (event.type == SDL_QUIT) mIsRunning = false;
+        if (event.type == SDL_QUIT)
+        {
+            mIsRunning = false;
+        }
         switch (getNowScene())
         {
-            case START:         mStart->Input(event);       break;
-            case HOME:          mHome->Input(event);        break;
-            case DUNGEON_MENU:  mDungeonMenu->Input(event); break;
+            case START:         
+                mStart->Input(event);       
+                break;
+
+            case HOME:          
+                mHome->Input(event);        
+                break;
+
+            case DUNGEON_MENU:  
+                mDungeonMenu->Input(event); 
+                break;
+
             case DUNGEON_AREA_DIVIDE:
-            case DUNGEON_RRA:   mDungeon->Input(event);     break;
+            case DUNGEON_RRA:   
+                mDungeon->Input(event);     
+                break;
         }
     } while (SDL_PollEvent(&event));
     const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -224,7 +246,8 @@ void Game::Shutdown()
     mMusic = NULL;
     Mix_CloseAudio();
     
-    TTF_CloseFont(mFont);
+    TTF_CloseFont(mFontN);
+    TTF_CloseFont(mFontB);
 
     delete mStart;
     delete mHome;
@@ -239,5 +262,6 @@ void Game::Shutdown()
     IMG_Quit();
     TTF_Quit();
     Mix_Quit();
+
     SDL_Quit();
 }

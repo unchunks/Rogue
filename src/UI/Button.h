@@ -24,13 +24,9 @@ public:
 
         mTexture = SDL_CreateTextureFromSurface(mRenderer, surface);
 
-        // 文字を描写したTextureのサイズを取得する
-        // int iw, ih;
-        // SDL_QueryTexture(mTexture, NULL, NULL, &iw, &ih);
-        // mTextRect = {0, 0, iw, ih};
-
         SDL_FreeSurface(surface);
     }
+
     void Draw()
     {
         SDL_Color buffColor;
@@ -68,17 +64,22 @@ public:
         buffRect.h -= padding*2;
         SDL_RenderCopy(mRenderer, mTexture, NULL, &buffRect);
     }
+
     void press()
     {
+        isPressed = true;
         hierarchy = 0;
     }
     void release()
     {
+        isPressed = false;
         hierarchy = 5;
     }
 
     // 関数へのポインタ
     void (*onClick)();
+
+    bool isPressed = false;
 
 private:
     const int padding = 5;

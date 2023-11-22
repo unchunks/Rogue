@@ -52,7 +52,7 @@ public:
       */
     glm::vec2 getImagePos() {return glm::vec2(mBox.x, mBox.y);}
 
-	/** @brief データ系座標を返す
+	  /** @brief データ系座標を返す
       */
     glm::vec2 getDataPos() {return glm::vec2(mBox.x / TILE_W + 1, mBox.y / TILE_H + 1);}
     bool onTileCenter();
@@ -90,4 +90,5 @@ protected:
     SDL_Rect mBox;
 
     int mAnimFrame;
+    bool receivingDamage;
 };

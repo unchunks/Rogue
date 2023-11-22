@@ -64,7 +64,7 @@ bool LTexture::loadFromRenderedText( std::string textureText, SDL_Color textColo
 	free();
 
 	//テキストをレンダリング
-	SDL_Surface* textSurface = TTF_RenderText_Solid( dungeon_g->getFont(), textureText.c_str(), textColor );
+	SDL_Surface* textSurface = TTF_RenderText_Solid( dungeon_g->getFontN(), textureText.c_str(), textColor );
 	if( textSurface != NULL )
 	{
 		//表層ピクセルからテクスチャを作成
@@ -134,7 +134,7 @@ void LTexture::setH( int height )
 	mHeight = height;
 }
 
-void LTexture::render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
+void LTexture::render( int x, int y, SDL_Rect* clip, bool filter, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
 	//レンダリングスペースを設定し、画面にレンダリング
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };
@@ -147,6 +147,11 @@ void LTexture::render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* ce
 	}
 	//画面にレンダリングする
 	SDL_RenderCopyEx( gRenderer, mTexture, clip, &renderQuad, angle, center, flip );
+	if( filter )
+	{
+		SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xAA);
+		SDL_RenderFillRect(gRenderer, &renderQuad);
+	}
 //REVIEW デバッグ用
 	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
 	SDL_RenderDrawRect(gRenderer, &renderQuad);

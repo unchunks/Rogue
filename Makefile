@@ -27,9 +27,15 @@ do : $(OBJS)
 release : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) -O3 -s $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 
-debug : $(OBJS)
-	$(CC) $(OBJS) $(COMPILER_FLAGS) -g $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME) 
-	valgrind --track-origins=yes --leak-check=full ./$(OBJ_NAME)
+valgrind : $(OBJS)
+#$(CC) $(OBJS) $(COMPILER_FLAGS) -g $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME) 
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(OBJ_NAME)
+
+gdb: $(BOJS)
+	gdb ./$(BOJS)
+	run
+	bt
+	frame 0
 
 test : test.cpp
 	$(CC) test.cpp $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o test

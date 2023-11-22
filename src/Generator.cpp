@@ -212,6 +212,7 @@ void Generator::outputMap() {
                 case FLOOR:             buff[y+1][x+1] = FLOOR;             writing_text += "17 "; break;
                 case AISLE:             buff[y+1][x+1] = AISLE;             writing_text += "18 "; break;
                 case STEP:              buff[y+1][x+1] = STEP;              writing_text += "19 "; break;
+                case CELL_NUM: break;
             }
         }
         writing_text += "\n";
