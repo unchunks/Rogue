@@ -19,8 +19,8 @@ Tile::Tile( int x, int y, CELL_TYPE tileType )
 
 void Tile::render( SDL_Rect& camera )
 {
-	//タイルが画面上にある場合
-    if( checkCollision( camera, mBox ) )
+	//タイルが画面上にある場合s
+    if( AinB( mBox, camera) )
     {
 		//タイルを表示
         gTileTexture.render( mBox.x - camera.x, mBox.y - camera.y, &gTileClips[ mType ] );
@@ -39,7 +39,7 @@ SDL_Rect Tile::getBox()
 
 //NOTE: 独立した関数
 
-bool checkCollision( SDL_Rect a, SDL_Rect b )
+bool AinB( SDL_Rect a, SDL_Rect b )
 {
     //The sides of the rectangles
     int leftA, leftB;
@@ -60,26 +60,11 @@ bool checkCollision( SDL_Rect a, SDL_Rect b )
     bottomB = b.y + b.h;
 
     //If any of the sides from A are outside of B
-    if( bottomA <= topB )
+    if( (bottomA > topB) && (topA < bottomB) && (rightA > leftB) && (leftA < rightB))
     {
-        return false;
-    }
-
-    if( topA >= bottomB )
-    {
-        return false;
-    }
-
-    if( rightA <= leftB )
-    {
-        return false;
-    }
-
-    if( leftA >= rightB )
-    {
-        return false;
+        return true;
     }
 
     //If none of the sides from A are outside B
-    return true;
+    return false;
 }

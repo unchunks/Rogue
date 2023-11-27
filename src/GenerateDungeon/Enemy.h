@@ -15,6 +15,7 @@ public:
     Enemy(int _x, int _y, int _maxHP, int _STR, int _VIT);
     ~Enemy();
     void walk(std::vector<class Tile> _tiles, class Character _player, std::vector<class Enemy> _otherEnemies);
+    void walkTo(glm::vec2 _destination, std::vector<class Tile> _tiles, class Character _player, std::vector<class Enemy> _otherEnemies);
     
     /// @brief 目的地を設定し、ルートを検索
     /// @param dungeon データ系のマップ情報

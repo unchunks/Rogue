@@ -132,14 +132,14 @@ std::deque<glm::vec2> AStar::AStar(CELL_TYPE def_data[FLOOR_H][FLOOR_W], glm::ve
             else 
                 data[y][x].status = 2;	// 壁
 
-			if(x == goal.x && y == goal.y)
-				std::cout << "G ";
-			else if(x == start.x && y == start.y)
-				std::cout << "S ";
-			else
-				std::cout << ((data[y][x].status==0)? " " : "W") << " ";
+			// if(x == goal.x && y == goal.y)
+			// 	std::cout << "G ";
+			// else if(x == start.x && y == start.y)
+			// 	std::cout << "S ";
+			// else
+			// 	std::cout << ((data[y][x].status==0)? " " : "W") << " ";
 		}
-		std::cout << "\n";
+		// std::cout << "\n";
 	}
 	// 開始位置をオープンに
     data[(int)start.y][(int)start.x].SearchStatus = SEARCH_OPEN;

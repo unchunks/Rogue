@@ -17,10 +17,10 @@ enum CELL_TYPE {
     WALL_SIDE_LR = 10,
     WALL_SIDE_TB = 11,
 //3辺床と接地
-    WALL_END_RIGHT = 12,
-    WALL_END_LEFT = 13,
-    WALL_END_BOTTOM = 14,
-    WALL_END_TOP = 15,
+    WALL_END_LEFT = 12,
+    WALL_END_RIGHT = 13,
+    WALL_END_TOP = 14,
+    WALL_END_BOTTOM = 15,
 //4辺床と接地
     WALL_ALL = 16,
     FLOOR = 17,

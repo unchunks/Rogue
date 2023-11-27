@@ -164,10 +164,10 @@ void Generator::identificationWallKind() {
                 else if((connect[1] == 0) && connect[3] == 0) floorTYPE[y][x] = WALL_LEFT_TOP;
                 else if((connect[2] == 0) && connect[3] == 0) floorTYPE[y][x] = WALL_SIDE_LR;
             } else if(connectWallNum == 1) {
-                if(connect[0] == 1) floorTYPE[y][x] = WALL_END_BOTTOM;
-                else if(connect[1] == 1) floorTYPE[y][x] = WALL_END_TOP;
-                else if(connect[2] == 1) floorTYPE[y][x] = WALL_END_RIGHT;
-                else if(connect[3] == 1) floorTYPE[y][x] = WALL_END_LEFT;
+                if(connect[0] == 1) floorTYPE[y][x] = WALL_END_TOP;
+                else if(connect[1] == 1) floorTYPE[y][x] = WALL_END_BOTTOM;
+                else if(connect[2] == 1) floorTYPE[y][x] = WALL_END_LEFT;
+                else if(connect[3] == 1) floorTYPE[y][x] = WALL_END_RIGHT;
             } else {
                 floorTYPE[y][x] = PILLAR;
             }

@@ -31,4 +31,4 @@ class Tile
 };
 
 //ボックスの衝突検出
-bool checkCollision( SDL_Rect a, SDL_Rect b );
+bool AinB( SDL_Rect a, SDL_Rect b );

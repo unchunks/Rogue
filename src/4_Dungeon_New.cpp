@@ -105,11 +105,25 @@ void Dungeon::Input(SDL_Event event)
             player.isMoved = false;
             player.mSpriteClips = mEnemySpriteClips[1];
             break;
+        case SDLK_r:
+            player.isMoved = false;
+            switch (dungeon_g->getNowScene())
+            {
+                case DUNGEON_AREA_DIVIDE:
+                    player.setDataPos(getRandomPos(areaDivide.getRoomNum()));
+                    break;
+                case DUNGEON_RRA:
+                    player.setDataPos(getRandomPos(rra.getRoomNum()));
+                    break;
+                default:
+                    break;
+            }
+            break;
         case SDLK_t:
             player.isMoved = false;
-            player.setPos(
-                enemies.at(0).getImagePos().x,
-                enemies.at(0).getImagePos().y + TILE_H * 2);
+            player.setDataPos(glm::vec2(
+                enemies.at(0).getDataPos().x,
+                enemies.at(0).getDataPos().y + 2));
             break;
         case SDLK_q:
             player.isMoved = false;
@@ -148,13 +162,19 @@ void Dungeon::Update()
     if (nowTurn == PLAYER)
     {
         if (player.onTileCenter())
-            SDL_Log("プレイヤーのターン");
+        {
+            SDL_Log("プレイヤーのターン=========================================================================");
+        }
         std::vector<Character> otherCharacters;
         for (auto enemy : enemies)
         {
             otherCharacters.push_back(enemy);
         }
         player.move(tileSet, otherCharacters);
+        if (player.onTileCenter())
+        {
+            SDL_Log("(%d, %d)", (int)player.getDataPos().x, (int)player.getDataPos().y);
+        }
 
         // 階段を登ったときの処理
         goNextFloor = (floor[((int)player.getDataPos().y)][((int)player.getDataPos().x)] == STEP);
@@ -164,11 +184,12 @@ void Dungeon::Update()
         // 敵のターンに移行
         if (player.onTileCenter())
             nowTurn = ENEMY;
+
     }// 敵のアップデート
     else if (nowTurn == ENEMY)
     {
         if (enemies.at(0).onTileCenter())
-            SDL_Log("敵のターン");
+            SDL_Log("敵のターン===============================================================================");
 
         for (auto &e : enemies)
         {
@@ -192,11 +213,11 @@ void Dungeon::Update()
 GOTO_SEARCH:
                 e.walk(tileSet, player, enemies);
 
-                // 移動後の発見確認
-                if(e.changeState(player))
-                {
-                    updateEnemyRoute(e, PLAYER_POS);
-                }
+                // // 移動後の発見確認
+                // if(e.changeState(player))
+                // {
+                //     updateEnemyRoute(e, PLAYER_POS);
+                // }
                 
                 break;
 
@@ -215,26 +236,20 @@ GOTO_SEARCH:
                     e.attack(player);
                     break;
                 }
-                
-                // ルートの情報が古くなったり、なくなったりした場合に更新
-                if (e.mustUpdateRoute())
-                {
-                    SDL_Log("FOUND: ルート更新");
-                    updateEnemyRoute(e, PLAYER_POS);
-                }
 GOTO_FOUND:
-                e.walk(tileSet, player, enemies);
+                // e.walk(tileSet, player, enemies);
+                e.walkTo(player.getImagePos(), tileSet, player, enemies);
 
-                if(e.changeState(player))
-                {
-                    updateEnemyRoute(e, RANDOM_POS);
-                }
+                // if(e.changeState(player))
+                // {
+                //     updateEnemyRoute(e, RANDOM_POS);
+                // }
                 
                 break;
 
             case ESCAPE:
                 break;
-//FIX
+//REVIEW: 
             case DEAD:
                 deadEnemies.push_back(e);
                 break;
@@ -276,9 +291,7 @@ GOTO_FOUND:
             default:
                 break;
         }
-        pos.x = pos.x * TILE_W + TILE_W / 4;
-        pos.y = pos.y * TILE_H + TILE_H / 4;
-        e->setPos(pos);
+        e->setDataPos(pos);
         deadEnemies.erase(e);
     }
 }
@@ -397,9 +410,7 @@ void Dungeon::InitDungeon()
         break;
     }
     SDL_Log("InitDungeon: 初期スポーン地点(%d, %d)", (int)pos.x, (int)pos.y);
-    pos.x = pos.x * TILE_W + TILE_W / 4;
-    pos.y = pos.y * TILE_H + TILE_H / 4;
-    player.setPos(pos);
+    player.setDataPos(pos);
 
     SDL_Log("InitDungeon: 敵を初期化");
     enemies.clear();
@@ -421,9 +432,7 @@ void Dungeon::InitDungeon()
         default:
             break;
         }
-        pos.x = pos.x * TILE_W + TILE_W / 4;
-        pos.y = pos.y * TILE_H + TILE_H / 4;
-        e.setPos(pos);
+        e.setDataPos(pos);
         SDL_Log("InitDungeon: 敵の位置(%d, %d)", (int)e.getDataPos().x, (int)e.getDataPos().y);
     }
 }
@@ -605,6 +614,7 @@ bool Dungeon::setTiles()
 
 void Dungeon::updateEnemyRoute(Enemy &_enemy, GOAL_TYPE _goalType)
 {
+    _enemy.routeClear();
     glm::vec2 goal(0, 0);
     switch (_goalType)
     {

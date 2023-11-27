@@ -31,15 +31,14 @@ public:
     void receiveDamage(int _damage);
 
     /** @brief 座標テレポート
-      * @param _x X座標(画像系の座標)
-      * @param _y Y座標(画像系の座標)
+      * @param _pos 画像系座標
       */
-    void setPos(int _x, int _y);
+    void setImagePos(glm::vec2 _pos);
 
     /** @brief 座標テレポート
-      * @param _pos 座標(画像系の座標) 
+      * @param _pos データ系座標
       */
-    void setPos(glm::vec2 _pos);
+    void setDataPos(glm::vec2 _pos);
     void setState(STATE _state);
     void setDir(DIRECTION _dir);
 
@@ -54,15 +53,20 @@ public:
 
 	  /** @brief データ系座標を返す
       */
-    glm::vec2 getDataPos() {return glm::vec2(mBox.x / TILE_W + 1, mBox.y / TILE_H + 1);}
+    glm::vec2 getDataPos() {return glm::vec2(static_cast<int>(mBox.x / TILE_W), static_cast<int>(mBox.y / TILE_H));}
     bool onTileCenter();
 
     /// @brief 向いている方向に移動。当たり判定も含む
     /// @param _tiles 当たり判定用の全タイルの配列
     bool move(std::vector<class Tile> _tiles, std::vector<class Character> _otherCharacters);
+    
+    /// @brief 向いている方向に移動。当たり判定も含む
+    /// @param _destination 移動先のデータ系座標
+    /// @param _tiles 当たり判定用の全タイルの配列
+    bool moveTo(glm::vec2 _destination, std::vector<Tile> _tiles, std::vector<Character> _otherCharacters);
     void setCamera(SDL_Rect& _camera);
     void render(SDL_Rect& _camera);
-    bool collided(std::vector<Tile> _tiles, std::vector<class Character> _otherCharacters);
+    bool collided(std::vector<Tile> _tiles, glm::vec2 _pos, std::vector<class Character> _otherCharacters);
 
     static LTexture mCharTexture;
     // LTexture mCharTexture;
@@ -73,11 +77,11 @@ public:
 
 protected:
     /// @brief 矩形とタイルの衝突判定
-    /// @param box 移動している物体の当たり判定
     /// @param _tiles 全タイルの配列
-    bool touchWall(std::vector<Tile> _tiles);
-    bool touchChars(std::vector<class Character> _otherCharacters);
-    bool touchChar(class Character  _otherCharacter);
+    /// @param _pos 対象のデータ系座標
+    bool touchWall(std::vector<Tile> _tiles, glm::vec2 _pos);
+    bool touchChars(std::vector<class Character> _otherCharacters, glm::vec2 _pos);
+    bool touchChar(class Character  _otherCharacter, glm::vec2 _pos);
     bool mapOver();
 
     int nowHP;
