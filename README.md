@@ -10,7 +10,9 @@
 |敵の種族|アイコン|HP|ATK|DEF|備考|
 |:--:|:--:|:--:|:--:|:--:|:--|
 |born（プレイヤー）|![born](sample/born.png)|100|20|20|未定|
-|deka|![deka](sample/deka.png)|70|10|10|未定|
-|guri|![guri](sample/guri.png)|20|35|5|未定|
+|deka |![deka](sample/deka.png)  | 70|10|10|未定|
+|guri |![guri](sample/guri.png)  | 20|35| 5|未定|
+|jelyf|![jelyf](sample/jelyf.png)| 10|15| 5|未定|
+|yummy|![yummy](sample/yummy.png)|100| 5| 5|未定|
 
 ![参考画像](sample/sample.png)

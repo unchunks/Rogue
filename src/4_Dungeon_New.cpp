@@ -93,19 +93,33 @@ void Dungeon::Input(SDL_Event event)
         // 		break;
         // 	player.attack(whichEnemy(front));
         // 	break;
-        case SDLK_1:
+        case SDLK_q:
+            player.isMoved = false;
+            inDungeon = false;
+            goNextFloor = true;
+            break;
+        // NOTE: 以下デバッグ用
+        case SDLK_1:    // 見た目をプレイヤーに変更
             player.isMoved = false;
             player.mSpriteClips = mPlayerSpriteClips;
             break;
-        case SDLK_2:
+        case SDLK_2:    // 見た目をデカに変更
             player.isMoved = false;
             player.mSpriteClips = mEnemySpriteClips[0];
             break;
-        case SDLK_3:
+        case SDLK_3:    // 見た目をグリに変更
             player.isMoved = false;
             player.mSpriteClips = mEnemySpriteClips[1];
             break;
-        case SDLK_r:
+        case SDLK_4:    // 見た目をジェリフに変更
+            player.isMoved = false;
+            player.mSpriteClips = mEnemySpriteClips[2];
+            break;
+        case SDLK_5:    // 見た目をヤミーに変更
+            player.isMoved = false;
+            player.mSpriteClips = mEnemySpriteClips[3];
+            break;
+        case SDLK_r:    // ランダムな位置にワープ
             player.isMoved = false;
             switch (dungeon_g->getNowScene())
             {
@@ -119,16 +133,11 @@ void Dungeon::Input(SDL_Event event)
                     break;
             }
             break;
-        case SDLK_t:
+        case SDLK_t:    // 敵の近くにワープ
             player.isMoved = false;
             player.setDataPos(glm::vec2(
                 enemies.at(0).getDataPos().x,
                 enemies.at(0).getDataPos().y + 2));
-            break;
-        case SDLK_q:
-            player.isMoved = false;
-            inDungeon = false;
-            goNextFloor = true;
             break;
         default:
             break;

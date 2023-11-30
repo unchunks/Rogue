@@ -10,13 +10,25 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
             maxHP = DEKA_HP;
             STR   = DEKA_STR;
             VIT   = DEKA_VIT;
-        break;
+            break;
 
         case GURI:
             maxHP = GURI_HP;
             STR   = GURI_STR;
             VIT   = GURI_VIT;
-        break;
+            break;
+
+        case JELYF:
+            maxHP = JELYF_HP;
+            STR   = JELYF_STR;
+            VIT   = JELYF_VIT;
+            break;
+
+        case YUMMY:
+            maxHP = YUMMY_HP;
+            STR   = YUMMY_STR;
+            VIT   = YUMMY_VIT;
+            break;
 
         case ENEMY_TYPE_NUMBER: break;
     }

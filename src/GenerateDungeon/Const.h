@@ -44,15 +44,25 @@ constexpr int ANIM_SPEED = 8; //スプライト毎秒
 // プレイヤー
 constexpr int PLAYER_HP = 100;
 constexpr int PLAYER_STR = 20;
-constexpr int PLAYER_VIT = 10;
+constexpr int PLAYER_VIT = 20;
 
 // デカ
-constexpr int   DEKA_HP   = 50;
-constexpr int   DEKA_STR  = 2;
-constexpr int   DEKA_VIT  = 5;
+constexpr int   DEKA_HP   = 70;
+constexpr int   DEKA_STR  = 10;
+constexpr int   DEKA_VIT  = 10;
 
 // グリ
-constexpr int   GURI_HP   = 50;
-constexpr int   GURI_STR  = 2;
+constexpr int   GURI_HP   = 20;
+constexpr int   GURI_STR  = 35;
 constexpr int   GURI_VIT  = 5;
+
+// ジェリフ
+constexpr int   JELYF_HP   = 10;
+constexpr int   JELYF_STR  = 15;
+constexpr int   JELYF_VIT  = 5;
+
+// ヤミー
+constexpr int   YUMMY_HP   = 100;
+constexpr int   YUMMY_STR  = 5;
+constexpr int   YUMMY_VIT  = 5;
 

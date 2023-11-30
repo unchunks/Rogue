@@ -46,5 +46,7 @@ enum CHAR_TYPE {
 enum ENEMY_TYPE {
     DEKA,
     GURI,
+    JELYF,
+    YUMMY,
     ENEMY_TYPE_NUMBER
 };
