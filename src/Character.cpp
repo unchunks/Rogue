@@ -133,7 +133,7 @@ bool Character::adjacent(Character _opponent)
 {
     if(!onTileCenter())
         return false;
-//REVIEW: プレイヤーが複数の敵を引数にしても正しく動くように
+//FIX: プレイヤーが複数の敵を引数にしても正しく動くように
     if( (mBox.x == _opponent.mBox.x) && (mBox.y - TILE_H == _opponent.mBox.y) )
     {
         mDir = UP;
