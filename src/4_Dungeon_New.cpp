@@ -164,11 +164,11 @@ void Dungeon::Update()
 
     player.setCamera(camera);
 
-    if (!player.isMoved)
-        return;
+    // if (!player.isMoved)
+    //     return;
 
     // プレイヤーのアップデート
-    if (nowTurn == PLAYER)
+    if (nowTurn == PLAYER && player.isMoved)
     {
         if (player.onTileCenter())
         {
@@ -192,79 +192,71 @@ void Dungeon::Update()
 
         // 敵のターンに移行
         if (player.onTileCenter())
+        {
             nowTurn = ENEMY;
+            player.isMoved = false;
+            for(auto &e : enemies)
+            {
+                e.isMoved = true;
+            }
+            SDL_Log("敵のターン===============================================================================");
+        }
 
     }// 敵のアップデート
     else if (nowTurn == ENEMY)
     {
-        if (enemies.at(0).onTileCenter())
-            SDL_Log("敵のターン===============================================================================");
-
         for (auto &e : enemies)
         {
             switch (e.getState())
             {
-            case SEARCH:
-                SDL_Log("SEARCH");
-                // 移動前の発見確認
-                if(e.changeState(player))
-                {
-                    updateEnemyRoute(e, PLAYER_POS);
-                    goto GOTO_FOUND;
-                }
-             
-                // ルートの情報が古くなったり、なくなったりした場合に更新
-                if (e.mustUpdateRoute())
-                {
-                    SDL_Log("SEARCH: ルート更新");
-                    updateEnemyRoute(e, RANDOM_POS);
-                }
-GOTO_SEARCH:
-                e.walk(tileSet, player, enemies);
+                case SEARCH:
+                    SDL_Log("SEARCH");
+                    // 発見確認
+                    if(e.changeState(player))
+                    {
+                        updateEnemyRoute(e, PLAYER_POS);
+                        goto GOTO_FOUND;
+                    }
 
-                // // 移動後の発見確認
-                // if(e.changeState(player))
-                // {
-                //     updateEnemyRoute(e, PLAYER_POS);
-                // }
-                
-                break;
-
-            case FOUND:
-                SDL_Log("FOUND");
-                // 移動前の発見確認
-                if(e.changeState(player))
-                {
-                    updateEnemyRoute(e, RANDOM_POS);
-                    goto GOTO_SEARCH;
-                }
-                
-                // 隣り合っている場合は攻撃
-                if (e.adjacent(player))
-                {
-                    e.attack(player);
+                    // ルートの情報が古くなったり、なくなったりした場合に更新
+                    if (e.mustUpdateRoute())
+                    {
+                        SDL_Log("SEARCH: ルート更新");
+                        updateEnemyRoute(e, RANDOM_POS);
+                    }
+        GOTO_SEARCH:
+                    e.walk(tileSet, player, enemies);
                     break;
-                }
-GOTO_FOUND:
-                // e.walk(tileSet, player, enemies);
-                e.walkTo(player.getImagePos(), tileSet, player, enemies);
 
-                // if(e.changeState(player))
-                // {
-                //     updateEnemyRoute(e, RANDOM_POS);
-                // }
-                
-                break;
+                case FOUND:
+                    SDL_Log("FOUND");
+                    // 移動前の発見確認
+                    if(e.changeState(player))
+                    {
+                        updateEnemyRoute(e, RANDOM_POS);
+                        goto GOTO_SEARCH;
+                    }
+                    
+                    // 隣り合っている場合は攻撃
+                    if (e.adjacent(player))
+                    {
+                        e.attack(player);
+                        break;
+                    }
+        GOTO_FOUND:
+                    // e.walk(tileSet, player, enemies);
+                    e.walkTo(player.getImagePos(), tileSet, player, enemies);
+                    break;
 
-            case ESCAPE:
-                break;
-//REVIEW: 
-            case DEAD:
-                deadEnemies.push_back(e);
-                break;
+                case ESCAPE:
+                    break;
+    //REVIEW: 
+                case DEAD:
+                    deadEnemies.push_back(e);
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
             }
 
             // 敵のターンに移行
