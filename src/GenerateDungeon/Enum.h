@@ -50,3 +50,20 @@ enum ENEMY_TYPE {
     YUMMY,
     ENEMY_TYPE_NUMBER
 };
+
+enum SEARCH_STATUS{
+	SEARCH_NO_CHECK	= 0,    //未調査
+	SEARCH_OPEN		= 1,    //調査中
+	SEARCH_CLOSE	= 2,    //調査済
+};
+
+class MAPCELL {
+public:
+	MAPCELL()
+	:status(2), cost(0), SearchStatus(SEARCH_NO_CHECK), parent(NO_DIRECTION)
+	{}
+	int status;					// 2:壁 0:床 1:ルート -1:スタート位置 -2:ゴール位置
+	int cost;                   // スタート地点からの移動距離
+	SEARCH_STATUS SearchStatus;	// 0:未調査 1:オープン 2:クローズ
+	DIRECTION parent;			// 親がある向き
+};

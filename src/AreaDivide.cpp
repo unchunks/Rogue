@@ -99,14 +99,14 @@ printf("地形整形\n");
 printf("階段生成\n");
     int roomNum = random_num(random_engine) % areaCount;
     Room room = rooms[roomNum];
-    glm::vec2 pos = glm::vec2(0, 0);
-    while(floorTYPE[(int)pos.y][(int)pos.x] != FLOOR)
+    Ivec2 pos = Ivec2(0, 0);
+    while(floorTYPE[pos.y][pos.x] != FLOOR)
     {
         pos.x = room.x + random_num(random_engine)%room.w;
         pos.y = room.y + random_num(random_engine)%room.h;
     }
-    floorTYPE[(int)pos.y][(int)pos.x] = STEP;
-printf("階段(%.0f, %.0f)\n", pos.x, pos.y);
+    floorTYPE[pos.y][pos.x] = STEP;
+printf("階段(%d, %d)\n", pos.x, pos.y);
 
 printf("dungeon.mapに書き出し\n");
     outputMap();

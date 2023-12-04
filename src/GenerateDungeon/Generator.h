@@ -5,7 +5,7 @@
 #include <string>
 #include <fstream>
 #include <random>
-#include <glm/glm.hpp>
+#include "../../Ivec2.h"
 
 #include "Area.h"
 #include "Room.h"
@@ -25,7 +25,7 @@ public:
     int getAreaNum() { return areas.size(); }
     int getRoomNum() { return rooms.size(); }
     /// @brief ランダムなデータ系座標を返す
-    glm::vec2 getRandomFloorPos();
+    Ivec2 getRandomFloorPos();
 
     int areaCount = 0;
     int randomNumber;

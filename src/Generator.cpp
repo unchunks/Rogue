@@ -221,14 +221,14 @@ void Generator::outputMap() {
     writing_file.close();
 }
 
-glm::vec2 Generator::getRandomFloorPos()
+Ivec2 Generator::getRandomFloorPos()
 {
     int roomNum = random_num(random_engine) % rooms.size();
 	Room room = rooms[roomNum];
-    glm::vec2 pos;
+    Ivec2 pos;
     pos.x = room.x + random_num(random_engine)%room.w;
     pos.y = room.y + random_num(random_engine)%room.h;
-    while(floorTYPE[static_cast<int>(pos.y)][static_cast<int>(pos.x)] != FLOOR) {
+    while(floorTYPE[pos.y][pos.x] != FLOOR) {
         pos.x = room.x + random_num(random_engine) % room.w;
         pos.y = room.y + random_num(random_engine) % room.h;
     }

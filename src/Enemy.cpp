@@ -62,15 +62,15 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
 
         otherCharacters.push_back(enemy);
     }
-
-    // if(onTileCenter())
+#ifdef __DEBUG_
+    if(onTileCenter())
     {
-        SDL_Log("walk: nextPos(%d, %d)", (int)nextPos.x, (int)nextPos.y);
-        SDL_Log("walk: enemPos(%d, %d)", (int)getDataPos().x, (int)getDataPos().y);
+        SDL_Log("walk: nextPos(%d, %d)", nextPos.x, nextPos.y);
+        SDL_Log("walk: enemPos(%d, %d)", getDataPos().x, getDataPos().y);
     }
 
     SDL_Log("タイル内座標(x: %d, y: %d)\n", (mBox.x % TILE_W), (mBox.y % TILE_H));
-    
+#endif
     bool touched = moveTo(nextPos, _tiles, otherCharacters);
     if(touched)
     {
@@ -82,43 +82,54 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
         nextPos = route[0];
         route.pop_front();
         elapsedTurn++;
+#ifdef __DEBUG_
         SDL_Log("walk: elapsedTurn = %d, route size = %d\n", elapsedTurn, static_cast<int>(route.size()));
+#endif
     }
 }
 
-void Enemy::walkTo(glm::vec2 _destination, std::vector<class Tile> _tiles, class Character _player, std::vector<class Enemy> _otherEnemies)
+void Enemy::walkTo(Ivec2 _destination, std::vector<class Tile> _tiles, class Character _player, std::vector<class Enemy> _otherEnemies)
 {
-    _destination.x = static_cast<int>(_destination.x / TILE_W);
-    _destination.y = static_cast<int>(_destination.y / TILE_H);
+    _destination.x = _destination.x / TILE_W;
+    _destination.y = _destination.y / TILE_H;
 
     nextPos = _destination;
 
     walk(_tiles, _player, _otherEnemies);
 }
 
-void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], glm::vec2 _goal)
+void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], Ivec2 _goal)
 {
     if(_goal.x > FLOOR_W || _goal.y > FLOOR_H || _goal.x < 0 || _goal.y < 0)
     {
-        SDL_Log("ゴール位置エラー");
+#ifdef __DEBUG_
+        SDL_Log("setGoal: ゴール位置エラー");
+#endif
         return;
     }
     goal = _goal;
     route.clear();
-    route = AStar::AStar(_dungeon, glm::vec2(mBox.x / TILE_W, mBox.y / TILE_H), goal);
+#ifdef __DEBUG_
+    SDL_Log("setGoal: ルート探索");
+#endif
+    route = AStar::AStar(_dungeon, getDataPos(), goal);
+    // route = OSearch::OSearch(_dungeon, getDataPos(), goal);
     // 現在地をポップ
-    SDL_Log("(%d, %d)", (int)route.at(0).x, (int)route.at(0).y);
+#ifdef __DEBUG_
+    SDL_Log("現在地としてポップ(%d, %d)", route.at(0).x, route.at(0).y);
+#endif
     route.pop_front();
     if(route.size() == 0)
     {
         return;
     }
+#ifdef __DEBUG_
     SDL_Log("setGoal: 更新後のルート一覧");
     for(auto vec2 : route)
     {
-    SDL_Log("setGoal: (%d, %d)", (int)vec2.x, (int)vec2.y);
+        SDL_Log("setGoal: (%d, %d)", vec2.x, vec2.y);
     }
-
+#endif
     nextPos = route.at(0);
     route.pop_front();
     elapsedTurn = 0;
@@ -150,6 +161,7 @@ bool Enemy::mustUpdateRoute()
         return false;
 
     bool result = ((static_cast<int>(route.size()) < 1) || (elapsedTurn > ENEMY_SEARCH_INTERVAL));
+#ifdef __DEBUG_
     if( static_cast<int>(route.size()) < 1 )
     {
         SDL_Log("mustUpdateRoute: ルートサイズが少ない %d", static_cast<int>(route.size()));
@@ -158,9 +170,12 @@ bool Enemy::mustUpdateRoute()
     {
         SDL_Log("mustUpdateRoute: 経過ターン超過 %d", elapsedTurn);
     }
+#endif
     if(result)
     {
+#ifdef __DEBUG_
         SDL_Log("mustUpdateRoute: 更新要求");
+#endif
         routeClear();
     }
     return result;
@@ -173,14 +188,18 @@ bool Enemy::changeState(Character _opponent)
 
     if (find(_opponent) && mState != FOUND)
     {
+#ifdef __DEBUG_
         SDL_Log("プレイヤー発見");
+#endif
         setState(FOUND);
         routeClear();
         return true;
     }
     else if(!find(_opponent) && mState != SEARCH)
     {
+#ifdef __DEBUG_
         SDL_Log("プレイヤー未発見");
+#endif
         setState(SEARCH);
         routeClear();
         return false;

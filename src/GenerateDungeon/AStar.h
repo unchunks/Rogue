@@ -1,32 +1,10 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "../../Ivec2.h"
 #include <deque>
 
 #include "Enum.h"
 #include "Const.h"
-
-enum SEARCH_STATUS{
-	SEARCH_NO_CHECK	= 0,
-	SEARCH_OPEN		= 1,
-	SEARCH_CLOSE	= 2,
-};
-
-typedef struct {
-	int x;
-	int y;
-} POINT;
-
-class MAPCELL {
-public:
-	MAPCELL()
-	:status(2), cost(0), SearchStatus(SEARCH_NO_CHECK), parent(NO_DIRECTION)
-	{}
-	int status;					// 2:壁 0:床 1:ルート
-	int cost;
-	SEARCH_STATUS SearchStatus;	// 0:未調査 1:オープン 2:クローズ
-	DIRECTION parent;			// 親の向き
-};
 
 namespace AStar{
 	// マンハッタン距離を求める
@@ -36,10 +14,17 @@ namespace AStar{
 	int BackTrace(int x, int y);
 
 	// A*で経路探査する
-	int Search(int count);
+	int Search();
 
 	// ゴールから逆算
 	void TraceRoute(int x, int y);
 
-	std::deque<glm::vec2> AStar(CELL_TYPE def_data[FLOOR_H][FLOOR_W], glm::vec2 _start, glm::vec2 _goal);
+	std::deque<Ivec2> AStar(CELL_TYPE def_data[FLOOR_H][FLOOR_W], Ivec2 _start, Ivec2 _goal);
+
+	// 4方向のベクトル設定
+	extern Ivec2 CheckMatrix[4];
+
+	extern MAPCELL astar_map_data[FLOOR_H][FLOOR_W];
+	extern Ivec2 start, goal;
+	extern std::deque<Ivec2> astar_route;
 }

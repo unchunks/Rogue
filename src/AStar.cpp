@@ -1,17 +1,21 @@
 #include <iostream>
 #include "GenerateDungeon/AStar.h"
 
-// 4方向のベクトル設定
-POINT CheckMatrix[] = {
-	{ -1,  0 },		// 左
-	{  1,  0 },		// 右
-	{  0, -1 },		// 上
-	{  0,  1 },		// 下
-};
+namespace AStar
+{
+	Ivec2 CheckMatrix[4] = {
+        Ivec2(-1, 0),  // 左
+        Ivec2(1, 0),   // 右
+        Ivec2(0, -1),  // 上
+        Ivec2(0, 1)    // 下
+    };
 
-MAPCELL data[FLOOR_H][FLOOR_W];
-glm::vec2 start, goal;
-std::deque<glm::vec2> route;
+	MAPCELL astar_map_data[FLOOR_H][FLOOR_W];
+	Ivec2 start, goal;
+	std::deque<Ivec2> astar_route;
+}
+
+int depth = 0;
 
 // マンハッタン距離を求める
 int AStar::GetDistance(int from_x, int from_y)
@@ -25,7 +29,7 @@ int AStar::BackTrace(int x, int y)
 {
 	if(x == start.x && y == start.y) return 0;
 
-	int parent_way = data[y][x].parent;
+	int parent_way = static_cast<int>(astar_map_data[y][x].parent);
 	return BackTrace(
 		x + CheckMatrix[parent_way].x,
 		y + CheckMatrix[parent_way].y
@@ -33,7 +37,12 @@ int AStar::BackTrace(int x, int y)
 }
 
 // A*で経路探査する
-int AStar::Search(int count){
+int AStar::Search()
+{
+    depth++;
+#ifdef __DEBUG_
+    std::cout << "現在の深さ: " << depth << std::endl;
+#endif
 	// 検索中のノード、X・Y座標、実コスト
 	MAPCELL *n = NULL;
 	int CX = 0;
@@ -44,12 +53,12 @@ int AStar::Search(int count){
 	int cost_min = 9999;
 	for(int y = 0; y < FLOOR_H; y++){
 		for(int x = 0; x < FLOOR_W; x++){
-			if(data[y][x].SearchStatus != SEARCH_OPEN)continue;	// オープンでなければスキップ
+			if(astar_map_data[y][x].SearchStatus != SEARCH_OPEN)continue;	// オープンでなければスキップ
 			int cost = GetDistance(x,y);
 			if(cost > cost_min)continue;	// 今よりゴールに遠ければスキップ
 			
 			cost_min = cost;
-			n = &data[y][x];
+			n = &astar_map_data[y][x];
 			CX = x;
 			CY = y;
 
@@ -77,12 +86,12 @@ int AStar::Search(int count){
 		if(check_y >= FLOOR_H) continue;
 
 		// 通れないところをよける
-		if(data[check_y][check_x].status == 2) continue;
+		if(astar_map_data[check_y][check_x].status == 2) continue;
 
 		int estimate_cost = BackCost + GetDistance(check_x, check_y) + 1;
-		MAPCELL *cell = &data[check_y][check_x];
+		MAPCELL *cell = &astar_map_data[check_y][check_x];
 
-		if(data[check_y][check_x].SearchStatus == SEARCH_NO_CHECK){	// 計算中の座標が未チェック
+		if(astar_map_data[check_y][check_x].SearchStatus == SEARCH_NO_CHECK){	// 計算中の座標が未チェック
 			cell->parent 	   = (DIRECTION)(int)(-1.33 * i*i*i + 6 * i*i + -5.67 * i + 1);
 			cell->SearchStatus = SEARCH_OPEN;
 
@@ -98,54 +107,59 @@ int AStar::Search(int count){
 		return -1;
 	}
 
-	return Search(count + 1);
+    depth--;
+	return Search();
 }
 
 // ゴールから逆算
 void AStar::TraceRoute(int x, int y)
 {
-	POINT *parent_way = &CheckMatrix[data[y][x].parent];
-	route.push_front(glm::vec2(x, y));
+	Ivec2 *parent_way = &CheckMatrix[astar_map_data[y][x].parent];
+	astar_route.push_front(Ivec2(x, y));
 	if((x == start.x) && (y == start.y))
 		return;
 	TraceRoute(x + parent_way->x, y + parent_way->y);
 }
 
 
-std::deque<glm::vec2> AStar::AStar(CELL_TYPE def_data[FLOOR_H][FLOOR_W], glm::vec2 _start, glm::vec2 _goal)
+std::deque<Ivec2> AStar::AStar(CELL_TYPE def_data[FLOOR_H][FLOOR_W], Ivec2 _start, Ivec2 _goal)
 {
-	route.clear();
+	astar_route.clear();
 	start = _start;
 	goal = _goal;
 	for(int y = 0; y < FLOOR_H; y++)
 	{
 		for(int x = 0; x < FLOOR_W; x++)
 		{
-			data[y][x] = MAPCELL();
+			astar_map_data[y][x] = MAPCELL();
 		}
 	}
 	// マップ変換
     for(int y = 0; y < FLOOR_H; y++){
 		for(int x = 0; x < FLOOR_W; x++){
             if((def_data[y][x] == FLOOR) || (def_data[y][x] == AISLE) || (def_data[y][x] == STEP))
-                data[y][x].status = 0;	// 床
+                astar_map_data[y][x].status = 0;	// 床
             else 
-                data[y][x].status = 2;	// 壁
+                astar_map_data[y][x].status = 2;	// 壁
 
 			// if(x == goal.x && y == goal.y)
 			// 	std::cout << "G ";
 			// else if(x == start.x && y == start.y)
 			// 	std::cout << "S ";
 			// else
-			// 	std::cout << ((data[y][x].status==0)? " " : "W") << " ";
+			// 	std::cout << ((astar_map_data[y][x].status==0)? " " : "W") << " ";
 		}
 		// std::cout << "\n";
 	}
 	// 開始位置をオープンに
-    data[(int)start.y][(int)start.x].SearchStatus = SEARCH_OPEN;
-    Search(0);
+    astar_map_data[start.y][start.x].SearchStatus = SEARCH_OPEN;
+    Search();
+#ifdef __DEBUG_
 	std::cout << "トレース開始\n";
+#endif
 	TraceRoute(goal.x, goal.y);
+#ifdef __DEBUG_
 	std::cout << "トレース終了\n";
-	return route;
+#endif
+	return astar_route;
 }

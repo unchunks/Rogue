@@ -1,7 +1,5 @@
 #include "Scene/4_Dungeon.h"
 
-#define DEBUG
-
 extern SDL_Renderer *gRenderer;
 
 extern std::mt19937 random_engine;
@@ -86,13 +84,14 @@ void Dungeon::Input(SDL_Event event)
             player.isMoved = true;
             player.setDir(RIGHT);
             break;
-        // case SDLK_k:
-        // 	player.isMoved = true;
-        // 	front = getFrontPos(player.getImagePos(), player.getDir());
-        // 	if(!isOtherPos(front))
-        // 		break;
-        // 	player.attack(whichEnemy(front));
-        // 	break;
+//FIXME: ここから
+        case SDLK_k:
+        	player.isMoved = false;
+            nowTurn = ENEMY;
+            if(player.adjacent(enemies))
+                player.attack(whichEnemy(player.getDataFrontPos()));
+        	break;
+//FIXME: ここまで
         case SDLK_q:
             player.isMoved = false;
             inDungeon = false;
@@ -135,7 +134,7 @@ void Dungeon::Input(SDL_Event event)
             break;
         case SDLK_t:    // 敵の近くにワープ
             player.isMoved = false;
-            player.setDataPos(glm::vec2(
+            player.setDataPos(Ivec2(
                 enemies.at(0).getDataPos().x,
                 enemies.at(0).getDataPos().y + 2));
             break;
@@ -164,9 +163,6 @@ void Dungeon::Update()
 
     player.setCamera(camera);
 
-    // if (!player.isMoved)
-    //     return;
-
     // プレイヤーのアップデート
     if (nowTurn == PLAYER && player.isMoved)
     {
@@ -180,13 +176,14 @@ void Dungeon::Update()
             otherCharacters.push_back(enemy);
         }
         player.move(tileSet, otherCharacters);
+#ifdef __DEBUG_
         if (player.onTileCenter())
         {
-            SDL_Log("(%d, %d)", (int)player.getDataPos().x, (int)player.getDataPos().y);
+            SDL_Log("(%d, %d)", player.getDataPos().x, player.getDataPos().y);
         }
-
+#endif
         // 階段を登ったときの処理
-        goNextFloor = (floor[((int)player.getDataPos().y)][((int)player.getDataPos().x)] == STEP);
+        goNextFloor = (floor[(player.getDataPos().y)][(player.getDataPos().x)] == STEP);
         if (goNextFloor)
             return;
 
@@ -205,8 +202,12 @@ void Dungeon::Update()
     }// 敵のアップデート
     else if (nowTurn == ENEMY)
     {
+        bool all_e_on_eneter = true;
         for (auto &e : enemies)
         {
+            if(!e.isMoved)
+                continue;
+            
             switch (e.getState())
             {
                 case SEARCH:
@@ -221,10 +222,12 @@ void Dungeon::Update()
                     // ルートの情報が古くなったり、なくなったりした場合に更新
                     if (e.mustUpdateRoute())
                     {
+#ifdef __DEBUG_
                         SDL_Log("SEARCH: ルート更新");
+#endif
                         updateEnemyRoute(e, RANDOM_POS);
                     }
-        GOTO_SEARCH:
+GOTO_SEARCH:
                     e.walk(tileSet, player, enemies);
                     break;
 
@@ -238,14 +241,19 @@ void Dungeon::Update()
                     }
                     
                     // 隣り合っている場合は攻撃
-                    if (e.adjacent(player))
+                    if (e.adjacent(player) != NO_DIRECTION)
                     {
                         e.attack(player);
                         break;
                     }
-        GOTO_FOUND:
-                    // e.walk(tileSet, player, enemies);
-                    e.walkTo(player.getImagePos(), tileSet, player, enemies);
+GOTO_FOUND:
+                    if(e.onTileCenter())
+                    {
+                        updateEnemyRoute(e, PLAYER_POS);
+                    }
+                    
+                    e.walk(tileSet, player, enemies);
+                    // e.walkTo(player.getImagePos(), tileSet, player, enemies);
                     break;
 
                 case ESCAPE:
@@ -259,13 +267,22 @@ void Dungeon::Update()
                     break;
             }
 
-            // 敵のターンに移行
+            // プレイヤーのターンに移行
             if (e.onTileCenter())
             {
-                nowTurn = PLAYER;
-                // プレイヤーが次動けるようfalseに
-                player.isMoved = false;
+                e.isMoved = false;
             }
+            else
+            {
+                all_e_on_eneter = false;
+            }
+#ifdef __DEBUG_
+            SDL_Log("%s", e.isMoved ? "移動中" : "移動済み");
+#endif
+        }
+        if(all_e_on_eneter)
+        {
+            nowTurn = PLAYER;
         }
     }
 
@@ -279,8 +296,10 @@ void Dungeon::Update()
     {
         *e = Enemy(static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER)));
         e->mSpriteClips = mEnemySpriteClips.at(static_cast<int>(e->getEnemyType()));
-        glm::vec2 pos;
+        Ivec2 pos;
+#ifdef __DEBUG_
         SDL_Log("敵の位置を初期化");
+#endif
         switch (dungeon_g->getNowScene())
         {
             case DUNGEON_AREA_DIVIDE:
@@ -397,7 +416,7 @@ void Dungeon::InitDungeon()
     if (!setTiles())
         SDL_Log("InitDungeon: Failed to load tile set!");
 
-    glm::vec2 pos;
+    Ivec2 pos;
     SDL_Log("InitDungeon: プレイヤーを初期化");
     switch (dungeon_g->getNowScene())
     {
@@ -410,7 +429,7 @@ void Dungeon::InitDungeon()
     default:
         break;
     }
-    SDL_Log("InitDungeon: 初期スポーン地点(%d, %d)", (int)pos.x, (int)pos.y);
+    SDL_Log("InitDungeon: 初期スポーン地点(%d, %d)", pos.x, pos.y);
     player.setDataPos(pos);
 
     SDL_Log("InitDungeon: 敵を初期化");
@@ -434,7 +453,7 @@ void Dungeon::InitDungeon()
             break;
         }
         e.setDataPos(pos);
-        SDL_Log("InitDungeon: 敵の位置(%d, %d)", (int)e.getDataPos().x, (int)e.getDataPos().y);
+        SDL_Log("InitDungeon: 敵の位置(%d, %d)", e.getDataPos().x, e.getDataPos().y);
     }
 }
 
@@ -446,7 +465,7 @@ void Dungeon::quit()
     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
 }
 
-int Dungeon::isOtherPos(glm::vec2 _pos)
+int Dungeon::isOtherPos(Ivec2 _pos)
 {
     int sameNum = 0;
     if (player.getImagePos() == _pos)
@@ -459,16 +478,16 @@ int Dungeon::isOtherPos(glm::vec2 _pos)
     return sameNum;
 }
 
-bool Dungeon::canGetOn(glm::vec2 _pos)
+bool Dungeon::canGetOn(Ivec2 _pos)
 {
-    if ((floor[(int)_pos.y][(int)_pos.x] != FLOOR) && (floor[(int)_pos.y][(int)_pos.x] != AISLE) && (floor[(int)_pos.y][(int)_pos.x] != STEP))
+    if ((floor[_pos.y][_pos.x] != FLOOR) && (floor[_pos.y][_pos.x] != AISLE) && (floor[_pos.y][_pos.x] != STEP))
         return false;
     if (isOtherPos(_pos) > 1)
         return false;
     return true;
 }
 
-glm::vec2 Dungeon::getRandomPos(int _roomCount)
+Ivec2 Dungeon::getRandomPos(int _roomCount)
 {
     int roomNum = rand() % _roomCount;
     Room room = Room();
@@ -483,7 +502,7 @@ glm::vec2 Dungeon::getRandomPos(int _roomCount)
     default:
         break;
     }
-    glm::vec2 pos;
+    Ivec2 pos;
     pos.x = room.x + rand() % room.w;
     pos.y = room.y + rand() % room.h;
     while (!canGetOn(pos))
@@ -494,7 +513,7 @@ glm::vec2 Dungeon::getRandomPos(int _roomCount)
     return pos;
 }
 
-Enemy &Dungeon::whichEnemy(glm::vec2 _pos)
+Enemy &Dungeon::whichEnemy(Ivec2 _pos)
 {
     for (auto &e : enemies)
         if ((e.getImagePos().x == _pos.x) && (e.getImagePos().y == _pos.y))
@@ -503,9 +522,9 @@ Enemy &Dungeon::whichEnemy(glm::vec2 _pos)
     throw std::runtime_error("Enemy not found");
 }
 
-glm::vec2 Dungeon::getFrontPos(glm::vec2 _pos, DIRECTION _dir)
+Ivec2 Dungeon::getFrontPos(Ivec2 _pos, DIRECTION _dir)
 {
-    glm::vec2 front(0, 0);
+    Ivec2 front(0, 0);
     switch (_dir)
     {
     case LEFT:
@@ -616,7 +635,7 @@ bool Dungeon::setTiles()
 void Dungeon::updateEnemyRoute(Enemy &_enemy, GOAL_TYPE _goalType)
 {
     _enemy.routeClear();
-    glm::vec2 goal(0, 0);
+    Ivec2 goal(0, 0);
     switch (_goalType)
     {
     case RANDOM_POS:
@@ -633,16 +652,16 @@ void Dungeon::updateEnemyRoute(Enemy &_enemy, GOAL_TYPE _goalType)
             default:
                 break;
             }
-            SDL_Log("updateEnemyRoute: RANDOM_POS = GOAL(%d, %d)", (int)goal.x, (int)goal.y);
+#ifdef __DEBUG_
+            SDL_Log("updateEnemyRoute: RANDOM_POS = GOAL(%d, %d)", goal.x, goal.y);
+#endif
         }
         break;
     case PLAYER_POS:
-        goal = player.getImagePos();
-        goal.x /= TILE_W;
-        goal.x++;
-        goal.y /= TILE_H;
-        goal.y++;
-        SDL_Log("updateEnemyRoute: PLAYER_POS = GOAL(%d, %d)", (int)goal.x, (int)goal.y);
+        goal = player.getDataPos();
+#ifdef __DEBUG_
+        SDL_Log("updateEnemyRoute: PLAYER_POS = GOAL(%d, %d)", goal.x, goal.y);
+#endif
         break;
     }
     _enemy.setGoal(floor, goal);

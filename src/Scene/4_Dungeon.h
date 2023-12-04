@@ -1,10 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
-#include <glm/glm.hpp>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
+#include "../../Ivec2.h"
 
 #include "../UI/Button.h"
 #include "../Functions/Color.h"
@@ -68,16 +68,16 @@ private:
     std::vector<Enemy> enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
     std::vector<Enemy> deadEnemies;
 
-    int isOtherPos(glm::vec2 _pos);
+    int isOtherPos(Ivec2 _pos);
 
     /**
      * @brief 引数の位置に移動できるか判定する
      * @param _pos データ系座標
     */
-    bool canGetOn(glm::vec2 _pos);
-    glm::vec2 getRandomPos(int _roomCount);
-    glm::vec2 getFrontPos(glm::vec2 _pos, DIRECTION _dir);
-    Enemy& whichEnemy(glm::vec2 _pos);
+    bool canGetOn(Ivec2 _pos);
+    Ivec2 getRandomPos(int _roomCount);
+    Ivec2 getFrontPos(Ivec2 _pos, DIRECTION _dir);
+    Enemy& whichEnemy(Ivec2 _pos);
 
     //The level tiles
 	std::vector<Tile> tileSet;

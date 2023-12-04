@@ -1,3 +1,5 @@
+// #define __DEBUG_
+
 #include "Game.h"
 
 int main(int argc, char **argv)

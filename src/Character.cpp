@@ -24,7 +24,7 @@ Character::~Character()
 //REVIEW
 bool Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherCharacters)
 {
-    glm::vec2 front = getDataPos();
+    Ivec2 front = getDataPos();
     switch (mDir)
     {
         case LEFT:  front.x--;  break;
@@ -35,50 +35,70 @@ bool Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherChar
     }
     if(onTileCenter() && collided(_tiles, front, _otherCharacters))
     {
+#ifdef __DEBUG_
         SDL_Log("移動先に障害物あり");
+#endif
         return true;
     }
+#ifdef __DEBUG_
     SDL_Log("移動先に障害物無し");
+#endif
     // 次のマス目につくまで前フレームの移動を継続
     switch (mDir)
     {
     case LEFT:
+#ifdef __DEBUG_
         if(onTileCenter())
             SDL_Log("move: 左に移動");
+#endif
         mBox.x -= CHAR_VEL;
         if(mBox.y % TILE_H != TILE_H / 4)
         {
+#ifdef __DEBUG_
             SDL_Log("上下位置調整");
+#endif
             mBox.y += (TILE_H / 4) - (mBox.y % TILE_H);
         }
         break;
     case RIGHT:
+#ifdef __DEBUG_
         if(onTileCenter())
             SDL_Log("move: 右に移動");
+#endif
         mBox.x += CHAR_VEL;
         if(mBox.y % TILE_H != TILE_H / 4)
         {
+#ifdef __DEBUG_
             SDL_Log("上下位置調整");
+#endif
             mBox.y += (TILE_H / 4) - (mBox.y % TILE_H);
         }
         break;
     case UP:
+#ifdef __DEBUG_
         if(onTileCenter())
             SDL_Log("move: 上に移動");
+#endif
         mBox.y -= CHAR_VEL;
         if(mBox.x % TILE_W != TILE_W / 4)
         {
+#ifdef __DEBUG_
             SDL_Log("左右位置調整");
+#endif
             mBox.x += (TILE_W / 4) - (mBox.x % TILE_W);
         }
         break;
     case DOWN:
+#ifdef __DEBUG_
         if(onTileCenter())
             SDL_Log("move: 下に移動");
+#endif
         mBox.y += CHAR_VEL;
         if(mBox.x % TILE_W != TILE_W / 4)
         {
+#ifdef __DEBUG_
             SDL_Log("左右位置調整");
+#endif
             mBox.x += (TILE_W / 4) - (mBox.x % TILE_W);
         }
         break;
@@ -86,82 +106,91 @@ bool Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherChar
         break;
     }
     return false;
-    // SDL_Log("move: (x: %d, y: %d)\n", ( mBox.x + mBox.w / 2 ) % TILE_W, ( mBox.y + mBox.h / 2 ) % TILE_H);
 }
 
-//REVIEW
-bool Character::moveTo(glm::vec2 _destination, std::vector<Tile> _tiles, std::vector<Character> _otherCharacters)
+bool Character::moveTo(Ivec2 _destination, std::vector<Tile> _tiles, std::vector<Character> _otherCharacters)
 {
-    // if(getDataPos() == _destination)
-    // {
-    //     setDataPos(_destination);
-    //     return false;
-    // }
-
-    if(!onTileCenter())
+   
+    if(_destination.x < getDataPos().x)
     {
-        return move(_tiles, _otherCharacters);
-    }
-    else if(_destination.x < getDataPos().x)
-    {
-        SDL_Log("moveTo: 行き先(%d, %d)、現在地（%d, %d)", (int)_destination.x, (int)_destination.y, (int)getDataPos().x, (int)getDataPos().y);
         mDir = LEFT;
-        return move(_tiles, _otherCharacters);
     }
     else if(_destination.x > getDataPos().x)
     {
-        SDL_Log("moveTo: 行き先(%d, %d)、現在地（%d, %d)", (int)_destination.x, (int)_destination.y, (int)getDataPos().x, (int)getDataPos().y);
         mDir = RIGHT;
-        return move(_tiles, _otherCharacters);
     }
     else if(_destination.y < getDataPos().y)
     {
-        SDL_Log("moveTo: 行き先(%d, %d)、現在地（%d, %d)", (int)_destination.x, (int)_destination.y, (int)getDataPos().x, (int)getDataPos().y);
         mDir = UP;
-        return move(_tiles, _otherCharacters);
     }
     else if(_destination.y > getDataPos().y)
     {
-        SDL_Log("moveTo: 行き先(%d, %d)、現在地（%d, %d)", (int)_destination.x, (int)_destination.y, (int)getDataPos().x, (int)getDataPos().y);
         mDir = DOWN;
-        return move(_tiles, _otherCharacters);
     }
-    return false;
+    else if(onTileCenter())
+    {
+        return false;
+    }
+#ifdef __DEBUG_
+    SDL_Log("moveTo: 行き先(%d, %d)、現在地（%d, %d)", _destination.x, _destination.y, getDataPos().x, getDataPos().y);
+#endif
+    return move(_tiles, _otherCharacters);
 }
 
-bool Character::adjacent(Character _opponent)
+DIRECTION Character::adjacent(Character _opponent)
 {
     if(!onTileCenter())
-        return false;
+        return NO_DIRECTION;
+
 //FIX: プレイヤーが複数の敵を引数にしても正しく動くように
     if( (mBox.x == _opponent.mBox.x) && (mBox.y - TILE_H == _opponent.mBox.y) )
     {
         mDir = UP;
+#ifdef __DEBUG_
         SDL_Log("adjacent: キャラに隣接（上）");
-        return true;
+#endif
+        return mDir;
     }
 
     if( (mBox.x == _opponent.mBox.x) && (mBox.y + TILE_H == _opponent.mBox.y) )
     {
         mDir = DOWN;
+#ifdef __DEBUG_
         SDL_Log("adjacent: キャラに隣接（下）");
-        return true;
+#endif
+        return mDir;
     }
 
     if( (mBox.x - TILE_W == _opponent.mBox.x) && (mBox.y == _opponent.mBox.y) )
     {
         mDir = LEFT;
+#ifdef __DEBUG_
         SDL_Log("adjacent: キャラに隣接（左）");
-        return true;
+#endif
+        return mDir;
     }
 
     if( (mBox.x + TILE_W == _opponent.mBox.x) && (mBox.y == _opponent.mBox.y) )
     {
         mDir = RIGHT;
+#ifdef __DEBUG_
         SDL_Log("adjacent: キャラに隣接（右）");
-        return true;
+#endif
+        return mDir;
     }
-    return false;
+    return NO_DIRECTION;
+}
+
+DIRECTION Character::adjacent(std::vector<Character> _opponents)
+{
+    for(auto oppo : _opponents)
+    {
+        if(adjacent(oppo) != NO_DIRECTION)
+        {
+            return adjacent(oppo);
+        }
+    }
+    return NO_DIRECTION;
 }
 
 void Character::attack(Character &_opponent)
@@ -185,16 +214,20 @@ void Character::receiveDamage(int _damage)
     }
 }
 
-void Character::setImagePos(glm::vec2 _pos)
+void Character::setImagePos(Ivec2 _pos)
 {
-    SDL_Log("setImagePos: (%d, %d)", (int)_pos.x / TILE_W, (int)_pos.y / TILE_H);
+#ifdef __DEBUG_
+    SDL_Log("setImagePos: (%d, %d)", _pos.x / TILE_W, _pos.y / TILE_H);
+#endif
     mBox.x = _pos.x;
     mBox.y = _pos.y;
 }
 
-void Character::setDataPos(glm::vec2 _pos)
+void Character::setDataPos(Ivec2 _pos)
 {
-    SDL_Log("setDataPos: (%d, %d)", (int)_pos.x, (int)_pos.y);
+#ifdef __DEBUG_
+    SDL_Log("setDataPos: (%d, %d)", _pos.x, _pos.y);
+#endif
     mBox.x = _pos.x * TILE_W + TILE_W / 4;
     mBox.y = _pos.y * TILE_H + TILE_H / 4;
 }
@@ -271,13 +304,13 @@ bool Character::onTileCenter()
     return false;
 }
 
-bool Character::collided(std::vector<Tile> _tiles, glm::vec2 _pos, std::vector<class Character> _otherCharacters)
+bool Character::collided(std::vector<Tile> _tiles, Ivec2 _pos, std::vector<class Character> _otherCharacters)
 {
     return (mapOver() || touchWall(_tiles, _pos) || touchChars(_otherCharacters, _pos));
 }
 
 //TODO: 上と左の壁を通り抜ける
-bool Character::touchWall(std::vector<Tile> _tiles, glm::vec2 _pos)
+bool Character::touchWall(std::vector<Tile> _tiles, Ivec2 _pos)
 {
     for (auto _tile : _tiles)
     {
@@ -290,7 +323,9 @@ bool Character::touchWall(std::vector<Tile> _tiles, glm::vec2 _pos)
         if (_pos.x == (_tile.getBox().x / TILE_W)
          && _pos.y == (_tile.getBox().y / TILE_H))
         {
+#ifdef __DEBUG_
             SDL_Log("touchWall: 壁に接触");
+#endif
             return true;
         }
     }
@@ -298,7 +333,7 @@ bool Character::touchWall(std::vector<Tile> _tiles, glm::vec2 _pos)
     return false;
 }
 
-bool Character::touchChars(std::vector<Character> _otherCharacters, glm::vec2 _pos)
+bool Character::touchChars(std::vector<Character> _otherCharacters, Ivec2 _pos)
 {
     for(auto _otherCharacter : _otherCharacters)
     {
@@ -310,11 +345,13 @@ bool Character::touchChars(std::vector<Character> _otherCharacters, glm::vec2 _p
     return false;
 }
 
-bool Character::touchChar(Character  _otherCharacter, glm::vec2 _pos)
+bool Character::touchChar(Character  _otherCharacter, Ivec2 _pos)
 {
     if( (_pos == _otherCharacter.getDataPos()) )
         {
+#ifdef __DEBUG_
             SDL_Log("touchChar: キャラクターに接触");
+#endif
             return true;
         }
     return false;
@@ -325,7 +362,9 @@ bool Character::mapOver()
     if( (getDataPos().x < 0) || (getDataPos().x >= FLOOR_W)
      || (getDataPos().y < 0) || (getDataPos().y >= FLOOR_H))
     {
+#ifdef __DEBUG_
         SDL_Log("mapOver: 範囲外");
+#endif
         return true;
     }
     else

@@ -77,7 +77,7 @@
 
 //     // プレイヤーのアップデート
 // // TODO: キーを長押しすると敵を無視して連続で動いてしまう
-//     // glm::vec2 front;
+//     // Ivec2 front;
 
 // 	// 前の行動が終わっていないときはその続きをする
 // 	if(!player.onTileCenter())
@@ -189,7 +189,7 @@
 // 					e.setState(SEARCH);
 // 				}
 // 				// 攻撃できるとき
-// 				if(e.onTileCenter() && e.adjacent(player))
+// 				if(e.onTileCenter() && e.adjacent(player) != NO_DIRECTION)
 // 				{
 // 					// SDL_Log("プレイヤーを攻撃");
 // 					e.attack(player);
@@ -364,7 +364,7 @@
 // 		printf( "Failed to load tile set!\n" );
 // 	}
 
-// 	glm::vec2 pos;
+// 	Ivec2 pos;
 // 	SDL_Log("プレイヤーを初期化");
 // 	switch(dungeon_g->getNowScene())
 // 	{
@@ -408,7 +408,7 @@
 //     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
 // }
 
-// int Dungeon::isOtherPos(glm::vec2 _pos)
+// int Dungeon::isOtherPos(Ivec2 _pos)
 // {
 //     int sameNum = 0;
 //     if(player.getImagePos() == _pos)
@@ -421,7 +421,7 @@
 //     return sameNum;
 // }
 
-// bool Dungeon::canGetOn(glm::vec2 _pos)
+// bool Dungeon::canGetOn(Ivec2 _pos)
 // {
 // 	if((floor[(int)_pos.y][(int)_pos.x] != FLOOR)
 // 	&& (floor[(int)_pos.y][(int)_pos.x] != AISLE)
@@ -432,7 +432,7 @@
 //     return true;
 // }
 
-// glm::vec2 Dungeon::getRandomPos(int _roomCount)
+// Ivec2 Dungeon::getRandomPos(int _roomCount)
 // {
 //     int roomNum = rand() % _roomCount;
 // 	Room room = Room();
@@ -446,7 +446,7 @@
 // 	break;
 //     default: break;
 // 	}
-//     glm::vec2 pos;
+//     Ivec2 pos;
 //     pos.x = room.x + rand() % room.w;
 //     pos.y = room.y + rand() % room.h;
 //     while(!canGetOn(pos)) {
@@ -456,7 +456,7 @@
 //     return pos;
 // }
 
-// Enemy& Dungeon::whichEnemy(glm::vec2 _pos)
+// Enemy& Dungeon::whichEnemy(Ivec2 _pos)
 // {
 //     for(auto& e : enemies)
 //     {
@@ -466,9 +466,9 @@
 //     throw std::runtime_error("Enemy not found");
 // }
 
-// glm::vec2 Dungeon::getFrontPos(glm::vec2 _pos, DIRECTION _dir)
+// Ivec2 Dungeon::getFrontPos(Ivec2 _pos, DIRECTION _dir)
 // {
-//     glm::vec2 front(0, 0);
+//     Ivec2 front(0, 0);
 //     switch(_dir)
 //     {
 //         case LEFT:  front.x = -1; break;
@@ -662,7 +662,7 @@
 
 // void Dungeon::updateEnemyRoute(Enemy& _enemy, GOAL_TYPE _goalType)
 // {
-// 	glm::vec2 goal(0, 0);
+// 	Ivec2 goal(0, 0);
 // 	switch(_goalType)
 // 	{
 // 		case RANDOM_POS: 
