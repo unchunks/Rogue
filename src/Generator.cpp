@@ -221,16 +221,16 @@ void Generator::outputMap() {
     writing_file.close();
 }
 
-Ivec2 Generator::getRandomFloorPos()
+Ivec2 Generator::getRandomFloorDataPos()
 {
     int roomNum = random_num(random_engine) % rooms.size();
 	Room room = rooms[roomNum];
-    Ivec2 pos;
-    pos.x = room.x + random_num(random_engine)%room.w;
-    pos.y = room.y + random_num(random_engine)%room.h;
-    while(floorTYPE[pos.y][pos.x] != FLOOR) {
-        pos.x = room.x + random_num(random_engine) % room.w;
-        pos.y = room.y + random_num(random_engine) % room.h;
+    Ivec2 data_pos;
+    data_pos.x = room.x + random_num(random_engine)%room.w;
+    data_pos.y = room.y + random_num(random_engine)%room.h;
+    while(floorTYPE[data_pos.y][data_pos.x] != FLOOR) {
+        data_pos.x = room.x + random_num(random_engine) % room.w;
+        data_pos.y = room.y + random_num(random_engine) % room.h;
     }
-    return pos;
+    return data_pos;
 }

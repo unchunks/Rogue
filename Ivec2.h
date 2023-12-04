@@ -86,6 +86,14 @@ public:
         }
         return Ivec2(x, y);
     }
+
+    /// @brief ここから引数までのマンハッタン距離を返す
+    /// @param _vec もう一つの座標
+    /// @return マンハッタン距離
+    int manhattan(class Ivec2 _vec)
+    {
+        return abs(x - _vec.x) + abs(y - _vec.y);
+    }
     
     int x, y;
 private:

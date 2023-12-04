@@ -24,8 +24,9 @@ public:
     Room getRoom(int id) { return rooms[id]; }
     int getAreaNum() { return areas.size(); }
     int getRoomNum() { return rooms.size(); }
+
     /// @brief ランダムなデータ系座標を返す
-    Ivec2 getRandomFloorPos();
+    Ivec2 getRandomFloorDataPos();
 
     int areaCount = 0;
     int randomNumber;

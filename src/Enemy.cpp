@@ -149,10 +149,7 @@ bool Enemy::find(Character _opponent)
     if(!onTileCenter())
         return false;
 
-    return 
-      ( abs(mBox.x - _opponent.getImagePos().x) / TILE_W 
-      + abs(mBox.y - _opponent.getImagePos().y) / TILE_H 
-            <= ENEMY_FIND_RANGE);
+    return ( getDataPos().manhattan(_opponent.getDataPos()) <= ENEMY_FIND_RANGE );
 }
 
 bool Enemy::mustUpdateRoute()

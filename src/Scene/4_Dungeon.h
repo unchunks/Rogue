@@ -68,16 +68,25 @@ private:
     std::vector<Enemy> enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
     std::vector<Enemy> deadEnemies;
 
-    int isOtherPos(Ivec2 _pos);
+    /// @brief 座標に自身以外のキャラが居るか
+    /// @param _data_pos データ系座標
+    /// @return > 0 のとき、別のキャラが居る
+    int isOtherPos(Ivec2 _data_pos);
 
-    /**
-     * @brief 引数の位置に移動できるか判定する
-     * @param _pos データ系座標
-    */
-    bool canGetOn(Ivec2 _pos);
-    Ivec2 getRandomPos(int _roomCount);
-    Ivec2 getFrontPos(Ivec2 _pos, DIRECTION _dir);
-    Enemy& whichEnemy(Ivec2 _pos);
+    /// @brief 引数の位置に移動できるか判定する
+    /// @param _data_pos データ系座標
+    /// @return 移動できるなら true
+    bool canGetOn(Ivec2 _data_pos);
+
+    /// @brief ランダムな座標を返す
+    /// @param _roomCount 
+    /// @return データ系座標
+    Ivec2 getRandomDataPos(int _roomCount);
+
+    /// @brief 座標にいる敵を返す
+    /// @param _data_pos 
+    /// @return 敵の参照を返す
+    Enemy& whichEnemy(Ivec2 _data_pos);
 
     //The level tiles
 	std::vector<Tile> tileSet;

@@ -214,22 +214,22 @@ void Character::receiveDamage(int _damage)
     }
 }
 
-void Character::setImagePos(Ivec2 _pos)
+void Character::setImagePos(Ivec2 _image_pos)
 {
 #ifdef __DEBUG_
-    SDL_Log("setImagePos: (%d, %d)", _pos.x / TILE_W, _pos.y / TILE_H);
+    SDL_Log("setImagePos: (%d, %d)", _image_pos.x / TILE_W, _image_pos.y / TILE_H);
 #endif
-    mBox.x = _pos.x;
-    mBox.y = _pos.y;
+    mBox.x = _image_pos.x;
+    mBox.y = _image_pos.y;
 }
 
-void Character::setDataPos(Ivec2 _pos)
+void Character::setDataPos(Ivec2 _data_pos)
 {
 #ifdef __DEBUG_
-    SDL_Log("setDataPos: (%d, %d)", _pos.x, _pos.y);
+    SDL_Log("setDataPos: (%d, %d)", _data_pos.x, _data_pos.y);
 #endif
-    mBox.x = _pos.x * TILE_W + TILE_W / 4;
-    mBox.y = _pos.y * TILE_H + TILE_H / 4;
+    mBox.x = _data_pos.x * TILE_W + TILE_W / 4;
+    mBox.y = _data_pos.y * TILE_H + TILE_H / 4;
 }
 
 void Character::setState(STATE _state)
@@ -304,13 +304,13 @@ bool Character::onTileCenter()
     return false;
 }
 
-bool Character::collided(std::vector<Tile> _tiles, Ivec2 _pos, std::vector<class Character> _otherCharacters)
+bool Character::collided(std::vector<Tile> _tiles, Ivec2 _data_pos, std::vector<class Character> _otherCharacters)
 {
-    return (mapOver() || touchWall(_tiles, _pos) || touchChars(_otherCharacters, _pos));
+    return (mapOver() || touchWall(_tiles, _data_pos) || touchChars(_otherCharacters, _data_pos));
 }
 
 //TODO: 上と左の壁を通り抜ける
-bool Character::touchWall(std::vector<Tile> _tiles, Ivec2 _pos)
+bool Character::touchWall(std::vector<Tile> _tiles, Ivec2 _data_pos)
 {
     for (auto _tile : _tiles)
     {
@@ -320,8 +320,8 @@ bool Character::touchWall(std::vector<Tile> _tiles, Ivec2 _pos)
             continue;
         }
         // 壁ならtrueを返す
-        if (_pos.x == (_tile.getBox().x / TILE_W)
-         && _pos.y == (_tile.getBox().y / TILE_H))
+        if (_data_pos.x == (_tile.getBox().x / TILE_W)
+         && _data_pos.y == (_tile.getBox().y / TILE_H))
         {
 #ifdef __DEBUG_
             SDL_Log("touchWall: 壁に接触");
@@ -333,11 +333,11 @@ bool Character::touchWall(std::vector<Tile> _tiles, Ivec2 _pos)
     return false;
 }
 
-bool Character::touchChars(std::vector<Character> _otherCharacters, Ivec2 _pos)
+bool Character::touchChars(std::vector<Character> _otherCharacters, Ivec2 _data_pos)
 {
     for(auto _otherCharacter : _otherCharacters)
     {
-        if( touchChar(_otherCharacter, _pos) )
+        if( touchChar(_otherCharacter, _data_pos) )
         {
             return true;
         }
@@ -345,9 +345,9 @@ bool Character::touchChars(std::vector<Character> _otherCharacters, Ivec2 _pos)
     return false;
 }
 
-bool Character::touchChar(Character  _otherCharacter, Ivec2 _pos)
+bool Character::touchChar(Character _otherCharacter, Ivec2 _data_pos)
 {
-    if( (_pos == _otherCharacter.getDataPos()) )
+    if( (_data_pos == _otherCharacter.getDataPos()) )
         {
 #ifdef __DEBUG_
             SDL_Log("touchChar: キャラクターに接触");

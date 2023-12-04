@@ -96,15 +96,15 @@ void RRA::generate()
     printf("階段生成\n");
     int roomNum = random_num(random_engine) % areas.size();
     Room room = rooms[roomNum];
-    Ivec2 pos = Ivec2(0.0f, 0.0f);
-    while(floorTYPE[pos.y][pos.x] != FLOOR)
+    Ivec2 data_pos = Ivec2(0, 0);
+    while(floorTYPE[data_pos.y][data_pos.x] != FLOOR)
     {
-        pos.x = room.x + random_num(random_engine)%room.w;
-        pos.y = room.y + random_num(random_engine)%room.h;
-    printf("pos(X: %d, Y: %d), room(X: %d, Y: %d, W: %d, H: %d)\n", pos.x, pos.y, room.x, room.y, room.w, room.h);
+        data_pos.x = room.x + random_num(random_engine)%room.w;
+        data_pos.y = room.y + random_num(random_engine)%room.h;
+    printf("data_pos(X: %d, Y: %d), room(X: %d, Y: %d, W: %d, H: %d)\n", data_pos.x, data_pos.y, room.x, room.y, room.w, room.h);
     }
-    floorTYPE[pos.y][pos.x] = STEP;
-    printf("階段(%d, %d)\n", pos.x, pos.y);
+    floorTYPE[data_pos.y][data_pos.x] = STEP;
+    printf("階段(%d, %d)\n", data_pos.x, data_pos.y);
 
     printf("dungeon.mapに書き出し\n");
     outputMap();

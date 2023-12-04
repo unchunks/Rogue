@@ -85,12 +85,13 @@ void Dungeon::Input(SDL_Event event)
             player.setDir(RIGHT);
             break;
 //FIXME: ここから
-        case SDLK_k:
-        	player.isMoved = false;
-            nowTurn = ENEMY;
-            if(player.adjacent(enemies))
-                player.attack(whichEnemy(player.getDataFrontPos()));
-        	break;
+        // case SDLK_k:
+        //     turn++;
+        // 	player.isMoved = false;
+        //     nowTurn = ENEMY;
+        //     if(player.adjacent(enemies))
+        //         player.attack(whichEnemy(player.getDataFrontPos()));
+        // 	break;
 //FIXME: ここまで
         case SDLK_q:
             player.isMoved = false;
@@ -123,10 +124,10 @@ void Dungeon::Input(SDL_Event event)
             switch (dungeon_g->getNowScene())
             {
                 case DUNGEON_AREA_DIVIDE:
-                    player.setDataPos(getRandomPos(areaDivide.getRoomNum()));
+                    player.setDataPos(getRandomDataPos(areaDivide.getRoomNum()));
                     break;
                 case DUNGEON_RRA:
-                    player.setDataPos(getRandomPos(rra.getRoomNum()));
+                    player.setDataPos(getRandomDataPos(rra.getRoomNum()));
                     break;
                 default:
                     break;
@@ -257,7 +258,7 @@ GOTO_FOUND:
                     }
                     
                     e.walk(tileSet, player, enemies);
-                    // e.walkTo(player.getImagePos(), tileSet, player, enemies);
+                    // e.walkTo(player.getDataPos(), tileSet, player, enemies);
                     break;
 
                 case ESCAPE:
@@ -300,22 +301,22 @@ GOTO_FOUND:
     {
         *e = Enemy(static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER)));
         e->mSpriteClips = mEnemySpriteClips.at(static_cast<int>(e->getEnemyType()));
-        Ivec2 pos;
+        Ivec2 data_pos;
 #ifdef __DEBUG_
         SDL_Log("敵の位置を初期化");
 #endif
         switch (dungeon_g->getNowScene())
         {
             case DUNGEON_AREA_DIVIDE:
-                pos = getRandomPos(areaDivide.getRoomNum());
+                data_pos = getRandomDataPos(areaDivide.getRoomNum());
                 break;
             case DUNGEON_RRA:
-                pos = getRandomPos(rra.getRoomNum());
+                data_pos = getRandomDataPos(rra.getRoomNum());
                 break;
             default:
                 break;
         }
-        e->setDataPos(pos);
+        e->setDataPos(data_pos);
         deadEnemies.erase(e);
     }
 }
@@ -420,21 +421,21 @@ void Dungeon::InitDungeon()
     if (!setTiles())
         SDL_Log("InitDungeon: Failed to load tile set!");
 
-    Ivec2 pos;
+    Ivec2 data_pos;
     SDL_Log("InitDungeon: プレイヤーを初期化");
     switch (dungeon_g->getNowScene())
     {
     case DUNGEON_AREA_DIVIDE:
-        pos = getRandomPos(areaDivide.getRoomNum());
+        data_pos = getRandomDataPos(areaDivide.getRoomNum());
         break;
     case DUNGEON_RRA:
-        pos = getRandomPos(rra.getRoomNum());
+        data_pos = getRandomDataPos(rra.getRoomNum());
         break;
     default:
         break;
     }
-    SDL_Log("InitDungeon: 初期スポーン地点(%d, %d)", pos.x, pos.y);
-    player.setDataPos(pos);
+    SDL_Log("InitDungeon: 初期スポーン地点(%d, %d)", data_pos.x, data_pos.y);
+    player.setDataPos(data_pos);
 
     SDL_Log("InitDungeon: 敵を初期化");
     enemies.clear();
@@ -448,15 +449,15 @@ void Dungeon::InitDungeon()
         switch (dungeon_g->getNowScene())
         {
         case DUNGEON_AREA_DIVIDE:
-            pos = getRandomPos(areaDivide.getRoomNum());
+            data_pos = getRandomDataPos(areaDivide.getRoomNum());
             break;
         case DUNGEON_RRA:
-            pos = getRandomPos(rra.getRoomNum());
+            data_pos = getRandomDataPos(rra.getRoomNum());
             break;
         default:
             break;
         }
-        e.setDataPos(pos);
+        e.setDataPos(data_pos);
         SDL_Log("InitDungeon: 敵の位置(%d, %d)", e.getDataPos().x, e.getDataPos().y);
     }
 }
@@ -469,29 +470,31 @@ void Dungeon::quit()
     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
 }
 
-int Dungeon::isOtherPos(Ivec2 _pos)
+int Dungeon::isOtherPos(Ivec2 _data_pos)
 {
-    int sameNum = 0;
-    if (player.getImagePos() == _pos)
+    int sameNum = -1;
+    if (player.getDataPos() == _data_pos)
         sameNum++;
     for (auto e : enemies)
     {
-        if (e.getImagePos() == _pos)
+        if (e.getDataPos() == _data_pos)
             sameNum++;
     }
     return sameNum;
 }
 
-bool Dungeon::canGetOn(Ivec2 _pos)
+bool Dungeon::canGetOn(Ivec2 _data_pos)
 {
-    if ((floor[_pos.y][_pos.x] != FLOOR) && (floor[_pos.y][_pos.x] != AISLE) && (floor[_pos.y][_pos.x] != STEP))
+    if ((floor[_data_pos.y][_data_pos.x] != FLOOR)
+     && (floor[_data_pos.y][_data_pos.x] != AISLE)
+     && (floor[_data_pos.y][_data_pos.x] != STEP))
         return false;
-    if (isOtherPos(_pos) > 1)
+    if (isOtherPos(_data_pos) > 0)
         return false;
     return true;
 }
 
-Ivec2 Dungeon::getRandomPos(int _roomCount)
+Ivec2 Dungeon::getRandomDataPos(int _roomCount)
 {
     int roomNum = rand() % _roomCount;
     Room room = Room();
@@ -506,47 +509,24 @@ Ivec2 Dungeon::getRandomPos(int _roomCount)
     default:
         break;
     }
-    Ivec2 pos;
-    pos.x = room.x + rand() % room.w;
-    pos.y = room.y + rand() % room.h;
-    while (!canGetOn(pos))
+    Ivec2 data_pos;
+    data_pos.x = room.x + rand() % room.w;
+    data_pos.y = room.y + rand() % room.h;
+    while (!canGetOn(data_pos))
     {
-        pos.x = room.x + rand() % room.w;
-        pos.y = room.y + rand() % room.h;
+        data_pos.x = room.x + rand() % room.w;
+        data_pos.y = room.y + rand() % room.h;
     }
-    return pos;
+    return data_pos;
 }
 
-Enemy &Dungeon::whichEnemy(Ivec2 _pos)
+Enemy &Dungeon::whichEnemy(Ivec2 _data_pos)
 {
     for (auto &e : enemies)
-        if ((e.getImagePos().x == _pos.x) && (e.getImagePos().y == _pos.y))
+        if ((e.getDataPos().x == _data_pos.x) && (e.getDataPos().y == _data_pos.y))
             return e;
 
     throw std::runtime_error("Enemy not found");
-}
-
-Ivec2 Dungeon::getFrontPos(Ivec2 _pos, DIRECTION _dir)
-{
-    Ivec2 front(0, 0);
-    switch (_dir)
-    {
-    case LEFT:
-        front.x = -1;
-        break;
-    case RIGHT:
-        front.x = 1;
-        break;
-    case UP:
-        front.y = -1;
-        break;
-    case DOWN:
-        front.y = 1;
-        break;
-    default:
-        break;
-    }
-    return _pos + front;
 }
 
 bool Dungeon::setTiles()
@@ -648,10 +628,10 @@ void Dungeon::updateEnemyRoute(Enemy &_enemy, GOAL_TYPE _goalType)
             switch (dungeon_g->getNowScene())
             {
             case DUNGEON_AREA_DIVIDE:
-                goal = areaDivide.getRandomFloorPos();
+                goal = areaDivide.getRandomFloorDataPos();
                 break;
             case DUNGEON_RRA:
-                goal = rra.getRandomFloorPos();
+                goal = rra.getRandomFloorDataPos();
                 break;
             default:
                 break;
