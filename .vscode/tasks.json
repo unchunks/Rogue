@@ -3,18 +3,20 @@
         {
             "type": "cppbuild",
             "label": "C/C++: g++ アクティブなファイルのビルド",
-            "command": "/usr/bin/g++",
+            "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "/home/yuthika/Rogue/src/*.cpp",
-                "-o",
-                "/home/yuthika/Rogue/game",
+                "test.cpp",
+                "test.cc",
                 "`sdl2-config --cflags --libs`",
                 "-lSDL2",
                 "-lSDL2_ttf",
                 "-lSDL2_image",
-                "-lSDL2_mixer"
+                "-lSDL2_mixer",
+                "-pthread",
+                "-lgtest_main",
+                "-lgtest",
             ],
             "options": {
                 "cwd": "${fileDirname}"
