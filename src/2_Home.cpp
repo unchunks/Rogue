@@ -3,7 +3,7 @@
 extern SDL_Renderer *gRenderer;
 
 const int TOP_BUTTON_W = 120;
-const int TOP_BUTTON_H = 120;
+const int TOP_BUTTON_H = 60;
 const int SIDE_BUTTON_W = 250;
 const int SIDE_BUTTON_H = 60;
 
