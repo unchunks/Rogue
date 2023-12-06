@@ -75,7 +75,7 @@ bool Game::Init()
     }
 
     // Initialize SDL_Mix
-    sdlResult = Mix_Init(MIX_INIT_MP3);
+    sdlResult = Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG);
     if (sdlResult < 0)
     {
         printf("Unable to initialize SDL_Mix: %s", Mix_GetError());
@@ -122,7 +122,7 @@ printf("Failed to load sound effect : %s", Mix_GetError());
         return false;
     }
 
-    mMusic = Mix_LoadMUS("assets/BGM.mp3");
+    mMusic = Mix_LoadMUS("assets/dungeon.ogg");//Mix_LoadMUS("assets/BGM.mp3");
     if(mMusic == NULL) {
 printf("Failed to load BGM : %s", Mix_GetError());
         return false;
@@ -133,7 +133,7 @@ printf("Failed to load BGM : %s", Mix_GetError());
     mDungeonMenu = new DungeonMenu(this);
     mDungeon = new Dungeon(this);
 
-    // Mix_PlayMusic(mMusic, -1);
+    Mix_PlayMusic(mMusic, -1);
 
     return true;
 }

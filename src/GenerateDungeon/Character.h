@@ -23,13 +23,14 @@ class Character
 {
 public:
     Character();
-    Character(int _x, int _y, int _maxHP, int _STR, int _VIT, STATE _state, DIRECTION _dir, CHAR_TYPE _type);
+    Character(int _x, int _y, int _maxHP, int _STR, int _VIT, STATE _state, DIRECTION _dir, CHAR_TYPE _type, std::string _name);
     ~Character();
 
     DIRECTION adjacent(class Character _opponent);
 	DIRECTION adjacent(std::vector<class Character> _opponents);
     virtual void attack(class Character& _opponent);
     void receiveDamage(int _damage);
+    void healed(int _heal_val);
 
     /// @brief 座標テレポート
     /// @param _image_pos 画像系座標
@@ -45,6 +46,7 @@ public:
     STATE getState() {return mState;}
     DIRECTION getDir() {return mDir;}
     CHAR_TYPE getType() {return mType;}
+    std::string getName() {return mName;}
 
     /// @brief 画像系座標を返す
     Ivec2 getImagePos() {return Ivec2(mBox.x, mBox.y);}
@@ -52,8 +54,9 @@ public:
 	/// @brief データ系座標を返す
     Ivec2 getDataPos() {return Ivec2(static_cast<int>(mBox.x / TILE_W), static_cast<int>(mBox.y / TILE_H));}
 	
-	/// @brief データ系座標で前方の座標を返す
-	Ivec2 getDataFrontPos() {return getDataPos().front(mDir);}
+	/// @brief 前方の座標を返す
+    /// @return NO_DIRECTIONの場合は現在地を返す
+	Ivec2 getFrontDataPos();
     bool onTileCenter();
 
     /// @brief 向いている方向に移動。当たり判定も含む
@@ -71,7 +74,7 @@ public:
     static LTexture mCharTexture;
     // LTexture mCharTexture;
 
-    std::vector<SDL_Rect> mSpriteClips;
+    std::vector<SDL_Rect> sprile_clips;
 
     bool isMoved;
 
@@ -108,4 +111,5 @@ protected:
 
     int mAnimFrame;
     bool receivingDamage;
+    std::string mName;
 };

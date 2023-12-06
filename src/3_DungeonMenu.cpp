@@ -6,11 +6,11 @@ const int BUTTON_W = 250;
 const int BUTTON_H = 60;
 
 Game *dungeonMenu_g;
-void areaDivide()
+void area_divide()
 {
     Mix_PlayChannel(-1, dungeonMenu_g->getClickEffect(), 0);
     dungeonMenu_g->setNowScene(SCENE::DUNGEON_AREA_DIVIDE);
-    printf("areaDivide\n");
+    printf("area_divide\n");
 }
 void RRA()
 {
@@ -25,7 +25,7 @@ DungeonMenu::DungeonMenu(Game *game)
     dungeonMenu_g = game;
     LoadData();
 
-    mAreaDivide.onClick = &areaDivide;
+    mAreaDivide.onClick = &area_divide;
     mRRA.onClick = &RRA;
     mAreaDivide.create(
         gRenderer,

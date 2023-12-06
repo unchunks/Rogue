@@ -40,9 +40,9 @@ int AStar::BackTrace(int x, int y)
 int AStar::Search()
 {
     depth++;
-#ifdef __DEBUG_
+
     std::cout << "現在の深さ: " << depth << std::endl;
-#endif
+
 	// 検索中のノード、X・Y座標、実コスト
 	MAPCELL *n = NULL;
 	int CX = 0;
@@ -154,12 +154,12 @@ std::deque<Ivec2> AStar::AStar(CELL_TYPE def_data[FLOOR_H][FLOOR_W], Ivec2 _star
 	// 開始位置をオープンに
     astar_map_data[start.y][start.x].SearchStatus = SEARCH_OPEN;
     Search();
-#ifdef __DEBUG_
+
 	std::cout << "トレース開始\n";
-#endif
+
 	TraceRoute(goal.x, goal.y);
-#ifdef __DEBUG_
+
 	std::cout << "トレース終了\n";
-#endif
+
 	return astar_route;
 }

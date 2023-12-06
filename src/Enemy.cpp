@@ -10,24 +10,28 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
             maxHP = DEKA_HP;
             STR   = DEKA_STR;
             VIT   = DEKA_VIT;
+            mName = "デカ";
             break;
 
         case GURI:
             maxHP = GURI_HP;
             STR   = GURI_STR;
             VIT   = GURI_VIT;
+            mName = "グリ";
             break;
 
         case JELYF:
             maxHP = JELYF_HP;
             STR   = JELYF_STR;
             VIT   = JELYF_VIT;
+            mName = "ジェリフ";
             break;
 
         case YUMMY:
             maxHP = YUMMY_HP;
             STR   = YUMMY_STR;
             VIT   = YUMMY_VIT;
+            mName = "ヤミー";
             break;
 
         case ENEMY_TYPE_NUMBER: break;
@@ -41,7 +45,7 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
 }
 
 Enemy::Enemy(int _x, int _y, int _maxHP, int _STR, int _VIT)
-: Character(_x, _y, _maxHP, _STR, _VIT, SEARCH, DOWN, ENEMY), elapsedTurn(0)
+: Character(_x, _y, _maxHP, _STR, _VIT, SEARCH, DOWN, ENEMY, "敵"), elapsedTurn(0)
 {
 }
 
@@ -62,7 +66,7 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
 
         otherCharacters.push_back(enemy);
     }
-#ifdef __DEBUG_
+
     if(onTileCenter())
     {
         SDL_Log("walk: nextPos(%d, %d)", nextPos.x, nextPos.y);
@@ -70,7 +74,7 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
     }
 
     SDL_Log("タイル内座標(x: %d, y: %d)\n", (mBox.x % TILE_W), (mBox.y % TILE_H));
-#endif
+
     bool touched = moveTo(nextPos, _tiles, otherCharacters);
     if(touched)
     {
@@ -82,9 +86,9 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
         nextPos = route[0];
         route.pop_front();
         elapsedTurn++;
-#ifdef __DEBUG_
+
         SDL_Log("walk: elapsedTurn = %d, route size = %d\n", elapsedTurn, static_cast<int>(route.size()));
-#endif
+
     }
 }
 
@@ -102,34 +106,34 @@ void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], Ivec2 _goal)
 {
     if(_goal.x > FLOOR_W || _goal.y > FLOOR_H || _goal.x < 0 || _goal.y < 0)
     {
-#ifdef __DEBUG_
+
         SDL_Log("setGoal: ゴール位置エラー");
-#endif
+
         return;
     }
     goal = _goal;
     route.clear();
-#ifdef __DEBUG_
+
     SDL_Log("setGoal: ルート探索");
-#endif
+
     route = AStar::AStar(_dungeon, getDataPos(), goal);
     // route = OSearch::OSearch(_dungeon, getDataPos(), goal);
     // 現在地をポップ
-#ifdef __DEBUG_
+
     SDL_Log("現在地としてポップ(%d, %d)", route.at(0).x, route.at(0).y);
-#endif
+
     route.pop_front();
     if(route.size() == 0)
     {
         return;
     }
-#ifdef __DEBUG_
+
     SDL_Log("setGoal: 更新後のルート一覧");
     for(auto vec2 : route)
     {
         SDL_Log("setGoal: (%d, %d)", vec2.x, vec2.y);
     }
-#endif
+
     nextPos = route.at(0);
     route.pop_front();
     elapsedTurn = 0;
@@ -139,7 +143,8 @@ void Enemy::attack(Character& _opponent)
 {
     if(!onTileCenter())
         return;
-
+    
+    printf("%sの攻撃  ", mName.c_str());
     elapsedTurn++;
     _opponent.receiveDamage(STR);
 }
@@ -158,7 +163,7 @@ bool Enemy::mustUpdateRoute()
         return false;
 
     bool result = ((static_cast<int>(route.size()) < 1) || (elapsedTurn > ENEMY_SEARCH_INTERVAL));
-#ifdef __DEBUG_
+
     if( static_cast<int>(route.size()) < 1 )
     {
         SDL_Log("mustUpdateRoute: ルートサイズが少ない %d", static_cast<int>(route.size()));
@@ -167,12 +172,12 @@ bool Enemy::mustUpdateRoute()
     {
         SDL_Log("mustUpdateRoute: 経過ターン超過 %d", elapsedTurn);
     }
-#endif
+
     if(result)
     {
-#ifdef __DEBUG_
+
         SDL_Log("mustUpdateRoute: 更新要求");
-#endif
+
         routeClear();
     }
     return result;
@@ -183,20 +188,26 @@ bool Enemy::changeState(Character _opponent)
     if(!onTileCenter())
         return false;
 
-    if (find(_opponent) && mState != FOUND)
+    if(nowHP <= 0)
     {
-#ifdef __DEBUG_
+        setState(DEAD);
+        routeClear();
+        return true;
+    }
+    else if (find(_opponent) && mState != FOUND)
+    {
+
         SDL_Log("プレイヤー発見");
-#endif
+
         setState(FOUND);
         routeClear();
         return true;
     }
     else if(!find(_opponent) && mState != SEARCH)
     {
-#ifdef __DEBUG_
+
         SDL_Log("プレイヤー未発見");
-#endif
+
         setState(SEARCH);
         routeClear();
         return false;

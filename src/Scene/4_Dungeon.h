@@ -41,7 +41,7 @@ public:
     void InitDungeon();
     void quit();
 
-    bool inDungeon;
+    bool in_dungeon;
 
 private:
     bool LoadData();
@@ -56,21 +56,20 @@ private:
 
 
 // ダンジョン生成
-    bool goNextFloor;
+    bool go_next_floor;
     char input = 'a';
 
     CELL_TYPE floor[FLOOR_H][FLOOR_W];
 
-    AreaDivide areaDivide;
+    AreaDivide area_divide;
     RRA rra;
 
     Player player = Player(0, 0, PLAYER_HP, PLAYER_STR, PLAYER_VIT);
     std::vector<Enemy> enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
-    std::vector<Enemy> deadEnemies;
 
     /// @brief 座標に自身以外のキャラが居るか
     /// @param _data_pos データ系座標
-    /// @return > 0 のとき、別のキャラが居る
+    /// @return 座標にいるキャラの数
     int isOtherPos(Ivec2 _data_pos);
 
     /// @brief 引数の位置に移動できるか判定する
@@ -93,7 +92,7 @@ private:
 
     SDL_Rect camera;
     std::vector<SDL_Rect> mPlayerSpriteClips;
-    std::vector<std::vector<SDL_Rect>> mEnemySpriteClips;
+    std::vector<std::vector<SDL_Rect>> enemy_sprite_clips;
 
     CHAR_TYPE nowTurn;
 };

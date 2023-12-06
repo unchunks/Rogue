@@ -14,14 +14,14 @@ SDL_Rect gTileClips[TOTAL_TILE_SPRITES];
 int turn = 0;
 
 Dungeon::Dungeon(Game *game)
-    : inDungeon(true), goNextFloor(true), nowTurn(PLAYER)
+    : in_dungeon(true), go_next_floor(true), nowTurn(PLAYER)
 {
     dungeon_g = game;
     mGame = game;
 
     tileSet.resize(TOTAL_TILES, Tile(0, 0, NONE));
     mPlayerSpriteClips.resize(ANIMATION_FRAMES * static_cast<int>(NO_DIRECTION), {0, 0, 0, 0});
-    mEnemySpriteClips.resize(static_cast<int>(ENEMY_TYPE_NUMBER), std::vector<SDL_Rect>(ANIMATION_FRAMES * static_cast<int>(NO_DIRECTION), {0, 0, 0, 0}));
+    enemy_sprite_clips.resize(static_cast<int>(ENEMY_TYPE_NUMBER), std::vector<SDL_Rect>(ANIMATION_FRAMES * static_cast<int>(NO_DIRECTION), {0, 0, 0, 0}));
     if (!LoadData())
     {
         printf("Failed to load media!\n");
@@ -36,10 +36,10 @@ Dungeon::~Dungeon()
     tileSet.shrink_to_fit();
 
     // Free loaded images
-    player.mSpriteClips.clear();
-    player.mSpriteClips.shrink_to_fit();
-    mEnemySpriteClips.clear();
-    mEnemySpriteClips.shrink_to_fit();
+    player.sprile_clips.clear();
+    player.sprile_clips.shrink_to_fit();
+    enemy_sprite_clips.clear();
+    enemy_sprite_clips.shrink_to_fit();
 
     // player.mCharTexture.free(); //別の場所で解放済み?
     // gTileTexture.free();
@@ -50,7 +50,7 @@ Dungeon::~Dungeon()
 
 void Dungeon::Input(SDL_Event event)
 {
-    if (!inDungeon || goNextFloor)
+    if (!in_dungeon || go_next_floor)
     {
         return;
     }
@@ -65,66 +65,72 @@ void Dungeon::Input(SDL_Event event)
         switch (event.key.keysym.sym)
         {
         case SDLK_w:
+        case SDLK_UP:
             turn++;
             player.isMoved = true;
             player.setDir(UP);
             break;
         case SDLK_a:
+        case SDLK_LEFT:
             turn++;
             player.isMoved = true;
             player.setDir(LEFT);
             break;
         case SDLK_s:
+        case SDLK_DOWN:
             turn++;
             player.isMoved = true;
             player.setDir(DOWN);
             break;
         case SDLK_d:
+        case SDLK_RIGHT:
             turn++;
             player.isMoved = true;
             player.setDir(RIGHT);
             break;
-//FIXME: ここから
-        // case SDLK_k:
-        //     turn++;
-        // 	player.isMoved = false;
-        //     nowTurn = ENEMY;
-        //     if(player.adjacent(enemies))
-        //         player.attack(whichEnemy(player.getDataFrontPos()));
-        // 	break;
-//FIXME: ここまで
+        case SDLK_SPACE:
+            turn++;
+            player.healed(1);
+            nowTurn = ENEMY;
+            player.isMoved = false;
+            for(auto &e : enemies)
+            {
+                e.isMoved = true;
+            }
+            SDL_Log("敵のターン===============================================================================");
+        	break;
         case SDLK_q:
             player.isMoved = false;
-            inDungeon = false;
-            goNextFloor = true;
+            in_dungeon = false;
+            go_next_floor = true;
             break;
         // NOTE: 以下デバッグ用
         case SDLK_1:    // 見た目をプレイヤーに変更
             player.isMoved = false;
-            player.mSpriteClips = mPlayerSpriteClips;
+            player.sprile_clips = mPlayerSpriteClips;
             break;
         case SDLK_2:    // 見た目をデカに変更
             player.isMoved = false;
-            player.mSpriteClips = mEnemySpriteClips[0];
+            player.sprile_clips = enemy_sprite_clips[0];
             break;
         case SDLK_3:    // 見た目をグリに変更
             player.isMoved = false;
-            player.mSpriteClips = mEnemySpriteClips[1];
+            player.sprile_clips = enemy_sprite_clips[1];
             break;
         case SDLK_4:    // 見た目をジェリフに変更
             player.isMoved = false;
-            player.mSpriteClips = mEnemySpriteClips[2];
+            player.sprile_clips = enemy_sprite_clips[2];
             break;
         case SDLK_5:    // 見た目をヤミーに変更
             player.isMoved = false;
-            player.mSpriteClips = mEnemySpriteClips[3];
+            player.sprile_clips = enemy_sprite_clips[3];
             break;
-        case SDLK_r:    // ランダムな位置にワープ
+        case SDLK_t:    // ランダムな位置にワープ
             player.isMoved = false;
             switch (dungeon_g->getNowScene())
             {
                 case DUNGEON_AREA_DIVIDE:
-                    player.setDataPos(getRandomDataPos(areaDivide.getRoomNum()));
+                    player.setDataPos(getRandomDataPos(area_divide.getRoomNum()));
                     break;
                 case DUNGEON_RRA:
                     player.setDataPos(getRandomDataPos(rra.getRoomNum()));
@@ -133,7 +139,7 @@ void Dungeon::Input(SDL_Event event)
                     break;
             }
             break;
-        case SDLK_t:    // 敵の近くにワープ
+        case SDLK_e:    // 敵の近くにワープ
             player.isMoved = false;
             player.setDataPos(Ivec2(
                 enemies.at(0).getDataPos().x,
@@ -142,27 +148,31 @@ void Dungeon::Input(SDL_Event event)
         default:
             break;
         }
-        if (player.isMoved)
-            SDL_Log("Input: 現在%dターン目", turn);
+        if(player.isMoved && turn % 3 == 0)
+        {
+            player.healed(1);
+        }
     }
 }
 
 void Dungeon::Update()
 {
-    if (!inDungeon)
+    if (!in_dungeon)
     {
         quit();
         dungeon_g->setNowScene(SCENE::HOME);
         return;
     }
 
-    if (goNextFloor)
+    if (go_next_floor)
     {
         InitDungeon();
         return;
     }
 
     player.setCamera(camera);
+
+    bool all_e_on_ceneter = true;
 
     // プレイヤーのアップデート
     if (nowTurn == PLAYER && player.isMoved)
@@ -171,21 +181,28 @@ void Dungeon::Update()
         {
             SDL_Log("プレイヤーのターン=========================================================================");
         }
-        std::vector<Character> otherCharacters;
-        for (auto enemy : enemies)
+        if( (player.onTileCenter()) && ( isOtherPos( player.getFrontDataPos() ) >= 0 ) )
         {
-            otherCharacters.push_back(enemy);
+            player.attack(whichEnemy(player.getFrontDataPos()));
         }
-        player.move(tileSet, otherCharacters);
-#ifdef __DEBUG_
+        else
+        {
+            std::vector<Character> otherCharacters;
+            for (auto enemy : enemies)
+            {
+                otherCharacters.push_back(enemy);
+            }
+            player.move(tileSet, otherCharacters);
+        }
+
         if (player.onTileCenter())
         {
             SDL_Log("(%d, %d)", player.getDataPos().x, player.getDataPos().y);
         }
-#endif
+
         // 階段を登ったときの処理
-        goNextFloor = ((player.onTileCenter()) && (floor[(player.getDataPos().y)][(player.getDataPos().x)] == STEP));
-        if (goNextFloor)
+        go_next_floor = ((player.onTileCenter()) && (floor[(player.getDataPos().y)][(player.getDataPos().x)] == STEP));
+        if (go_next_floor)
             return;
 
         // 敵のターンに移行
@@ -203,18 +220,21 @@ void Dungeon::Update()
     }// 敵のアップデート
     else if (nowTurn == ENEMY)
     {
-        bool all_e_on_eneter = true;
+        all_e_on_ceneter = true;
+        std::vector<Enemy*> dead_enemies;
         for (auto &e : enemies)
         {
+            SDL_Log("%sのターン=========================================================================", e.getName().c_str());
+
             if(!e.isMoved)
                 continue;
             
             switch (e.getState())
             {
                 case SEARCH:
-#ifdef __DEBUG_
+
                     SDL_Log("SEARCH");
-#endif
+
                     // 発見確認
                     if(e.changeState(player))
                     {
@@ -225,9 +245,9 @@ void Dungeon::Update()
                     // ルートの情報が古くなったり、なくなったりした場合に更新
                     if (e.mustUpdateRoute())
                     {
-#ifdef __DEBUG_
+
                         SDL_Log("SEARCH: ルート更新");
-#endif
+
                         updateEnemyRoute(e, RANDOM_POS);
                     }
 GOTO_SEARCH:
@@ -235,37 +255,37 @@ GOTO_SEARCH:
                     break;
 
                 case FOUND:
-#ifdef __DEBUG_
+
                     SDL_Log("FOUND");
-#endif
+
                     // 移動前の発見確認
                     if(e.changeState(player))
                     {
                         updateEnemyRoute(e, RANDOM_POS);
                         goto GOTO_SEARCH;
                     }
-                    
+GOTO_FOUND:
                     // 隣り合っている場合は攻撃
                     if (e.adjacent(player) != NO_DIRECTION)
                     {
                         e.attack(player);
                         break;
                     }
-GOTO_FOUND:
+
                     if(e.onTileCenter())
                     {
                         updateEnemyRoute(e, PLAYER_POS);
                     }
                     
                     e.walk(tileSet, player, enemies);
-                    // e.walkTo(player.getDataPos(), tileSet, player, enemies);
                     break;
 
                 case ESCAPE:
                     break;
     //REVIEW: 動作確認
                 case DEAD:
-                    deadEnemies.push_back(e);
+                    SDL_Log("DEAD");
+                    dead_enemies.push_back(&e);
                     break;
 
                 default:
@@ -279,51 +299,53 @@ GOTO_FOUND:
             }
             else
             {
-                all_e_on_eneter = false;
+                all_e_on_ceneter = false;
             }
-#ifdef __DEBUG_
+
             SDL_Log("%s", e.isMoved ? "移動中" : "移動済み");
-#endif
+
         }
-        if(all_e_on_eneter)
+        if(all_e_on_ceneter)
         {
             nowTurn = PLAYER;
+            while(!dead_enemies.empty())
+            {
+                SDL_Log("死亡した敵を別の敵としてリスポーン");
+                auto *e = dead_enemies.front();
+                *e = Enemy(static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER)));
+                e->sprile_clips = enemy_sprite_clips.at(static_cast<int>(e->getEnemyType()));
+                Ivec2 data_pos;
+                switch (dungeon_g->getNowScene())
+                {
+                    case DUNGEON_AREA_DIVIDE:
+                        data_pos = getRandomDataPos(area_divide.getRoomNum());
+                        break;
+                    case DUNGEON_RRA:
+                        data_pos = getRandomDataPos(rra.getRoomNum());
+                        break;
+                    default:
+                        break;
+                }
+                e->setDataPos(data_pos);
+                dead_enemies.erase(dead_enemies.begin());
+            }
+            std::cout << "\n\n";
+            SDL_Log("Input: 現在%dターン目", turn);
+            SDL_Log("プレイヤー HP: %d", player.getNowHP());
+            SDL_Log("%s HP: %d", enemies.at(0).getName().c_str(), enemies.at(0).getNowHP());
         }
     }
 
     if (player.getState() == DEAD)
     {
-        inDungeon = false;
-        goNextFloor = true;
-    }
-
-    for(auto e = deadEnemies.begin(); e < deadEnemies.end(); e++)
-    {
-        *e = Enemy(static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER)));
-        e->mSpriteClips = mEnemySpriteClips.at(static_cast<int>(e->getEnemyType()));
-        Ivec2 data_pos;
-#ifdef __DEBUG_
-        SDL_Log("敵の位置を初期化");
-#endif
-        switch (dungeon_g->getNowScene())
-        {
-            case DUNGEON_AREA_DIVIDE:
-                data_pos = getRandomDataPos(areaDivide.getRoomNum());
-                break;
-            case DUNGEON_RRA:
-                data_pos = getRandomDataPos(rra.getRoomNum());
-                break;
-            default:
-                break;
-        }
-        e->setDataPos(data_pos);
-        deadEnemies.erase(e);
+        in_dungeon = false;
+        go_next_floor = true;
     }
 }
 
 void Dungeon::Output()
 {
-    if (!inDungeon || goNextFloor)
+    if (!in_dungeon || go_next_floor)
         return;
 
     for (auto tile : tileSet)
@@ -367,16 +389,16 @@ bool Dungeon::LoadData()
             {
                 for (int sprite_num = 0; sprite_num < ANIMATION_FRAMES; sprite_num++)
                 {
-                    mEnemySpriteClips.at(enemy_num).at((sprite_dir * ANIMATION_FRAMES) + sprite_num).x = SPRITE_CHAR_WIDTH * (sprite_dir * ANIMATION_FRAMES + sprite_num);
-                    mEnemySpriteClips.at(enemy_num).at((sprite_dir * ANIMATION_FRAMES) + sprite_num).y = SPRITE_CHAR_HEIGHT * (enemy_num + 1);
-                    mEnemySpriteClips.at(enemy_num).at((sprite_dir * ANIMATION_FRAMES) + sprite_num).w = SPRITE_CHAR_WIDTH;
-                    mEnemySpriteClips.at(enemy_num).at((sprite_dir * ANIMATION_FRAMES) + sprite_num).h = SPRITE_CHAR_HEIGHT;
+                    enemy_sprite_clips.at(enemy_num).at((sprite_dir * ANIMATION_FRAMES) + sprite_num).x = SPRITE_CHAR_WIDTH * (sprite_dir * ANIMATION_FRAMES + sprite_num);
+                    enemy_sprite_clips.at(enemy_num).at((sprite_dir * ANIMATION_FRAMES) + sprite_num).y = SPRITE_CHAR_HEIGHT * (enemy_num + 1);
+                    enemy_sprite_clips.at(enemy_num).at((sprite_dir * ANIMATION_FRAMES) + sprite_num).w = SPRITE_CHAR_WIDTH;
+                    enemy_sprite_clips.at(enemy_num).at((sprite_dir * ANIMATION_FRAMES) + sprite_num).h = SPRITE_CHAR_HEIGHT;
                 }
             }
         }
     }
 
-    player.mSpriteClips = mPlayerSpriteClips;
+    player.sprile_clips = mPlayerSpriteClips;
 
     // Load tile texture
     if (!gTileTexture.loadFromFile("assets/dungeon_tiles.png"))
@@ -395,17 +417,17 @@ void Dungeon::PlayMusic()
 void Dungeon::InitDungeon()
 {
     SDL_Log("InitDungeon: ダンジョンを初期化\n");
-    inDungeon = true;
-    goNextFloor = false;
+    in_dungeon = true;
+    go_next_floor = false;
 
     // 選択した方法でダンジョンを生成
     switch (dungeon_g->getNowScene())
     {
     case DUNGEON_AREA_DIVIDE:
-        areaDivide.generate();
+        area_divide.generate();
         for (int y = 0; y < FLOOR_H; y++)
             for (int x = 0; x < FLOOR_W; x++)
-                floor[y][x] = areaDivide.buff[y + 1][x + 1];
+                floor[y][x] = area_divide.buff[y + 1][x + 1];
         break;
     case DUNGEON_RRA:
         rra.generate();
@@ -426,7 +448,7 @@ void Dungeon::InitDungeon()
     switch (dungeon_g->getNowScene())
     {
     case DUNGEON_AREA_DIVIDE:
-        data_pos = getRandomDataPos(areaDivide.getRoomNum());
+        data_pos = getRandomDataPos(area_divide.getRoomNum());
         break;
     case DUNGEON_RRA:
         data_pos = getRandomDataPos(rra.getRoomNum());
@@ -443,13 +465,13 @@ void Dungeon::InitDungeon()
     for (auto &e : enemies)
     {
         e = Enemy(static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER)));
-        e.mSpriteClips = mEnemySpriteClips.at(static_cast<int>(e.getEnemyType()));
+        e.sprile_clips = enemy_sprite_clips.at(static_cast<int>(e.getEnemyType()));
 
         SDL_Log("InitDungeon: 敵の位置を初期化");
         switch (dungeon_g->getNowScene())
         {
         case DUNGEON_AREA_DIVIDE:
-            data_pos = getRandomDataPos(areaDivide.getRoomNum());
+            data_pos = getRandomDataPos(area_divide.getRoomNum());
             break;
         case DUNGEON_RRA:
             data_pos = getRandomDataPos(rra.getRoomNum());
@@ -464,8 +486,8 @@ void Dungeon::InitDungeon()
 
 void Dungeon::quit()
 {
-    inDungeon = true;
-    goNextFloor = true;
+    in_dungeon = true;
+    go_next_floor = true;
     player.reset();
     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
 }
@@ -501,7 +523,7 @@ Ivec2 Dungeon::getRandomDataPos(int _roomCount)
     switch (dungeon_g->getNowScene())
     {
     case DUNGEON_AREA_DIVIDE:
-        room = areaDivide.getRoom(roomNum);
+        room = area_divide.getRoom(roomNum);
         break;
     case DUNGEON_RRA:
         room = rra.getRoom(roomNum);
@@ -628,7 +650,7 @@ void Dungeon::updateEnemyRoute(Enemy &_enemy, GOAL_TYPE _goalType)
             switch (dungeon_g->getNowScene())
             {
             case DUNGEON_AREA_DIVIDE:
-                goal = areaDivide.getRandomFloorDataPos();
+                goal = area_divide.getRandomFloorDataPos();
                 break;
             case DUNGEON_RRA:
                 goal = rra.getRandomFloorDataPos();
@@ -636,16 +658,16 @@ void Dungeon::updateEnemyRoute(Enemy &_enemy, GOAL_TYPE _goalType)
             default:
                 break;
             }
-#ifdef __DEBUG_
+
             SDL_Log("updateEnemyRoute: RANDOM_POS = GOAL(%d, %d)", goal.x, goal.y);
-#endif
+
         }
         break;
     case PLAYER_POS:
         goal = player.getDataPos();
-#ifdef __DEBUG_
+
         SDL_Log("updateEnemyRoute: PLAYER_POS = GOAL(%d, %d)", goal.x, goal.y);
-#endif
+
         break;
     }
     _enemy.setGoal(floor, goal);

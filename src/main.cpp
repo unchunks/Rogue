@@ -1,4 +1,4 @@
-// #define __DEBUG_
+#define __DEBUG_
 
 #include "Game.h"
 

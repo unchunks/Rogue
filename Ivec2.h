@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "src/GenerateDungeon/Enum.h"
-
 class Ivec2
 {
 public:
@@ -70,21 +68,6 @@ public:
     Ivec2 down()
     {
         return Ivec2(x, y + 1);
-    }
-    /// @brief 前方の座標を返す
-    /// @param _dir 
-    /// @return NO_DIRECTIONの場合は現在地を返す
-    Ivec2 front(DIRECTION _dir)
-    {
-        switch(_dir)
-        {
-            case LEFT:  return Ivec2(x, y); break;
-            case RIGHT: return Ivec2(x, y); break;
-            case UP:    return Ivec2(x, y); break;
-            case DOWN:  return Ivec2(x, y); break;
-            case NO_DIRECTION:  return Ivec2(x, y); break;
-        }
-        return Ivec2(x, y);
     }
 
     /// @brief ここから引数までのマンハッタン距離を返す

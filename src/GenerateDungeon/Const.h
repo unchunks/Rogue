@@ -10,36 +10,41 @@ constexpr int BUFF_FLOOR_H = FLOOR_H + 2;
 constexpr int AREA_MAX = 10;
 constexpr int AREA_SIZE_MIN = 10;
 
+// REVIEW: 同時スポーンする敵の数
 constexpr int NUM_ENEMY = 1;
-constexpr int ENEMY_FIND_RANGE = 10;
+// REVIEW: 敵の検知範囲
+constexpr int ENEMY_FIND_RANGE = 1;
 constexpr int ENEMY_SEARCH_INTERVAL = 10;
 
-//スクリーンの寸法
+// スクリーンの寸法（幅）
 constexpr int SCREEN_WIDTH = 996;
+// スクリーンの寸法（高さ）
 constexpr int SCREEN_HEIGHT = 560;
 
-//Tile 定数
+// Tile 定数
 constexpr int TILE_W = 128;
 constexpr int TILE_H = 128;
 constexpr int TOTAL_TILES = 1600;
 constexpr int TOTAL_TILE_SPRITES = 20;
 
-//レベルの寸法
+// レベルの寸法
 constexpr int LEVEL_WIDTH = TILE_W * FLOOR_W;
 constexpr int LEVEL_HEIGHT = TILE_H * FLOOR_H;
 
+// UI同士の間隔
 constexpr int PADDING = 5;
 
-//キャラクターの寸法
+// キャラクターの寸法
 constexpr int SPRITE_CHAR_WIDTH = 64;
 constexpr int SPRITE_CHAR_HEIGHT = 64;
 
-//軸方向の最大速度
-constexpr int CHAR_VEL = ((TILE_W + TILE_H) / FPS);// - (TILE_W % ((TILE_W + TILE_H) / FPS));
+// 軸方向の最大速度
+constexpr int CHAR_VEL = ((TILE_W + TILE_H) / FPS);
 
-//歩行アニメーション
+// 歩行アニメーション
 constexpr int ANIMATION_FRAMES = 4;
-constexpr int ANIM_SPEED = 8; //スプライト毎秒
+// スプライト毎秒
+constexpr int ANIM_SPEED = 8;
 
 // プレイヤー
 constexpr int PLAYER_HP = 100;

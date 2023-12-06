@@ -2,9 +2,9 @@
 
 extern SDL_Renderer *gRenderer;
 
-const int TOP_BUTTON_W = 60;
-const int TOP_BUTTON_H = 60;
-const int SIDE_BUTTON_W = 200;
+const int TOP_BUTTON_W = 120;
+const int TOP_BUTTON_H = 120;
+const int SIDE_BUTTON_W = 250;
 const int SIDE_BUTTON_H = 60;
 
 Game *home_g;
@@ -73,7 +73,7 @@ Home::Home(Game *game)
         PADDING,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
-        "武",
+        "1:武",
         mGame->getFontN(),
         Color::SDL_blue,
         Color::SDL_white);
@@ -83,7 +83,7 @@ Home::Home(Game *game)
         PADDING,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
-        "防",
+        "2:防",
         mGame->getFontN(),
         Color::SDL_blue,
         Color::SDL_white);
@@ -93,7 +93,7 @@ Home::Home(Game *game)
         PADDING,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
-        "ア",
+        "3:ア",
         mGame->getFontN(),
         Color::SDL_blue,
         Color::SDL_white);
@@ -103,7 +103,7 @@ Home::Home(Game *game)
         PADDING,
         TOP_BUTTON_W,
         TOP_BUTTON_H,
-        "他",
+        "4:他",
         mGame->getFontN(),
         Color::SDL_blue,
         Color::SDL_white);
@@ -115,7 +115,7 @@ Home::Home(Game *game)
         SIDE_BUTTON_H * 0 + PADDING,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
-        "もちもの",
+        "5:もちもの",
         mGame->getFontN(),
         Color::SDL_blue,
         Color::SDL_white);
@@ -125,7 +125,7 @@ Home::Home(Game *game)
         (SIDE_BUTTON_H + 10) * 1 + PADDING,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
-        "　倉庫　",
+        "6:　倉庫　",
         mGame->getFontN(),
         Color::SDL_blue,
         Color::SDL_white);
@@ -135,7 +135,7 @@ Home::Home(Game *game)
         (SIDE_BUTTON_H + 10) * 2 + PADDING,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
-        " セーブ ",
+        "7: セーブ ",
         mGame->getFontN(),
         Color::SDL_blue,
         Color::SDL_white);
@@ -145,7 +145,7 @@ Home::Home(Game *game)
         (SIDE_BUTTON_H + 10) * 3 + PADDING,
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
-        "ﾀﾞﾝｼﾞｮﾝ",
+        "8:ダンジョン",
         mGame->getFontN(),
         Color::SDL_blue,
         Color::SDL_white);
