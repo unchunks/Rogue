@@ -616,7 +616,6 @@ bool Dungeon::setTiles()
             }
         }
 
-        // FIX: Clip the sprite sheet
         int mapTilesetW = 5;
         int mapTilesetH = 4;
         if (tilesLoaded)
