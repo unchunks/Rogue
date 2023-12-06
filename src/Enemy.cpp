@@ -67,13 +67,13 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
         otherCharacters.push_back(enemy);
     }
 
-    if(onTileCenter())
-    {
-        SDL_Log("walk: nextPos(%d, %d)", nextPos.x, nextPos.y);
-        SDL_Log("walk: enemPos(%d, %d)", getDataPos().x, getDataPos().y);
-    }
+    // if(onTileCenter())
+    // {
+    //     SDL_Log("walk: nextPos(%d, %d)", nextPos.x, nextPos.y);
+    //     SDL_Log("walk: enemPos(%d, %d)", getDataPos().x, getDataPos().y);
+    // }
 
-    SDL_Log("タイル内座標(x: %d, y: %d)\n", (mBox.x % TILE_W), (mBox.y % TILE_H));
+    // SDL_Log("タイル内座標(x: %d, y: %d)\n", (mBox.x % TILE_W), (mBox.y % TILE_H));
 
     bool touched = moveTo(nextPos, _tiles, otherCharacters);
     if(touched)

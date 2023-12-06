@@ -53,6 +53,11 @@ push-% :
 wc: *.cpp *.h src/* src/*/*
 	wc *.cpp *.h src/* src/*/* -m -l
 
+game: $(OBJS)
+	sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev -y
+	make do
+
+
 # real    0m18.780s
 # user    0m15.831s
 # sys     0m2.673s

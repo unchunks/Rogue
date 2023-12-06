@@ -282,20 +282,20 @@ void Character::render(SDL_Rect &_camera)
     int c_sprite_num = (static_cast<int>(mDir) * ANIMATION_FRAMES);
     if(isMoved)
     {
-        c_sprite_num += (mAnimFrame++ * ANIM_SPEED / FPS);
+        mAnimFrame++;
+        if(mAnimFrame >= ANIMATION_FRAMES * FPS / ANIM_SPEED)
+        {
+            mAnimFrame = 0;
+        }
+        c_sprite_num += (mAnimFrame * ANIM_SPEED / FPS);
     }
     else
     {
         mAnimFrame = 0;
-        receivingDamage = false;
-    }
-    if(mAnimFrame >= ANIMATION_FRAMES * FPS / ANIM_SPEED)
-    {
-        mAnimFrame = 0;
-        receivingDamage = false;
     }
     // キャラクターを表示
-    mCharTexture.render(mBox.x - _camera.x, mBox.y - _camera.y, &sprile_clips[c_sprite_num], receivingDamage);    
+    mCharTexture.render(mBox.x - _camera.x, mBox.y - _camera.y, &sprile_clips[c_sprite_num], receivingDamage);
+    receivingDamage = false;  
 }
 
 Ivec2 Character::getFrontDataPos()
@@ -313,13 +313,9 @@ Ivec2 Character::getFrontDataPos()
 
 bool Character::onTileCenter()
 {
-    // SDL_Log("タイル内座標(x: %d, y: %d)\n", (mBox.x % TILE_W), (mBox.y % TILE_H));
     if ( ( ( mBox.x % TILE_W ) == ( TILE_W / 4 ) )
       && ( ( mBox.y % TILE_H )  == ( TILE_H / 4 ) ) )
     {
-        // SDL_Log("タイルの中央");
-        // mBox.x = (mBox.x / TILE_W) * TILE_W + TILE_W / 4;
-        // mBox.y = (mBox.y / TILE_H) * TILE_H + TILE_H / 4;
         return true;
     }
     return false;

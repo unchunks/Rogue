@@ -224,7 +224,7 @@ void Dungeon::Update()
         std::vector<Enemy*> dead_enemies;
         for (auto &e : enemies)
         {
-            SDL_Log("%sのターン=========================================================================", e.getName().c_str());
+            SDL_Log("%sのターン-------------------------------------------------------------------------", e.getName().c_str());
 
             if(!e.isMoved)
                 continue;
@@ -295,14 +295,13 @@ GOTO_FOUND:
             // プレイヤーのターンに移行
             if (e.onTileCenter())
             {
+                SDL_Log("中央に到着したので、isMovedをfalseに");
                 e.isMoved = false;
             }
             else
             {
                 all_e_on_ceneter = false;
             }
-
-            SDL_Log("%s", e.isMoved ? "移動中" : "移動済み");
 
         }
         if(all_e_on_ceneter)
@@ -353,7 +352,7 @@ void Dungeon::Output()
 
     player.render(camera);
 
-    for (auto e : enemies)
+    for (auto &e : enemies)
         e.render(camera);
 }
 

@@ -57,12 +57,12 @@ constexpr int   DEKA_STR  = 10;
 constexpr int   DEKA_VIT  = 10;
 
 // グリ
-constexpr int   GURI_HP   = 20;
+constexpr int   GURI_HP   = 30;
 constexpr int   GURI_STR  = 35;
 constexpr int   GURI_VIT  = 5;
 
 // ジェリフ
-constexpr int   JELYF_HP   = 10;
+constexpr int   JELYF_HP   = 20;
 constexpr int   JELYF_STR  = 15;
 constexpr int   JELYF_VIT  = 5;
 
