@@ -7,16 +7,16 @@
 |区域分割法|メジャーな方法です。全体をランダムに分割して、それぞれの領域に部屋を作ります。|
 |RRA  (オリジナル)|Random Room Assignmentだと長いので、格好つけて略してます。生成方法は名前のとおりです。|
 
-|敵の種族         |アイコン                                 |HP  |ATK |DEF |備考|
-|:-------------:|:-------------------------------------:|:--:|:--:|:--:|:--|
-|born（プレイヤー）|![born]        (sample/born.png)       | 100|  20|  20|未定|
-|deka           |![deka]        (sample/deka.png)       |  70|  10|  10|なし|
-|guri           |![guri]        (sample/guri.png)       |  30|  35|   5|なし|
-|jelyf          |![jelyf]       (sample/jelyf.png)      |  20|  15|   5|なし|
-|yummy          |![yummy]       (sample/yummy.png)      | 100|   5|   5|なし|
-|crystal        |![crystal]     (sample/crystal.png)    |  50|   1|  40|なし|
-|grosspider     |![grosspider]  (sample/grosspider.png) |  40|   7|   7|なし|
-|iron           |![iron]        (sample/iron.png)       |  50|   8|  10|なし|
+|敵の種族         |アイコン                              |HP  |ATK |DEF |備考|
+|:-------------:|:-----------------------------------:|:--:|:--:|:--:|:--|
+|born（プレイヤー）|![born](sample/born.png)            | 100|  20|  20|未定|
+|deka           |![deka](sample/deka.png)             |  70|  10|  10|なし|
+|guri           |![guri](sample/guri.png)             |  30|  35|   5|なし|
+|jelyf          |![jelyf](sample/jelyf.png)           |  20|  15|   5|なし|
+|yummy          |![yummy](sample/yummy.png)           | 100|   5|   5|なし|
+|crystal        |![crystal](sample/crystal.png)       |  50|   1|  40|なし|
+|grosspider     |![grosspider](sample/grosspider.png) |  40|   7|   7|なし|
+|iron           |![iron](sample/iron.png)             |  50|   8|  10|なし|
 
 
 ![参考画像](sample/sample.png)
