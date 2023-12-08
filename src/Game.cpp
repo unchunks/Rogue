@@ -5,8 +5,8 @@
 #include "Scene/3_DungeonMenu.h"
 #include "Scene/4_Dungeon.h"
 
-SDL_Window *gWindow;
-SDL_Renderer *gRenderer;
+extern SDL_Window *gWindow;
+extern SDL_Renderer *gRenderer;
 
 SDL_atomic_t frames;
 

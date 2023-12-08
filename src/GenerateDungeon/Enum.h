@@ -48,6 +48,9 @@ enum ENEMY_TYPE {
     GURI,
     JELYF,
     YUMMY,
+    CRYSTAL,
+    GROSSPIDER,
+    IRON,
     ENEMY_TYPE_NUMBER
 };
 

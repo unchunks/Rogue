@@ -331,7 +331,10 @@ GOTO_FOUND:
             std::cout << "\n\n";
             SDL_Log("Input: 現在%dターン目", turn);
             SDL_Log("プレイヤー HP: %d", player.getNowHP());
-            SDL_Log("%s HP: %d", enemies.at(0).getName().c_str(), enemies.at(0).getNowHP());
+            for(auto e: enemies)
+            {
+                SDL_Log("%s HP: %d", e.getName().c_str(), enemies.at(0).getNowHP());
+            }
         }
     }
 

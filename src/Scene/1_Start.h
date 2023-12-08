@@ -11,7 +11,7 @@
 
 #include "../Game.h"
 
-
+#include "../UI/Log.h"
 class Start
 {
 public:
@@ -28,4 +28,6 @@ private:
     class Game *mGame;
 
     Button mStartButton;
+
+    Log log;
 };

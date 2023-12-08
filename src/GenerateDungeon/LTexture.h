@@ -42,6 +42,7 @@ public:
     //画像の寸法取得
     int getWidth();
     int getHeight();
+    SDL_Texture* getTexture(){return mTexture;}
 
 private:
     //実際のハードウェアテクスチャ

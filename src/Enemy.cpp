@@ -33,6 +33,27 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
             VIT   = YUMMY_VIT;
             mName = "ヤミー";
             break;
+        
+        case CRYSTAL:
+            maxHP = CRYSTAL_HP;
+            STR   = CRYSTAL_STR;
+            VIT   = CRYSTAL_VIT;
+            mName = "クリスタル";
+            break;
+
+        case GROSSPIDER:
+            maxHP = GROSSPIDER_HP;
+            STR   = GROSSPIDER_STR;
+            VIT   = GROSSPIDER_VIT;
+            mName = "グロスパイダー";
+            break;
+
+        case IRON:
+            maxHP = IRON_HP;
+            STR   = IRON_STR;
+            VIT   = IRON_VIT;
+            mName = "アイアン";
+            break;
 
         case ENEMY_TYPE_NUMBER: break;
     }

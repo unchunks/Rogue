@@ -10,10 +10,10 @@ constexpr int BUFF_FLOOR_H = FLOOR_H + 2;
 constexpr int AREA_MAX = 10;
 constexpr int AREA_SIZE_MIN = 10;
 
-// REVIEW: 同時スポーンする敵の数
-constexpr int NUM_ENEMY = 1;
-// REVIEW: 敵の検知範囲
-constexpr int ENEMY_FIND_RANGE = 1;
+// 同時スポーンする敵の数
+constexpr int NUM_ENEMY = 10;
+// 敵の検知範囲
+constexpr int ENEMY_FIND_RANGE = 3;
 constexpr int ENEMY_SEARCH_INTERVAL = 10;
 
 // スクリーンの寸法（幅）
@@ -71,3 +71,17 @@ constexpr int   YUMMY_HP   = 100;
 constexpr int   YUMMY_STR  = 5;
 constexpr int   YUMMY_VIT  = 5;
 
+// クリスタル
+constexpr int   CRYSTAL_HP   = 50;
+constexpr int   CRYSTAL_STR  = 1;
+constexpr int   CRYSTAL_VIT  = 40;
+
+// グロスパイダー
+constexpr int   GROSSPIDER_HP   = 40;
+constexpr int   GROSSPIDER_STR  = 7;
+constexpr int   GROSSPIDER_VIT  = 7;
+
+// アイアン
+constexpr int   IRON_HP   = 50;
+constexpr int   IRON_STR  = 8;
+constexpr int   IRON_VIT  = 10;

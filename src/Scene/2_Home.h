@@ -8,6 +8,7 @@
 #include "../UI/Button.h"
 #include "../Functions/Color.h"
 #include "../GenerateDungeon/Const.h"
+#include "../GenerateDungeon/LTexture.h"
 
 #include "../Game.h"
 
@@ -34,4 +35,9 @@ private:
     Button mStorageButton;
     Button mSaveButton;
     Button mDungeonButton;
+
+    int mAnimFrame;
+    SDL_Rect mBornSleepBox;
+    LTexture mBornSleepTexture;
+    std::vector<SDL_Rect> mBornSleepSpriteClips;
 };
