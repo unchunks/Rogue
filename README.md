@@ -9,7 +9,7 @@
 
 |敵の種族         |アイコン                              |HP  |ATK |DEF |備考|
 |:-------------:|:-----------------------------------:|:--:|:--:|:--:|:--|
-|born（プレイヤー）|![born](sample/born.png)            | 100|  20|  20|未定|
+|born（プレイヤー）|![born](sample/born.png)            | 100|  20|  20|なし|
 |deka           |![deka](sample/deka.png)             |  70|  10|  10|なし|
 |guri           |![guri](sample/guri.png)             |  30|  35|   5|なし|
 |jelyf          |![jelyf](sample/jelyf.png)           |  20|  15|   5|なし|
