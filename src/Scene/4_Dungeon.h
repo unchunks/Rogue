@@ -7,6 +7,7 @@
 #include "../../Ivec2.h"
 
 #include "../UI/Button.h"
+#include "../UI/Log.h"
 #include "../Functions/Color.h"
 #include "../GenerateDungeon/Const.h"
 
@@ -54,10 +55,8 @@ private:
 
     class Game *mGame;
 
-
-// ダンジョン生成
+// ダンジョン生成フラグ
     bool go_next_floor;
-    char input = 'a';
 
     CELL_TYPE floor[FLOOR_H][FLOOR_W];
 
@@ -95,5 +94,8 @@ private:
     std::vector<std::vector<SDL_Rect>> enemy_sprite_clips;
 
     CHAR_TYPE nowTurn;
+
+//FIX
+    // Log log;
 };
 

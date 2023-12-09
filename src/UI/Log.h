@@ -14,13 +14,19 @@ public:
     ~Log();
 
     void addText(std::string _text);
-    void render(SDL_Renderer *renderer, TTF_Font *font);
+    void render(SDL_Renderer *renderer);
 
 private:
-    static constexpr int LINE_SIZE = 3;
-    static constexpr int LINE_PADDING = 3;
-    static constexpr int TEXT_SIZE = 10;
-    static constexpr SDL_Rect logRect = {0, SCREEN_HEIGHT - (TEXT_SIZE + LINE_PADDING) * LINE_SIZE, SCREEN_WIDTH, (TEXT_SIZE + LINE_PADDING) * LINE_SIZE};
-    SDL_Rect textRects[LINE_SIZE];
+    static constexpr int LOG_SIDE_PADDIG = 10;
+    static constexpr int LINE_NUM = 3;
+    static constexpr int LINE_PADDING = 5;
+    static constexpr int FONT_SIZE = 15;
+    static constexpr SDL_Rect logRect = {
+        0, 
+        SCREEN_HEIGHT - (FONT_SIZE + LINE_PADDING) * LINE_NUM - LINE_PADDING, 
+        SCREEN_WIDTH, 
+        (FONT_SIZE + LINE_PADDING) * LINE_NUM + LINE_PADDING};
+    TTF_Font *fontN;
+    SDL_Rect textRects[LINE_NUM];
     std::vector<std::string> texts = {"null", "null", "null"};
 };

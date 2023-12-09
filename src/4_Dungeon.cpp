@@ -125,6 +125,18 @@ void Dungeon::Input(SDL_Event event)
             player.isMoved = false;
             player.sprile_clips = enemy_sprite_clips[3];
             break;
+        case SDLK_6:    // 見た目をクリスタルに変更
+            player.isMoved = false;
+            player.sprile_clips = enemy_sprite_clips[4];
+            break;
+        case SDLK_7:    // 見た目をグロスパイダーに変更
+            player.isMoved = false;
+            player.sprile_clips = enemy_sprite_clips[5];
+            break;
+        case SDLK_8:    // 見た目をアイアンに変更
+            player.isMoved = false;
+            player.sprile_clips = enemy_sprite_clips[6];
+            break;
         case SDLK_t:    // ランダムな位置にワープ
             player.isMoved = false;
             switch (dungeon_g->getNowScene())
@@ -183,7 +195,8 @@ void Dungeon::Update()
         }
         if( (player.onTileCenter()) && ( isOtherPos( player.getFrontDataPos() ) >= 0 ) )
         {
-            player.attack(whichEnemy(player.getFrontDataPos()));
+            //FIX
+            // log.addText(player.attack(whichEnemy(player.getFrontDataPos())));
         }
         else
         {
@@ -268,7 +281,8 @@ GOTO_FOUND:
                     // 隣り合っている場合は攻撃
                     if (e.adjacent(player) != NO_DIRECTION)
                     {
-                        e.attack(player);
+                        //FIX
+                        // log.addText(e.attack(player));
                         break;
                     }
 
@@ -282,7 +296,7 @@ GOTO_FOUND:
 
                 case ESCAPE:
                     break;
-    //REVIEW: 動作確認
+
                 case DEAD:
                     SDL_Log("DEAD");
                     dead_enemies.push_back(&e);
@@ -307,6 +321,7 @@ GOTO_FOUND:
         if(all_e_on_ceneter)
         {
             nowTurn = PLAYER;
+//FIX: 動作確認
             while(!dead_enemies.empty())
             {
                 SDL_Log("死亡した敵を別の敵としてリスポーン");
@@ -333,7 +348,7 @@ GOTO_FOUND:
             SDL_Log("プレイヤー HP: %d", player.getNowHP());
             for(auto e: enemies)
             {
-                SDL_Log("%s HP: %d", e.getName().c_str(), enemies.at(0).getNowHP());
+                SDL_Log("%s HP: %d", e.getName().c_str(), e.getNowHP());
             }
         }
     }
@@ -357,6 +372,9 @@ void Dungeon::Output()
 
     for (auto &e : enemies)
         e.render(camera);
+    
+//FIX
+    // log.render(gRenderer);
 }
 
 bool Dungeon::LoadData()
