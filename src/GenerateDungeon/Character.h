@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <cstdlib>
+#include <string>
 #include "../../Ivec2.h"
 
 #include "Enum.h"
@@ -28,8 +29,8 @@ public:
 
     DIRECTION adjacent(class Character _opponent);
 	DIRECTION adjacent(std::vector<class Character> _opponents);
-    virtual void attack(class Character& _opponent);
-    void receiveDamage(int _damage);
+    virtual std::string attack(class Character& _opponent);
+    std::string receiveDamage(int _damage);
     void healed(int _heal_val);
 
     /// @brief 座標テレポート

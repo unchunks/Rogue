@@ -21,7 +21,6 @@ Character::~Character()
     sprile_clips.shrink_to_fit();
 }
 
-//REVIEW
 bool Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherCharacters)
 {
     Ivec2 front = getDataPos();
@@ -193,16 +192,15 @@ DIRECTION Character::adjacent(std::vector<Character> _opponents)
     return NO_DIRECTION;
 }
 
-void Character::attack(Character &_opponent)
+std::string Character::attack(Character &_opponent)
 {
     if(!onTileCenter())
-        return;
+        return "";
     
-    printf("%sの攻撃  ", mName.c_str());
-    _opponent.receiveDamage(STR);
+    return mName + "の攻撃　" + _opponent.receiveDamage(STR);
 }
 
-void Character::receiveDamage(int _damage)
+std::string Character::receiveDamage(int _damage)
 {
     receivingDamage = true;
 
@@ -214,7 +212,16 @@ void Character::receiveDamage(int _damage)
     {
         mState = DEAD;
     }
-    printf("%sは%dダメージを受けた\n", mName.c_str(), _damage);
+    std::string log = mName + "は" + std::to_string(_damage);
+    if(mState == DEAD)
+    {
+        log += "ダメージを受けて倒れた";
+    }
+    else
+    {
+        log += "ダメージを受けた";
+    }
+    return log;
 }
 
 void Character::healed(int _heal_val)
@@ -326,7 +333,6 @@ bool Character::collided(std::vector<Tile> _tiles, Ivec2 _data_pos, std::vector<
     return (mapOver() || touchWall(_tiles, _data_pos) || touchChars(_otherCharacters, _data_pos));
 }
 
-//TODO: 上と左の壁を通り抜ける
 bool Character::touchWall(std::vector<Tile> _tiles, Ivec2 _data_pos)
 {
     for (auto _tile : _tiles)
