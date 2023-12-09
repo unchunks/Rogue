@@ -1,5 +1,7 @@
 .vscode/c_cpp_properties.json
 .vscode/settings.json
 token.txt
-.o
-.map
+*.o
+*.map
+game
+TODO.md
