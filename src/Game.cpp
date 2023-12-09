@@ -221,7 +221,7 @@ void Game::Update()
 
 void Game::Output()
 {
-    SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(gRenderer, 50, 50, 50, 255);
     SDL_RenderClear(gRenderer);
 
     switch (getNowScene())
@@ -245,9 +245,6 @@ void Game::Shutdown()
     Mix_FreeMusic(mMusic);
     mMusic = NULL;
     Mix_CloseAudio();
-    
-    TTF_CloseFont(mFontN);
-    TTF_CloseFont(mFontB);
 
     delete mStart;
     delete mHome;
