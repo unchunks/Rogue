@@ -47,6 +47,12 @@ DungeonMenu::DungeonMenu(Game *game)
         mGame->getFontN(),
         Color::SDL_blue,
         Color::SDL_white);
+
+    
+}
+
+DungeonMenu::~DungeonMenu()
+{
 }
 
 void DungeonMenu::LoadData()

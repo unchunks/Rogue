@@ -71,6 +71,7 @@ Home::Home(Game *game)
     mStorageButton.onClick = &storageButton;
     mSaveButton.onClick = &saveButton;
     mDungeonButton.onClick = &dungeonButton;
+
     // トップボタン
     mWeaponButton.create(
         gRenderer,
@@ -156,7 +157,10 @@ Home::Home(Game *game)
         Color::SDL_white);
 }
 
-// TODO
+Home::~Home()
+{
+}
+
 void Home::LoadData()
 {
     mBornSleepSpriteClips.resize(SLEEP_NUM, {0, 0, 0, 0});

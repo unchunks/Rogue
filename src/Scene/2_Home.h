@@ -16,6 +16,7 @@ class Home
 {
 public:
     Home(class Game *game);
+    ~Home();
 
     void Input(SDL_Event event);
     void Update();

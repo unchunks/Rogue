@@ -15,6 +15,7 @@ class DungeonMenu
 {
 public:
     DungeonMenu(class Game *game);
+    ~DungeonMenu();
 
     void Input(SDL_Event event);
     void Update();

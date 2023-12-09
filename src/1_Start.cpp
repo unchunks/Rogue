@@ -31,9 +31,14 @@ Start::Start(Game *game)
         Color::SDL_blue,
         Color::SDL_white
     );
-    // log.addText("1行目");
-    // log.addText("2行目。文字の大きさは大丈夫？");
-    // log.addText("3行目。文字の色や色も大丈夫？");
+}
+
+Start::~Start()
+{
+}
+
+void Start::LoadData()
+{
 }
 
 void Start::Input(SDL_Event event)
@@ -67,12 +72,6 @@ void Start::Update()
 void Start::Output()
 {
     mStartButton.Draw();
-    // log.render(gRenderer, start_g->getFontN());
-}
-
-void Start::LoadData()
-{
-
 }
 
 void Start::PlayMusic()

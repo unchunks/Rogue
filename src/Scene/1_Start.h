@@ -11,11 +11,11 @@
 
 #include "../Game.h"
 
-#include "../UI/Log.h"
 class Start
 {
 public:
     Start(class Game *game);
+    ~Start();
 
     void Input(SDL_Event event);
     void Update();
@@ -28,6 +28,4 @@ private:
     class Game *mGame;
 
     Button mStartButton;
-
-    Log log;
 };
