@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <deque>
+#include <string>
 #include "../../Ivec2.h"
 
 #include "AStar.h"
@@ -24,7 +25,7 @@ public:
     /// @param _goal データ系の目的地の座標
     void setGoal(CELL_TYPE dungeon[FLOOR_H][FLOOR_W], Ivec2 _goal);
 
-    void attack(class Character& _opponent) override;
+    std::string attack(class Character& _opponent) override;
     bool find(class Character _opponent);
     bool mustUpdateRoute();
     bool changeState(class Character _opponent);

@@ -160,14 +160,13 @@ void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], Ivec2 _goal)
     elapsedTurn = 0;
 }
 
-void Enemy::attack(Character& _opponent)
+std::string Enemy::attack(Character& _opponent)
 {
     if(!onTileCenter())
-        return;
+        return "";
     
-    printf("%sの攻撃  ", mName.c_str());
     elapsedTurn++;
-    _opponent.receiveDamage(STR);
+    return mName + "の攻撃　" + _opponent.receiveDamage(STR);
 }
 
 bool Enemy::find(Character _opponent)

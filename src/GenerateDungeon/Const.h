@@ -46,10 +46,10 @@ constexpr int ANIMATION_FRAMES = 4;
 // スプライト毎秒
 constexpr int ANIM_SPEED = 8;
 
-// プレイヤー
+// REVIEW: プレイヤー
 constexpr int PLAYER_HP = 100;
-constexpr int PLAYER_STR = 20;
-constexpr int PLAYER_VIT = 20;
+constexpr int PLAYER_STR = 200;
+constexpr int PLAYER_VIT = 200;
 
 // デカ
 constexpr int   DEKA_HP   = 70;
