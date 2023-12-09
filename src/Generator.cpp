@@ -2,7 +2,7 @@
 
 std::random_device random_seed;
 std::mt19937 random_engine(random_seed());
-std::uniform_int_distribution<int> random_num(AREA_MAX, 100);
+std::uniform_int_distribution<int> random_num(AREA_MAX, 1000);
 
 Generator::Generator()
 {
