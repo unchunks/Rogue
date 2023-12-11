@@ -1,5 +1,7 @@
 #include "GenerateDungeon/Character.h"
 
+extern SDL_Renderer *gRenderer;
+
 LTexture Character::mCharTexture = LTexture();
 
 Character::Character()
@@ -286,6 +288,28 @@ void Character::setCamera(SDL_Rect &_camera)
 
 void Character::render(SDL_Rect &_camera)
 {
+// TODO: HPはキャラの上に表示するかも
+    int HP_BAR_H = 20;
+    SDL_Rect hp_bar_frame = {
+        mBox.x, 
+        mBox.y - HP_BAR_H, 
+        SPRITE_CHAR_WIDTH, 
+        HP_BAR_H};
+    SDL_Rect hp_bar = {
+        mBox.x, 
+        mBox.y - HP_BAR_H, 
+        SPRITE_CHAR_WIDTH * nowHP / maxHP, 
+        HP_BAR_H};
+    SDL_Log("x: %d, y: %d, w: %d, h: %d", hp_bar_frame.x, hp_bar_frame.y, hp_bar_frame.w, hp_bar_frame.h);
+    // SDL_Log("HPのフレームを表示");
+    SDL_SetRenderDrawColor(gRenderer, 100, 100, 100, 255);
+    SDL_RenderFillRect(gRenderer, &hp_bar_frame);
+
+    // SDL_Log("HPを表示");
+    SDL_SetRenderDrawColor(gRenderer, 0, 239, 166, 255);
+    SDL_RenderFillRect(gRenderer, &hp_bar);
+
+// REVIEW: 常にアニメーションを再生するかどうか検討
     int c_sprite_num = (static_cast<int>(mDir) * ANIMATION_FRAMES);
     if(isMoved)
     {

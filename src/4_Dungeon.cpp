@@ -197,6 +197,7 @@ void Dungeon::Update()
         {
             //FIX
             // log.addText(player.attack(whichEnemy(player.getFrontDataPos())));
+            player.attack(whichEnemy(player.getFrontDataPos()));
         }
         else
         {
@@ -234,7 +235,6 @@ void Dungeon::Update()
     else if (nowTurn == ENEMY)
     {
         all_e_on_ceneter = true;
-        std::vector<Enemy*> dead_enemies;
         for (auto &e : enemies)
         {
             SDL_Log("%sのターン-------------------------------------------------------------------------", e.getName().c_str());
@@ -283,6 +283,7 @@ GOTO_FOUND:
                     {
                         //FIX
                         // log.addText(e.attack(player));
+                        e.attack(player);
                         break;
                     }
 
@@ -299,7 +300,6 @@ GOTO_FOUND:
 
                 case DEAD:
                     SDL_Log("DEAD");
-                    dead_enemies.push_back(&e);
                     break;
 
                 default:
@@ -321,13 +321,16 @@ GOTO_FOUND:
         if(all_e_on_ceneter)
         {
             nowTurn = PLAYER;
-//FIX: 動作確認
-            while(!dead_enemies.empty())
+            for(auto &e : enemies)
             {
+                if(e.getState() != DEAD)
+                {
+                    continue;
+                }
                 SDL_Log("死亡した敵を別の敵としてリスポーン");
-                auto *e = dead_enemies.front();
-                *e = Enemy(static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER)));
-                e->sprile_clips = enemy_sprite_clips.at(static_cast<int>(e->getEnemyType()));
+                ENEMY_TYPE new_e_type = static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER));
+                e = Enemy(new_e_type);
+                e.sprile_clips = enemy_sprite_clips.at(static_cast<int>(new_e_type));
                 Ivec2 data_pos;
                 switch (dungeon_g->getNowScene())
                 {
@@ -340,8 +343,7 @@ GOTO_FOUND:
                     default:
                         break;
                 }
-                e->setDataPos(data_pos);
-                dead_enemies.erase(dead_enemies.begin());
+                e.setDataPos(data_pos);
             }
             std::cout << "\n\n";
             SDL_Log("Input: 現在%dターン目", turn);

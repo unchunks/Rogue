@@ -53,19 +53,6 @@ private:
 
     void updateEnemyRoute(Enemy& _enemy, GOAL_TYPE _goleType);
 
-    class Game *mGame;
-
-// ダンジョン生成フラグ
-    bool go_next_floor;
-
-    CELL_TYPE floor[FLOOR_H][FLOOR_W];
-
-    AreaDivide area_divide;
-    RRA rra;
-
-    Player player = Player(0, 0, PLAYER_HP, PLAYER_STR, PLAYER_VIT);
-    std::vector<Enemy> enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
-
     /// @brief 座標に自身以外のキャラが居るか
     /// @param _data_pos データ系座標
     /// @return 座標にいるキャラの数
@@ -86,7 +73,19 @@ private:
     /// @return 敵の参照を返す
     Enemy& whichEnemy(Ivec2 _data_pos);
 
-    //The level tiles
+    class Game *mGame;
+
+    // ダンジョン生成フラグ
+    bool go_next_floor;
+
+    CELL_TYPE floor[FLOOR_H][FLOOR_W];
+
+    AreaDivide area_divide;
+    RRA rra;
+
+    Player player = Player(0, 0, PLAYER_HP, PLAYER_STR, PLAYER_VIT);
+    std::vector<Enemy> enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
+
 	std::vector<Tile> tileSet;
 
     SDL_Rect camera;
