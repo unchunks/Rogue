@@ -8,6 +8,11 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
+#include "Scene/1_Start.h"
+#include "Scene/2_Home.h"
+#include "Scene/3_DungeonMenu.h"
+#include "Scene/4_Dungeon.h"
+
 enum SCENE
 {
     START,

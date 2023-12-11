@@ -195,8 +195,7 @@ void Dungeon::Update()
         }
         if( (player.onTileCenter()) && ( isOtherPos( player.getFrontDataPos() ) >= 0 ) )
         {
-            //FIX
-            // log.addText(player.attack(whichEnemy(player.getFrontDataPos())));
+            log.addText(player.attack(whichEnemy(player.getFrontDataPos())));
             player.attack(whichEnemy(player.getFrontDataPos()));
         }
         else
@@ -281,8 +280,7 @@ GOTO_FOUND:
                     // 隣り合っている場合は攻撃
                     if (e.adjacent(player) != NO_DIRECTION)
                     {
-                        //FIX
-                        // log.addText(e.attack(player));
+                        log.addText(e.attack(player));
                         e.attack(player);
                         break;
                     }
@@ -375,8 +373,7 @@ void Dungeon::Output()
     for (auto &e : enemies)
         e.render(camera);
     
-//FIX
-    // log.render(gRenderer);
+    log.render(gRenderer);
 }
 
 bool Dungeon::LoadData()
@@ -442,6 +439,8 @@ void Dungeon::InitDungeon()
     in_dungeon = true;
     go_next_floor = false;
 
+    log.reset();
+
     // 選択した方法でダンジョンを生成
     switch (dungeon_g->getNowScene())
     {
@@ -480,6 +479,7 @@ void Dungeon::InitDungeon()
     }
     SDL_Log("InitDungeon: 初期スポーン地点(%d, %d)", data_pos.x, data_pos.y);
     player.setDataPos(data_pos);
+    player.isMoved = false;
 
     SDL_Log("InitDungeon: 敵を初期化");
     enemies.clear();

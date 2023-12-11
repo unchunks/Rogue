@@ -1,157 +1,68 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <functional>
-#include <cmath>
-
-#include "Ivec2.h"
-#include "src/GenerateDungeon/Enum.h"
-#include "src/GenerateDungeon/Const.h"
-
-// Define CELL_TYPE enum and Ivec2 class here...
-
-namespace AStar {
-
-    // Function to calculate Manhattan distance between two points
-    int GetDistance(int from_x, int from_y, int to_x, int to_y) {
-        return std::abs(to_x - from_x) + std::abs(to_y - from_y);
-    }
-
-    // A* search algorithm
-    std::queue<Ivec2> AStarSearch(CELL_TYPE def_data[FLOOR_H][FLOOR_W], Ivec2 _start, Ivec2 _goal) {
-        const int directions[4][2] = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
-
-        // Priority queue for open set
-        std::priority_queue<std::pair<int, Ivec2>, std::vector<std::pair<int, Ivec2>>, std::greater<>> openSet;
-
-        // Closed set to track visited nodes
-        std::vector<std::vector<bool>> closedSet(FLOOR_H, std::vector<bool>(FLOOR_W, false));
-
-        // Parent map to reconstruct the path
-        std::vector<std::vector<Ivec2>> parent(FLOOR_H, std::vector<Ivec2>(FLOOR_W, Ivec2(-1, -1)));
-
-        // Cost map to track the cost to reach each node
-        std::vector<std::vector<int>> gScore(FLOOR_H, std::vector<int>(FLOOR_W, 1600));
-
-        // Initialize starting point
-        openSet.push({ GetDistance(_start.x, _start.y, _goal.x, _goal.y), _start });
-        gScore[_start.y][_start.x] = 0;
-
-        while (!openSet.empty()) {
-            // Get the node with the lowest fScore
-            auto current = openSet.top().second;
-            openSet.pop();
-
-            // Check if the goal is reached
-            if (current == _goal) {
-                // Reconstruct the path
-                std::queue<Ivec2> path;
-                while (current != _start) {
-                    path.push(current);
-                    current = parent[current.y][current.x];
-                }
-                path.push(_start);
-                return path;
-            }
-
-            // Mark the current node as visited
-            closedSet[current.y][current.x] = true;
-
-            // Explore neighbors
-            for (const auto& direction : directions) {
-                int neighborX = current.x + direction[0];
-                int neighborY = current.y + direction[1];
-
-                // Check if the neighbor is within bounds and is walkable
-                if (neighborX >= 0 && neighborX < FLOOR_W && neighborY >= 0 && neighborY < FLOOR_H &&
-                    def_data[neighborY][neighborX] == CELL_TYPE::FLOOR && !closedSet[neighborY][neighborX]) {
-
-                    // Calculate tentative gScore for the neighbor
-                    int tentativeGScore = gScore[current.y][current.x] + 1;
-
-                    // If the new path to the neighbor is shorter or the neighbor is not in the open set
-                    if (tentativeGScore < gScore[neighborY][neighborX]) {
-                        // Update the gScore and add the neighbor to the open set
-                        gScore[neighborY][neighborX] = tentativeGScore;
-                        openSet.push({ tentativeGScore + GetDistance(neighborX, neighborY, _goal.x, _goal.y), Ivec2(neighborX, neighborY) });
-
-                        // Update the parent
-                        parent[neighborY][neighborX] = current;
-                    }
-                }
-            }
-        }
-
-        // If the open set is empty and goal is not reached, return an empty queue
-        return std::queue<Ivec2>();
-    }
-}
+#include <SDL2/SDL.h>
 
 int main() {
-    // Example usage
-    int def_data[FLOOR_H][FLOOR_W] = 
-    {
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16, 16,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  7,  9, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18, 18, 18, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 19, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 17, 17,  6,  8, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 17, 17,  2, 16,  8, 18, 18, 18, 18, 18, 18, 18, 18, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 17, 17,  2, 16, 16,  4,  4,  4,  4,  4,  4,  4,  8, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 17, 17,  2, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 17, 17,  2, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17,  2, 16, 16, 16, 16, 16, 16, 16, 16, 16,  3, 17, 17, 17, 17, 17, 17,  2, 16, 16 },
-{ 16, 16, 16, 16, 16, 16,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  4,  4,  4,  4,  4,  4, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 },
-{ 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 }
-    };
-    Ivec2 start = {0, 0};                  // Set your start point
-    Ivec2 goal = {4, 4};                   // Set your goal point
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        SDL_Log("SDLの初期化に失敗しました: %s", SDL_GetError());
+        return 1;
+    }
 
-    CELL_TYPE map[FLOOR_H][FLOOR_W];
-    for(int y=0; y<FLOOR_H; y++)
-    {
-        for(int x=0; x<FLOOR_W; x++)
-        {
-            map[y][x] = static_cast<CELL_TYPE>(def_data[y][x]);
+    // ウィンドウの作成時にSDL_WINDOW_ALLOW_HIGHDPIフラグとSDL_WINDOW_OPENGLを追加
+    SDL_Window* window = SDL_CreateWindow("Transparent Rectangle",
+                                          SDL_WINDOWPOS_CENTERED,
+                                          SDL_WINDOWPOS_CENTERED,
+                                          800, 600,
+                                          SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
+    if (!window) {
+        SDL_Log("ウィンドウの作成に失敗しました: %s", SDL_GetError());
+        SDL_Quit();
+        return 1;
+    }
+
+    // ウィンドウ表示
+    SDL_ShowWindow(window);
+
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (!renderer) {
+        SDL_Log("レンダラの作成に失敗しました: %s", SDL_GetError());
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+
+    // 透明な背景色 (RGBA)
+    Uint8 r = 255;
+    Uint8 g = 0;
+    Uint8 b = 0;
+    Uint8 a = 128; // 透明度
+
+    // 透明な四角形の描画
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+    SDL_Rect rect = {100, 100, 200, 200};
+    SDL_RenderFillRect(renderer, &rect);
+
+    // ウィンドウ表示
+    SDL_RenderPresent(renderer);
+
+    // イベントループ
+    bool quit = false;
+    SDL_Event e;
+    while (!quit) {
+        SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+        SDL_RenderClear(renderer);
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            }
         }
+        SDL_SetRenderDrawColor(renderer, r, g, b, a);
+        SDL_RenderFillRect(renderer, &rect);
+        SDL_RenderPresent(renderer);
     }
 
-    // Perform A* search
-    std::queue<Ivec2> path = AStar::AStarSearch(map, start, goal);
-
-    // Print the path
-    while (!path.empty()) {
-        std::cout << "(" << path.front().x << ", " << path.front().y << ") ";
-        path.pop();
-    }
+    // 後片付け
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
     return 0;
 }

@@ -27,7 +27,7 @@ void Log::addText(std::string _text)
 
 void Log::render(SDL_Renderer *renderer)
 {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 10);
     SDL_RenderFillRect(renderer, &logRect);
     if(texts.empty())
         return;
@@ -49,4 +49,9 @@ void Log::render(SDL_Renderer *renderer)
         SDL_DestroyTexture(texture);
         rect.y += rect.h;
     }
+}
+
+void Log::reset()
+{
+    texts.clear();
 }

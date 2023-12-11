@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../../Ivec2.h"
 #include <deque>
+
+#include "../../Ivec2.h"
 
 #include "Enum.h"
 #include "Const.h"

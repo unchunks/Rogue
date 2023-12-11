@@ -6,7 +6,6 @@
 #include <SDL2/SDL_mixer.h>
 #include "../../Ivec2.h"
 
-#include "../UI/Button.h"
 #include "../UI/Log.h"
 #include "../Functions/Color.h"
 #include "../GenerateDungeon/Const.h"
@@ -95,6 +94,6 @@ private:
     CHAR_TYPE nowTurn;
 
 //FIX
-    // Log log;
+    Log log;
 };
 

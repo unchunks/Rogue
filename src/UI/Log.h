@@ -15,10 +15,11 @@ public:
 
     void addText(std::string _text);
     void render(SDL_Renderer *renderer);
+    void reset();
 
 private:
     static constexpr int LOG_SIDE_PADDIG = 10;
-    static constexpr int LINE_NUM = 3;
+    static constexpr int LINE_NUM = 5;
     static constexpr int LINE_PADDING = 5;
     static constexpr int FONT_SIZE = 15;
     static constexpr SDL_Rect logRect = {

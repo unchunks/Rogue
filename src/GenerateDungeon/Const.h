@@ -48,8 +48,8 @@ constexpr int ANIM_SPEED = 8;
 
 // REVIEW: プレイヤー
 constexpr int PLAYER_HP = 100;
-constexpr int PLAYER_STR = 200;
-constexpr int PLAYER_VIT = 200;
+constexpr int PLAYER_STR = 20;
+constexpr int PLAYER_VIT = 20;
 
 // デカ
 constexpr int DEKA_HP   = 70;

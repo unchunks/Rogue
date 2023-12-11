@@ -1,10 +1,5 @@
 #include "Game.h"
 
-#include "Scene/1_Start.h"
-#include "Scene/2_Home.h"
-#include "Scene/3_DungeonMenu.h"
-#include "Scene/4_Dungeon.h"
-
 extern SDL_Window *gWindow;
 extern SDL_Renderer *gRenderer;
 
