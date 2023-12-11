@@ -206,7 +206,7 @@ std::string Character::receiveDamage(int _damage)
 {
     receivingDamage = true;
 
-    _damage -= VIT;
+    _damage -= (VIT / 2);
     if (_damage <= 0)
         _damage = 1;
     nowHP -= _damage;

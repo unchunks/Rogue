@@ -9,14 +9,15 @@
 
 |敵の種族         |アイコン                              |HP  |ATK |DEF |備考|
 |:-------------:|:-----------------------------------:|:--:|:--:|:--:|:--|
-|born（プレイヤー）|![born](sample/born.png)            | 100|  20|  20|なし|
+|born（プレイヤー）|![born](sample/born.png)             | 100|  20|  20|なし|
 |deka           |![deka](sample/deka.png)             |  70|  10|  10|なし|
 |guri           |![guri](sample/guri.png)             |  30|  35|   5|なし|
 |jelyf          |![jelyf](sample/jelyf.png)           |  20|  15|   5|なし|
 |yummy          |![yummy](sample/yummy.png)           | 100|   5|   5|なし|
-|crystal        |![crystal](sample/crystal.png)       |  50|   1|  40|なし|
+|crystal        |![crystal](sample/crystal.png)       |  50|   1|  30|なし|
 |grosspider     |![grosspider](sample/grosspider.png) |  40|   7|   7|なし|
 |iron           |![iron](sample/iron.png)             |  50|   8|  10|なし|
+|tatsu          |![tatsu](sample/tatsu.png)           |  20|  20|  20|なし|
 
 
 ![参考画像](sample/sample.png)

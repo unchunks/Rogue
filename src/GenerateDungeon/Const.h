@@ -52,36 +52,41 @@ constexpr int PLAYER_STR = 200;
 constexpr int PLAYER_VIT = 200;
 
 // デカ
-constexpr int   DEKA_HP   = 70;
-constexpr int   DEKA_STR  = 10;
-constexpr int   DEKA_VIT  = 10;
+constexpr int DEKA_HP   = 70;
+constexpr int DEKA_STR  = 10;
+constexpr int DEKA_VIT  = 20;
 
 // グリ
-constexpr int   GURI_HP   = 30;
-constexpr int   GURI_STR  = 35;
-constexpr int   GURI_VIT  = 5;
+constexpr int GURI_HP   = 30;
+constexpr int GURI_STR  = 35;
+constexpr int GURI_VIT  = 5;
 
 // ジェリフ
-constexpr int   JELYF_HP   = 20;
-constexpr int   JELYF_STR  = 15;
-constexpr int   JELYF_VIT  = 5;
+constexpr int JELYF_HP   = 20;
+constexpr int JELYF_STR  = 15;
+constexpr int JELYF_VIT  = 5;
 
 // ヤミー
-constexpr int   YUMMY_HP   = 100;
-constexpr int   YUMMY_STR  = 5;
-constexpr int   YUMMY_VIT  = 5;
+constexpr int YUMMY_HP   = 100;
+constexpr int YUMMY_STR  = 5;
+constexpr int YUMMY_VIT  = 5;
 
 // クリスタル
-constexpr int   CRYSTAL_HP   = 50;
-constexpr int   CRYSTAL_STR  = 1;
-constexpr int   CRYSTAL_VIT  = 40;
+constexpr int CRYSTAL_HP   = 50;
+constexpr int CRYSTAL_STR  = 1;
+constexpr int CRYSTAL_VIT  = 30;
 
 // グロスパイダー
-constexpr int   GROSSPIDER_HP   = 40;
-constexpr int   GROSSPIDER_STR  = 7;
-constexpr int   GROSSPIDER_VIT  = 7;
+constexpr int GROSSPIDER_HP   = 40;
+constexpr int GROSSPIDER_STR  = 7;
+constexpr int GROSSPIDER_VIT  = 7;
 
 // アイアン
-constexpr int   IRON_HP   = 50;
-constexpr int   IRON_STR  = 8;
-constexpr int   IRON_VIT  = 10;
+constexpr int IRON_HP   = 50;
+constexpr int IRON_STR  = 10;
+constexpr int IRON_VIT  = 10;
+
+// タツ
+constexpr int TATSU_HP   = 20;
+constexpr int TATSU_STR  = 20;
+constexpr int TATSU_VIT  = 20;

@@ -51,6 +51,7 @@ enum ENEMY_TYPE {
     CRYSTAL,
     GROSSPIDER,
     IRON,
+    TATSU,
     ENEMY_TYPE_NUMBER
 };
 
