@@ -1,7 +1,7 @@
 #OBSRC specifies which files to compile as part of the project
 OBSRC = src/*.cpp
 
-OBJO = 1_Start.o 2_Home.o 3_DungeonMenu.o 4_Dungeon.o AreaDivide.o AStar.o Character.o Enemy.o Extern.o Game.o Generator.o Log.o LTexture.o main.o OSearch.o Player.o RRA.o Tile.o
+OBJO = 1_Start.o 2_Home.o 3_DungeonMenu.o 4_Dungeon.o 5_Congratulations.o AreaDivide.o AStar.o Character.o Enemy.o Extern.o Game.o Generator.o Log.o LTexture.o main.o OSearch.o Player.o RRA.o Tile.o
 
 #CC specifies which compiler we're using
 CC = g++
@@ -77,6 +77,8 @@ play: $(OBSRC)
 	g++ src/3_DungeonMenu.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 4_Dungeon.o : src/4_Dungeon.cpp src/Scene/4_Dungeon.h src/UI/Log.h src/Functions/Color.h src/GenerateDungeon/Const.h src/GenerateDungeon/AreaDivide.h src/GenerateDungeon/RRA.h src/GenerateDungeon/Player.h src/GenerateDungeon/Enemy.h src/GenerateDungeon/Const.h src/GenerateDungeon/Tile.h src/GenerateDungeon/LTexture.h src/Game.h
 	g++ src/4_Dungeon.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
+5_Congratulations.o : src/5_Congratulations.cpp src/Scene/5_Congratulations.h src/UI/Button.h src/Functions/Color.h src/GenerateDungeon/Const.h src/Game.h
+	g++ src/5_Congratulations.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 AreaDivide.o : src/AreaDivide.cpp src/GenerateDungeon/AreaDivide.h src/GenerateDungeon/Generator.h
 	g++ src/AreaDivide.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 AStar.o : src/AStar.cpp src/GenerateDungeon/AStar.h src/GenerateDungeon/Const.h src/GenerateDungeon/Enum.h Ivec2.h 
@@ -87,7 +89,7 @@ Enemy.o : src/Enemy.cpp src/GenerateDungeon/Enemy.h src/GenerateDungeon/AStar.h 
 	g++ src/Enemy.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 Extern.o : src/Extern.cpp
 	g++ src/Extern.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
-Game.o : src/Game.cpp src/Game.h src/Scene/1_Start.h src/Scene/2_Home.h src/Scene/3_DungeonMenu.h src/Scene/4_Dungeon.h
+Game.o : src/Game.cpp src/Game.h src/Scene/1_Start.h src/Scene/2_Home.h src/Scene/3_DungeonMenu.h src/Scene/4_Dungeon.h src/Scene/5_Congratulations.h
 	g++ src/Game.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 Generator.o : src/Generator.cpp src/GenerateDungeon/Generator.h src/GenerateDungeon/Area.h src/GenerateDungeon/Room.h src/GenerateDungeon/Player.h src/GenerateDungeon/Enemy.h src/GenerateDungeon/Enum.h src/GenerateDungeon/Const.h Ivec2.h
 	g++ src/Generator.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)

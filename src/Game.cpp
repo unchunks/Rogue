@@ -127,6 +127,7 @@ printf("Failed to load BGM : %s", Mix_GetError());
     mHome = new Home(this);
     mDungeonMenu = new DungeonMenu(this);
     mDungeon = new Dungeon(this);
+    mCongratulations = new Congratulations(this);
 
     Mix_PlayMusic(mMusic, -1);
 
@@ -195,6 +196,10 @@ void Game::Input()
             case DUNGEON_RRA:   
                 mDungeon->Input(event);     
                 break;
+            
+            case CONGRATULATIONS:
+                mCongratulations->Input(event);
+                break;
         }
     } while (SDL_PollEvent(&event));
     const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -206,11 +211,22 @@ void Game::Update()
 {
     switch (getNowScene())
     {
-        case START:         mStart->Update();             break;
-        case HOME:          mHome->Update();              break;
-        case DUNGEON_MENU:  mDungeonMenu->Update();       break;
+        case START:         
+            mStart->Update();
+            break;
+        case HOME:          
+            mHome->Update();
+            break;
+        case DUNGEON_MENU:  
+            mDungeonMenu->Update();
+            break;
         case DUNGEON_AREA_DIVIDE:
-        case DUNGEON_RRA:   mDungeon->Update(); break;
+        case DUNGEON_RRA:   
+            mDungeon->Update();
+            break;
+        case CONGRATULATIONS:
+            mCongratulations->Update();
+            break;
     }
 }
 
@@ -221,11 +237,22 @@ void Game::Output()
 
     switch (getNowScene())
     {
-        case START:         mStart->Output();             break;
-        case HOME:          mHome->Output();              break;
-        case DUNGEON_MENU:  mDungeonMenu->Output();       break;
+        case START:
+            mStart->Output();
+            break;
+        case HOME:
+            mHome->Output();
+            break;
+        case DUNGEON_MENU:
+            mDungeonMenu->Output();
+            break;
         case DUNGEON_AREA_DIVIDE:
-        case DUNGEON_RRA:   mDungeon->Output(); break;
+        case DUNGEON_RRA:
+            mDungeon->Output();
+            break;
+        case CONGRATULATIONS:
+            mCongratulations->Output();
+            break;
     }
 
     SDL_RenderPresent(gRenderer);
@@ -245,6 +272,7 @@ void Game::Shutdown()
     delete mHome;
     delete mDungeonMenu;
     delete mDungeon;
+    delete mCongratulations;
 
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);

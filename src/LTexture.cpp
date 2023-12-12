@@ -149,13 +149,13 @@ void LTexture::render( int x, int y, SDL_Rect* clip, bool filter, double angle, 
 	SDL_RenderCopyEx( gRenderer, mTexture, clip, &renderQuad, angle, center, flip );
 
 //REVIEW デバッグ用
-	if( filter )
-	{
-		SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xAA);
-		SDL_RenderFillRect(gRenderer, &renderQuad);
-	}
-	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
-	SDL_RenderDrawRect(gRenderer, &renderQuad);
+	// if( filter )
+	// {
+	// 	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xAA);
+	// 	SDL_RenderFillRect(gRenderer, &renderQuad);
+	// }
+	// SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
+	// SDL_RenderDrawRect(gRenderer, &renderQuad);
 }
 
 int LTexture::getWidth()

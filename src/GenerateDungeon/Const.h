@@ -3,6 +3,8 @@
 constexpr int FPS = 30;
 constexpr int SPF = 1000 / FPS;
 
+constexpr int LAST_FLOOR = 5;
+
 constexpr int FLOOR_W = 40;
 constexpr int FLOOR_H = 40;
 constexpr int BUFF_FLOOR_W = FLOOR_W + 2;

@@ -12,6 +12,7 @@
 #include "Scene/2_Home.h"
 #include "Scene/3_DungeonMenu.h"
 #include "Scene/4_Dungeon.h"
+#include "Scene/5_Congratulations.h"
 
 enum SCENE
 {
@@ -20,6 +21,7 @@ enum SCENE
     DUNGEON_MENU,
     DUNGEON_AREA_DIVIDE,
     DUNGEON_RRA,
+    CONGRATULATIONS,
 };
 
 class Game
@@ -55,5 +57,7 @@ private:
     class Home *mHome;
     class DungeonMenu *mDungeonMenu;
     class Dungeon *mDungeon;
+    class Congratulations *mCongratulations;
+
     SCENE mNowScene;
 };

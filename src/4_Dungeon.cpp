@@ -14,7 +14,7 @@ SDL_Rect gTileClips[TOTAL_TILE_SPRITES];
 int turn = 0;
 
 Dungeon::Dungeon(Game *game)
-    : in_dungeon(true), go_next_floor(true), nowTurn(PLAYER)
+    : in_dungeon(true), go_next_floor(true), nowTurn(PLAYER), floor_num(0)
 {
     dungeon_g = game;
     mGame = game;
@@ -90,7 +90,6 @@ void Dungeon::Input(SDL_Event event)
             break;
         case SDLK_SPACE:
             turn++;
-            player.healed(1);
             nowTurn = ENEMY;
             player.isMoved = false;
             for(auto &e : enemies)
@@ -160,9 +159,10 @@ void Dungeon::Input(SDL_Event event)
         default:
             break;
         }
-        if(player.isMoved && turn % 3 == 0)
+        if(!player.isMoved || turn % 3 == 0)
         {
             player.healed(1);
+            log.addText("");
         }
     }
 }
@@ -436,8 +436,17 @@ void Dungeon::PlayMusic()
 void Dungeon::InitDungeon()
 {
     SDL_Log("InitDungeon: ダンジョンを初期化\n");
+    floor_num++;
     in_dungeon = true;
     go_next_floor = false;
+
+//TODO: 最下層についたときの処理を追加
+    if (floor_num >= LAST_FLOOR)
+    {
+        quit();
+        dungeon_g->setNowScene(SCENE::CONGRATULATIONS);
+        return;
+    }
 
     log.reset();
 
@@ -510,6 +519,7 @@ void Dungeon::quit()
 {
     in_dungeon = true;
     go_next_floor = true;
+    floor_num = 0;
     player.reset();
     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
 }

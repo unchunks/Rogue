@@ -93,7 +93,8 @@ private:
 
     CHAR_TYPE nowTurn;
 
-//FIX
     Log log;
+
+    int floor_num;
 };
 
