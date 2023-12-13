@@ -91,4 +91,9 @@ constexpr int IRON_VIT  = 10;
 // タツ
 constexpr int TATSU_HP   = 20;
 constexpr int TATSU_STR  = 20;
-constexpr int TATSU_VIT  = 20;
+constexpr int TATSU_VIT  = 15;
+
+// ボール
+constexpr int BALL_HP   = 20;
+constexpr int BALL_STR  = 5;
+constexpr int BALL_VIT  = 20;

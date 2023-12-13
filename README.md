@@ -17,7 +17,8 @@
 |crystal        |![crystal](sample/crystal.png)       |  50|   1|  30|なし|
 |grosspider     |![grosspider](sample/grosspider.png) |  40|   7|   7|なし|
 |iron           |![iron](sample/iron.png)             |  50|   8|  10|なし|
-|tatsu          |![tatsu](sample/tatsu.png)           |  20|  20|  20|なし|
+|tatsu          |![tatsu](sample/tatsu.png)           |  20|  20|  15|なし|
+|ball           |![ball](sample/ball.png)             |  20|   5|  20|なし|
 
 
 ![参考画像](sample/sample.png)

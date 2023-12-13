@@ -61,6 +61,13 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
             VIT   = TATSU_VIT;
             mName = "タツ";
             break;
+        
+        case BALL:
+            maxHP = BALL_HP;
+            STR   = BALL_STR;
+            VIT   = BALL_VIT;
+            mName = "ボール";
+            break;
 
         case ENEMY_TYPE_NUMBER: break;
     }

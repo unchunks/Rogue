@@ -62,6 +62,7 @@ enum ENEMY_TYPE {
     GROSSPIDER,
     IRON,
     TATSU,
+    BALL,
     ENEMY_TYPE_NUMBER
 };
 
