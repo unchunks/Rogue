@@ -1,5 +1,15 @@
 #pragma once
 
+enum SCENE
+{
+    START,
+    HOME,
+    DUNGEON_MENU,
+    DUNGEON_AREA_DIVIDE,
+    DUNGEON_RRA,
+    CONGRATULATIONS,
+};
+
 enum CELL_TYPE {
     NONE = 0,
 //0辺床と接地（柱）

@@ -29,5 +29,5 @@ private:
         (FONT_SIZE + LINE_PADDING) * LINE_NUM + LINE_PADDING};
     TTF_Font *fontN;
     SDL_Rect textRects[LINE_NUM];
-    std::vector<std::string> texts = {"null", "null", "null"};
+    std::vector<std::string> texts;
 };

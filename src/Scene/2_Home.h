@@ -15,7 +15,7 @@
 class Home
 {
 public:
-    Home(class Game *game);
+    Home();
     ~Home();
 
     void Input(SDL_Event event);
@@ -25,8 +25,6 @@ public:
 private:
     void LoadData();
     void PlayMusic();
-
-    class Game *mGame;
 
     Button mWeaponButton;
     Button mArmorButton;

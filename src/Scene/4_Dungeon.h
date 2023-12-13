@@ -9,6 +9,7 @@
 #include "../UI/Log.h"
 #include "../Functions/Color.h"
 #include "../GenerateDungeon/Const.h"
+#include "../GenerateDungeon/Enum.h"
 
 #include "../GenerateDungeon/AreaDivide.h"
 #include "../GenerateDungeon/RRA.h"
@@ -30,7 +31,7 @@ enum GOAL_TYPE
 class Dungeon
 {
 public:
-    Dungeon(class Game *game);
+    Dungeon();
     ~Dungeon();
 
     void Input(SDL_Event event);
@@ -71,8 +72,6 @@ private:
     /// @param _data_pos 
     /// @return 敵の参照を返す
     Enemy& whichEnemy(Ivec2 _data_pos);
-
-    class Game *mGame;
 
     // ダンジョン生成フラグ
     bool go_next_floor;

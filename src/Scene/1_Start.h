@@ -8,13 +8,12 @@
 #include "../UI/Button.h"
 #include "../Functions/Color.h"
 #include "../GenerateDungeon/Const.h"
-
-#include "../Game.h"
+#include "../GenerateDungeon/Enum.h"
 
 class Start
 {
 public:
-    Start(class Game *game);
+    Start();
     ~Start();
 
     void Input(SDL_Event event);
@@ -24,8 +23,6 @@ public:
 private:
     void LoadData();
     void PlayMusic();
-
-    class Game *mGame;
 
     Button mStartButton;
 };

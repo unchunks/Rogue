@@ -8,13 +8,14 @@
 #include "../UI/Button.h"
 #include "../Functions/Color.h"
 #include "../GenerateDungeon/Const.h"
+#include "../GenerateDungeon/Enum.h"
 
 #include "../Game.h"
 
 class DungeonMenu
 {
 public:
-    DungeonMenu(class Game *game);
+    DungeonMenu();
     ~DungeonMenu();
 
     void Input(SDL_Event event);
@@ -24,8 +25,6 @@ public:
 private:
     void LoadData();
     void PlayMusic();
-
-    class Game *mGame;
 
     Button mAreaDivide;
     Button mRRA;

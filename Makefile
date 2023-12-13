@@ -43,11 +43,14 @@ valgrind : $(OBSRC)
 #$(CC) $(OBSRC) $(COMPILER_FLAGS) -g $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME) 
 	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./$(OBJ_NAME)
 
-gdb : $(BOJS)
-	gdb ./$(BOJS)
-	run
-	bt
-	frame 0
+debug : $(OBSRC)
+	$(CC) $(OBSRC) -g $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+
+# gdbの手順
+#	gdb ./$(BOJS)
+#	run
+#	bt
+#	frame 0
 
 test : test.cpp
 	$(CC) test.cpp $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o test

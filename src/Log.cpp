@@ -7,6 +7,7 @@ Log::Log()
     // なぜか指定したフォントより1大きくなる
     fontN = TTF_OpenFont("assets/JF-Dot-K14.ttf", FONT_SIZE - 1);
     texts.resize(0);
+
 }
 
 Log::~Log()
@@ -39,7 +40,13 @@ void Log::render(SDL_Renderer *renderer)
         0};
     for(auto text : texts)
     {
+        SDL_Log("%s", text.c_str());
         SDL_Surface *surface = TTF_RenderUTF8_Blended(fontN, text.c_str(), {255, 255, 255});
+        if(surface == NULL)
+        {
+            SDL_Log("TTF_RenderUTF8_Blended failed: %s", TTF_GetError());
+            continue;
+        }
         SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
         rect.y += LINE_PADDING;
         rect.w = surface->w;

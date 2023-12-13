@@ -1,28 +1,28 @@
 #include "Scene/3_DungeonMenu.h"
 
 extern SDL_Renderer *gRenderer;
+extern TTF_Font *gFontN;
+extern Mix_Chunk* gClickEffect;
+extern SCENE gNowScene;
 
 const int BUTTON_W = 250;
 const int BUTTON_H = 60;
 
-Game *dungeonMenu_g;
 void area_divide()
 {
-    Mix_PlayChannel(-1, dungeonMenu_g->getClickEffect(), 0);
-    dungeonMenu_g->setNowScene(SCENE::DUNGEON_AREA_DIVIDE);
+    Mix_PlayChannel(-1, gClickEffect, 0);
+    gNowScene = SCENE::DUNGEON_AREA_DIVIDE;
     printf("area_divide\n");
 }
 void RRA()
 {
-    Mix_PlayChannel(-1, dungeonMenu_g->getClickEffect(), 0);
-    dungeonMenu_g->setNowScene(SCENE::DUNGEON_RRA);
+    Mix_PlayChannel(-1, gClickEffect, 0);
+    gNowScene = SCENE::DUNGEON_RRA;
     printf("RRA\n");
 }
 
-DungeonMenu::DungeonMenu(Game *game)
+DungeonMenu::DungeonMenu()
 {
-    mGame = game;
-    dungeonMenu_g = game;
     LoadData();
 
     mAreaDivide.onClick = &area_divide;
@@ -34,7 +34,7 @@ DungeonMenu::DungeonMenu(Game *game)
         BUTTON_W,
         BUTTON_H,
         "1 : 区域分割法",
-        mGame->getFontN(),
+        gFontN,
         Color::SDL_blue,
         Color::SDL_white);
     mRRA.create(
@@ -44,7 +44,7 @@ DungeonMenu::DungeonMenu(Game *game)
         BUTTON_W,
         BUTTON_H,
         "2 : 　 RRA 　",
-        mGame->getFontN(),
+        gFontN,
         Color::SDL_blue,
         Color::SDL_white);
 
@@ -72,26 +72,24 @@ void DungeonMenu::Input(SDL_Event event)
             mRRA.press();
             break;
         }
+        return;
     }
-    else
+    switch(event.key.keysym.sym)
     {
-        switch(event.key.keysym.sym)
+    case SDLK_1:
+        if(mAreaDivide.isPressed)
         {
-        case SDLK_1:
-            if(mAreaDivide.isPressed)
-            {
-                mAreaDivide.release();
-                mAreaDivide.onClick();
-            }
-            break;
-        case SDLK_2:
-            if(mRRA.isPressed)
-            {
-                mRRA.release();
-                mRRA.onClick();
-            }
-            break;
+            mAreaDivide.release();
+            mAreaDivide.onClick();
         }
+        break;
+    case SDLK_2:
+        if(mRRA.isPressed)
+        {
+            mRRA.release();
+            mRRA.onClick();
+        }
+        break;
     }
 }
 

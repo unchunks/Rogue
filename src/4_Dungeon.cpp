@@ -1,11 +1,10 @@
 #include "Scene/4_Dungeon.h"
 
 extern SDL_Renderer *gRenderer;
+extern SCENE gNowScene;
 
 extern std::mt19937 random_engine;
 extern std::uniform_int_distribution<int> random_num;
-
-Game *dungeon_g;
 
 // マップ画像のテクスチャ
 LTexture gTileTexture = LTexture();
@@ -13,12 +12,9 @@ SDL_Rect gTileClips[TOTAL_TILE_SPRITES];
 
 int turn = 0;
 
-Dungeon::Dungeon(Game *game)
+Dungeon::Dungeon()
     : in_dungeon(true), go_next_floor(true), nowTurn(PLAYER), floor_num(0)
 {
-    dungeon_g = game;
-    mGame = game;
-
     tileSet.resize(TOTAL_TILES, Tile(0, 0, NONE));
     mPlayerSpriteClips.resize(ANIMATION_FRAMES * static_cast<int>(NO_DIRECTION), {0, 0, 0, 0});
     enemy_sprite_clips.resize(static_cast<int>(ENEMY_TYPE_NUMBER), std::vector<SDL_Rect>(ANIMATION_FRAMES * static_cast<int>(NO_DIRECTION), {0, 0, 0, 0}));
@@ -138,7 +134,7 @@ void Dungeon::Input(SDL_Event event)
             break;
         case SDLK_t:    // ランダムな位置にワープ
             player.isMoved = false;
-            switch (dungeon_g->getNowScene())
+            switch (gNowScene)
             {
                 case DUNGEON_AREA_DIVIDE:
                     player.setDataPos(getRandomDataPos(area_divide.getRoomNum()));
@@ -162,7 +158,7 @@ void Dungeon::Input(SDL_Event event)
         if(!player.isMoved || turn % 3 == 0)
         {
             player.healed(1);
-            log.addText("");
+            // log.addText("HPが1回復した！");
         }
     }
 }
@@ -172,7 +168,7 @@ void Dungeon::Update()
     if (!in_dungeon)
     {
         quit();
-        dungeon_g->setNowScene(SCENE::HOME);
+        gNowScene = SCENE::HOME;
         return;
     }
 
@@ -330,7 +326,7 @@ GOTO_FOUND:
                 e = Enemy(new_e_type);
                 e.sprile_clips = enemy_sprite_clips.at(static_cast<int>(new_e_type));
                 Ivec2 data_pos;
-                switch (dungeon_g->getNowScene())
+                switch (gNowScene)
                 {
                     case DUNGEON_AREA_DIVIDE:
                         data_pos = getRandomDataPos(area_divide.getRoomNum());
@@ -444,14 +440,14 @@ void Dungeon::InitDungeon()
     if (floor_num >= LAST_FLOOR)
     {
         quit();
-        dungeon_g->setNowScene(SCENE::CONGRATULATIONS);
+        gNowScene = SCENE::CONGRATULATIONS;
         return;
     }
 
     log.reset();
 
     // 選択した方法でダンジョンを生成
-    switch (dungeon_g->getNowScene())
+    switch (gNowScene)
     {
     case DUNGEON_AREA_DIVIDE:
         area_divide.generate();
@@ -475,7 +471,7 @@ void Dungeon::InitDungeon()
 
     Ivec2 data_pos;
     SDL_Log("InitDungeon: プレイヤーを初期化");
-    switch (dungeon_g->getNowScene())
+    switch (gNowScene)
     {
     case DUNGEON_AREA_DIVIDE:
         data_pos = getRandomDataPos(area_divide.getRoomNum());
@@ -499,7 +495,7 @@ void Dungeon::InitDungeon()
         e.sprile_clips = enemy_sprite_clips.at(static_cast<int>(e.getEnemyType()));
 
         SDL_Log("InitDungeon: 敵の位置を初期化");
-        switch (dungeon_g->getNowScene())
+        switch (gNowScene)
         {
         case DUNGEON_AREA_DIVIDE:
             data_pos = getRandomDataPos(area_divide.getRoomNum());
@@ -552,7 +548,7 @@ Ivec2 Dungeon::getRandomDataPos(int _roomCount)
 {
     int roomNum = rand() % _roomCount;
     Room room = Room();
-    switch (dungeon_g->getNowScene())
+    switch (gNowScene)
     {
     case DUNGEON_AREA_DIVIDE:
         room = area_divide.getRoom(roomNum);
@@ -678,7 +674,7 @@ void Dungeon::updateEnemyRoute(Enemy &_enemy, GOAL_TYPE _goalType)
     case RANDOM_POS:
         while (!canGetOn(goal))
         {
-            switch (dungeon_g->getNowScene())
+            switch (gNowScene)
             {
             case DUNGEON_AREA_DIVIDE:
                 goal = area_divide.getRandomFloorDataPos();

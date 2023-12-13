@@ -14,16 +14,6 @@
 #include "Scene/4_Dungeon.h"
 #include "Scene/5_Congratulations.h"
 
-enum SCENE
-{
-    START,
-    HOME,
-    DUNGEON_MENU,
-    DUNGEON_AREA_DIVIDE,
-    DUNGEON_RRA,
-    CONGRATULATIONS,
-};
-
 class Game
 {
 public:
@@ -34,21 +24,12 @@ public:
     void RunLoop();
     void Shutdown();
 
-    TTF_Font *getFontN() const { return mFontN; }
-    TTF_Font *getFontB() const { return mFontB; }
-    Mix_Chunk *getClickEffect() const { return mClickEffect; }
-
-    void setNowScene(const SCENE nextScene) { mNowScene = nextScene; }
-    SCENE getNowScene() const { return mNowScene; }
-
 private:
     void Input();
     void Update();
     void Output();
 
     SDL_Event event;
-    TTF_Font *mFontN, *mFontB;
-    Mix_Chunk* mClickEffect;
     Mix_Music* mMusic;
 
     bool mIsRunning;
@@ -58,6 +39,4 @@ private:
     class DungeonMenu *mDungeonMenu;
     class Dungeon *mDungeon;
     class Congratulations *mCongratulations;
-
-    SCENE mNowScene;
 };

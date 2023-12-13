@@ -2,6 +2,9 @@
 
 extern SDL_Window *gWindow;
 extern SDL_Renderer *gRenderer;
+extern TTF_Font *gFontN, *gFontB;
+extern Mix_Chunk* gClickEffect;
+extern SCENE gNowScene;
 
 SDL_atomic_t frames;
 
@@ -22,7 +25,6 @@ Uint32 fps_timer_callback(Uint32 interval, void *data)
 
 Game::Game()
 :mIsRunning(true)
-,mNowScene(START)
 {
 
 }
@@ -58,13 +60,13 @@ bool Game::Init()
         return false;
     }
 
-    mFontN = TTF_OpenFont("assets/JF-Dot-K14.ttf", 30);
-    if (!mFontN) {
+    gFontN = TTF_OpenFont("assets/JF-Dot-K14.ttf", 30);
+    if (!gFontN) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
         return false;
     }
-    mFontB = TTF_OpenFont("assets/JF-Dot-K14B.ttf", 30);
-    if (!mFontB) {
+    gFontB = TTF_OpenFont("assets/JF-Dot-K14B.ttf", 30);
+    if (!gFontB) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
         return false;
     }
@@ -96,7 +98,7 @@ bool Game::Init()
 
     if (!gWindow)
     {
-printf("Failed to create window: %s", SDL_GetError());
+        printf("Failed to create window: %s", SDL_GetError());
         return false;
     }
 
@@ -107,27 +109,27 @@ printf("Failed to create window: %s", SDL_GetError());
         SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!gRenderer)
     {
-printf("Failed to create renderer: %s", SDL_GetError());
+        printf("Failed to create renderer: %s", SDL_GetError());
         return false;
     }
 
-    mClickEffect = Mix_LoadWAV("assets/click.mp3");
-    if(mClickEffect == NULL) {
-printf("Failed to load sound effect : %s", Mix_GetError());
+    gClickEffect = Mix_LoadWAV("assets/click.mp3");
+    if(gClickEffect == NULL) {
+        printf("Failed to load sound effect : %s", Mix_GetError());
         return false;
     }
 
     mMusic = Mix_LoadMUS("assets/dungeon.ogg");//Mix_LoadMUS("assets/BGM.mp3");
     if(mMusic == NULL) {
-printf("Failed to load BGM : %s", Mix_GetError());
+        printf("Failed to load BGM : %s", Mix_GetError());
         return false;
     }
 
-    mStart = new Start(this);
-    mHome = new Home(this);
-    mDungeonMenu = new DungeonMenu(this);
-    mDungeon = new Dungeon(this);
-    mCongratulations = new Congratulations(this);
+    mStart = new Start();
+    mHome = new Home();
+    mDungeonMenu = new DungeonMenu();
+    mDungeon = new Dungeon();
+    mCongratulations = new Congratulations();
 
     Mix_PlayMusic(mMusic, -1);
 
@@ -178,7 +180,7 @@ void Game::Input()
         {
             mIsRunning = false;
         }
-        switch (getNowScene())
+        switch (gNowScene)
         {
             case START:         
                 mStart->Input(event);       
@@ -209,7 +211,7 @@ void Game::Input()
 //画面の切り替わり後はここから
 void Game::Update()
 {
-    switch (getNowScene())
+    switch (gNowScene)
     {
         case START:         
             mStart->Update();
@@ -235,7 +237,7 @@ void Game::Output()
     SDL_SetRenderDrawColor(gRenderer, 50, 50, 50, 255);
     SDL_RenderClear(gRenderer);
 
-    switch (getNowScene())
+    switch (gNowScene)
     {
         case START:
             mStart->Output();
@@ -260,8 +262,8 @@ void Game::Output()
 
 void Game::Shutdown()
 {
-    Mix_FreeChunk(mClickEffect);
-    mClickEffect = NULL;
+    Mix_FreeChunk(gClickEffect);
+    gClickEffect = NULL;
 
     Mix_HaltMusic();
     Mix_FreeMusic(mMusic);

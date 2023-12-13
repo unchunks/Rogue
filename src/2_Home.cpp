@@ -1,6 +1,9 @@
 #include "Scene/2_Home.h"
 
 extern SDL_Renderer *gRenderer;
+extern TTF_Font *gFontN;
+extern Mix_Chunk* gClickEffect;
+extern SCENE gNowScene;
 
 const int TOP_BUTTON_W = 120;
 const int TOP_BUTTON_H = 60;
@@ -12,55 +15,52 @@ const int SLEEP_SPEED = 3;
 const int SLEEP_W = 256;
 const int SLEEP_H = 256;
 
-Game *home_g;
 void weaponButton()
 {
-    Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
+    Mix_PlayChannel(-1, gClickEffect, 0);
     printf("weaponButton\n");
 }
 void armorButton()
 {
-    Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
+    Mix_PlayChannel(-1, gClickEffect, 0);
     printf("armorButton\n");
 }
 void itemButton()
 {
-    Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
+    Mix_PlayChannel(-1, gClickEffect, 0);
     printf("itemButton\n");
 }
 void otherButton()
 {
-    Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
+    Mix_PlayChannel(-1, gClickEffect, 0);
     printf("otherButton\n");
 }
 
 void haveButton()
 {
-    Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
+    Mix_PlayChannel(-1, gClickEffect, 0);
     printf("haveButton\n");
 }
 void storageButton()
 {
-    Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
+    Mix_PlayChannel(-1, gClickEffect, 0);
     printf("storageButton\n");
 }
 void saveButton()
 {
-    Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
+    Mix_PlayChannel(-1, gClickEffect, 0);
     printf("saveButton\n");
 }
 void dungeonButton()
 {
-    Mix_PlayChannel(-1, home_g->getClickEffect(), 0);
-    home_g->setNowScene(SCENE::DUNGEON_MENU);
+    Mix_PlayChannel(-1, gClickEffect, 0);
+    gNowScene = SCENE::DUNGEON_MENU;
     printf("dungeonButton\n");
 }
 
-Home::Home(Game *game)
+Home::Home()
     : mAnimFrame(0)
 {
-    mGame = game;
-    home_g = game;
     LoadData();
 
     mWeaponButton.onClick = &weaponButton;
@@ -80,7 +80,7 @@ Home::Home(Game *game)
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "1:武",
-        mGame->getFontN(),
+        gFontN,
         Color::SDL_blue,
         Color::SDL_white);
     mArmorButton.create(
@@ -90,7 +90,7 @@ Home::Home(Game *game)
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "2:防",
-        mGame->getFontN(),
+        gFontN,
         Color::SDL_blue,
         Color::SDL_white);
     mItemButton.create(
@@ -100,7 +100,7 @@ Home::Home(Game *game)
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "3:ア",
-        mGame->getFontN(),
+        gFontN,
         Color::SDL_blue,
         Color::SDL_white);
     mOtherButton.create(
@@ -110,7 +110,7 @@ Home::Home(Game *game)
         TOP_BUTTON_W,
         TOP_BUTTON_H,
         "4:他",
-        mGame->getFontN(),
+        gFontN,
         Color::SDL_blue,
         Color::SDL_white);
 
@@ -122,7 +122,7 @@ Home::Home(Game *game)
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         "5:もちもの",
-        mGame->getFontN(),
+        gFontN,
         Color::SDL_blue,
         Color::SDL_white);
     mStorageButton.create(
@@ -132,7 +132,7 @@ Home::Home(Game *game)
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         "6:　倉庫　",
-        mGame->getFontN(),
+        gFontN,
         Color::SDL_blue,
         Color::SDL_white);
     mSaveButton.create(
@@ -142,7 +142,7 @@ Home::Home(Game *game)
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         "7: セーブ ",
-        mGame->getFontN(),
+        gFontN,
         Color::SDL_blue,
         Color::SDL_white);
     mDungeonButton.create(
@@ -152,7 +152,7 @@ Home::Home(Game *game)
         SIDE_BUTTON_W,
         SIDE_BUTTON_H,
         "8:ダンジョン",
-        mGame->getFontN(),
+        gFontN,
         Color::SDL_blue,
         Color::SDL_white);
 }
@@ -210,68 +210,66 @@ void Home::Input(SDL_Event event)
             mDungeonButton.press();
             break;
         }
+        return;
     }
-    else
+    switch (event.key.keysym.sym)
     {
-        switch (event.key.keysym.sym)
+    case SDLK_1:
+        if (mWeaponButton.isPressed)
         {
-        case SDLK_1:
-            if (mWeaponButton.isPressed)
-            {
-                mWeaponButton.release();
-                mWeaponButton.onClick();
-            }
-            break;
-        case SDLK_2:
-            if (mArmorButton.isPressed)
-            {
-                mArmorButton.release();
-                mArmorButton.onClick();
-            }
-            break;
-        case SDLK_3:
-            if (mItemButton.isPressed)
-            {
-                mItemButton.release();
-                mItemButton.onClick();
-            }
-            break;
-        case SDLK_4:
-            if (mOtherButton.isPressed)
-            {
-                mOtherButton.release();
-                mOtherButton.onClick();
-            }
-            break;
-        case SDLK_5:
-            if (mHaveButton.isPressed)
-            {
-                mHaveButton.release();
-                mHaveButton.onClick();
-            }
-            break;
-        case SDLK_6:
-            if (mStorageButton.isPressed)
-            {
-                mStorageButton.release();
-                mStorageButton.onClick();
-            }
-            break;
-        case SDLK_7:
-            if (mSaveButton.isPressed)
-            {
-                mSaveButton.release();
-                mSaveButton.onClick();
-            }
-            break;
-        case SDLK_8:
-            if (mDungeonButton.isPressed)
-            {
-                mDungeonButton.release();
-                mDungeonButton.onClick();
-            }
-            break;
+            mWeaponButton.release();
+            mWeaponButton.onClick();
         }
+        break;
+    case SDLK_2:
+        if (mArmorButton.isPressed)
+        {
+            mArmorButton.release();
+            mArmorButton.onClick();
+        }
+        break;
+    case SDLK_3:
+        if (mItemButton.isPressed)
+        {
+            mItemButton.release();
+            mItemButton.onClick();
+        }
+        break;
+    case SDLK_4:
+        if (mOtherButton.isPressed)
+        {
+            mOtherButton.release();
+            mOtherButton.onClick();
+        }
+        break;
+    case SDLK_5:
+        if (mHaveButton.isPressed)
+        {
+            mHaveButton.release();
+            mHaveButton.onClick();
+        }
+        break;
+    case SDLK_6:
+        if (mStorageButton.isPressed)
+        {
+            mStorageButton.release();
+            mStorageButton.onClick();
+        }
+        break;
+    case SDLK_7:
+        if (mSaveButton.isPressed)
+        {
+            mSaveButton.release();
+            mSaveButton.onClick();
+        }
+        break;
+    case SDLK_8:
+        if (mDungeonButton.isPressed)
+        {
+            mDungeonButton.release();
+            mDungeonButton.onClick();
+        }
+        break;
     }
 }
 

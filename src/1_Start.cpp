@@ -1,22 +1,23 @@
 #include "Scene/1_Start.h"
 
 extern SDL_Renderer *gRenderer;
+extern TTF_Font *gFontB;
+extern Mix_Chunk* gClickEffect;
+extern SCENE gNowScene;
 
 const int BUTTON_W = 500;
 const int BUTTON_H = 80;
 
-Game *start_g;
 void startButton()
 {
-    Mix_PlayChannel(-1, start_g->getClickEffect(), 0);
-    start_g->setNowScene(SCENE::HOME);
+    Mix_PlayChannel(-1, gClickEffect, 0);
+    gNowScene = SCENE::HOME;
     printf("startButton\n");
 }
 
-Start::Start(Game *game)
+Start::Start()
 {
-    start_g = game;
-    mGame = game;
+    SDL_Log("Start constructor");
     LoadData();
 
     mStartButton.onClick = &startButton;
@@ -27,7 +28,7 @@ Start::Start(Game *game)
         BUTTON_W,
         BUTTON_H,
         "S : Game Start",
-        mGame->getFontB(),
+        gFontB,
         Color::SDL_blue,
         Color::SDL_white
     );
@@ -47,20 +48,21 @@ void Start::Input(SDL_Event event)
     {
         switch(event.key.keysym.sym)
         {
-        case SDLK_s:    mStartButton.press();  break;
+            case SDLK_s:
+                mStartButton.press();
+                break;
         }
+        return;
     }
-    else
+    switch(event.key.keysym.sym)
     {
-        switch(event.key.keysym.sym)
-        {
         case SDLK_s:
             if(mStartButton.isPressed)
             {
-                mStartButton.release(); mStartButton.onClick();
+                mStartButton.release();
+                mStartButton.onClick();
             }
             break;
-        }
     }
 }
 
