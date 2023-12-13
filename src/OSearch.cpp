@@ -40,57 +40,57 @@ std::deque<Ivec2> OSearch::OSearch(CELL_TYPE def_data[FLOOR_H][FLOOR_W], Ivec2 _
 		}
 	}
 
-    std::cout << "探索前\n";
-    for(int y = 0; y < FLOOR_H; y++)
-    {
-		for(int x = 0; x < FLOOR_W; x++)
-        {
-            if(x == start.x && y == start.y)
-            {
-                std::cout << "S";
-            }
-            else if(x == goal.x && y == goal.y)
-            {
-                std::cout << "G";
-            }
-            else if(can_walk[y][x])
-            {
-                std::cout << " ";
-            }
-            else
-            {
-                std::cout << "W";
-            }
-        }
-        std::cout << std::endl;
-    }
+    // std::cout << "探索前\n";
+    // for(int y = 0; y < FLOOR_H; y++)
+    // {
+	// 	for(int x = 0; x < FLOOR_W; x++)
+    //     {
+    //         if(x == start.x && y == start.y)
+    //         {
+    //             std::cout << "S";
+    //         }
+    //         else if(x == goal.x && y == goal.y)
+    //         {
+    //             std::cout << "G";
+    //         }
+    //         else if(can_walk[y][x])
+    //         {
+    //             std::cout << " ";
+    //         }
+    //         else
+    //         {
+    //             std::cout << "W";
+    //         }
+    //     }
+    //     std::cout << std::endl;
+    // }
 
     Search(_start);
 
-    std::cout << "探索後\n";
-    for(int y = 0; y < FLOOR_H; y++)
-    {
-		for(int x = 0; x < FLOOR_W; x++)
-        {
-            if(x == start.x && y == start.y)
-            {
-                std::cout << "S";
-            }
-            else if(x == goal.x && y == goal.y)
-            {
-                std::cout << "G";
-            }
-            else if(std::find(osearch_route.begin(), osearch_route.end(), Ivec2(x, y)) != osearch_route.end())
-            {
-                std::cout << "*";
-            }
-            else if(can_walk[y][x])
-            {
-                std::cout << "W";
-            }
-        }
-        std::cout << std::endl;
-    }
+    // std::cout << "探索後\n";
+    // for(int y = 0; y < FLOOR_H; y++)
+    // {
+	// 	for(int x = 0; x < FLOOR_W; x++)
+    //     {
+    //         if(x == start.x && y == start.y)
+    //         {
+    //             std::cout << "S";
+    //         }
+    //         else if(x == goal.x && y == goal.y)
+    //         {
+    //             std::cout << "G";
+    //         }
+    //         else if(std::find(osearch_route.begin(), osearch_route.end(), Ivec2(x, y)) != osearch_route.end())
+    //         {
+    //             std::cout << "*";
+    //         }
+    //         else if(can_walk[y][x])
+    //         {
+    //             std::cout << "W";
+    //         }
+    //     }
+    //     std::cout << std::endl;
+    // }
 	
 	return osearch_route;
 }

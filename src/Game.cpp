@@ -14,7 +14,7 @@ Uint32 fps_timer_callback(Uint32 interval, void *data)
         // const Uint32 f = SDL_AtomicGet(&frames);
         // const iv = interval * 0.001f;
 
-        /* 注意: printfがスレッドセーフであるかは環境に依存する */
+        /* 注意: SDL_Logがスレッドセーフであるかは環境に依存する */
 // printf("%.2f\tfps\n", f / iv);
 
         /* フレームカウンタをリセットする */
@@ -40,7 +40,7 @@ bool Game::Init()
     int sdlResult = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     if (sdlResult != 0)
     {
-        printf("Unable to initialize SDL: %s", SDL_GetError());
+        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
         return false;
     }
 
@@ -48,7 +48,7 @@ bool Game::Init()
     sdlResult = IMG_Init(IMG_INIT_PNG);
     if (!(sdlResult & IMG_INIT_PNG))
     {
-        printf("Unable to initialize SDL_IMG: %s", IMG_GetError());
+        SDL_Log("Unable to initialize SDL_IMG: %s", IMG_GetError());
         return false;
     }
 
@@ -56,18 +56,18 @@ bool Game::Init()
     sdlResult = TTF_Init();
     if (sdlResult != 0)
     {
-        printf("Unable to initialize SDL_TTF: %s", TTF_GetError());
+        SDL_Log("Unable to initialize SDL_TTF: %s", TTF_GetError());
         return false;
     }
 
     gFontN = TTF_OpenFont("assets/JF-Dot-K14.ttf", 30);
     if (!gFontN) {
-        printf("TTF_OpenFont: %s\n", TTF_GetError());
+        SDL_Log("TTF_OpenFont: %s\n", TTF_GetError());
         return false;
     }
     gFontB = TTF_OpenFont("assets/JF-Dot-K14B.ttf", 30);
     if (!gFontB) {
-        printf("TTF_OpenFont: %s\n", TTF_GetError());
+        SDL_Log("TTF_OpenFont: %s\n", TTF_GetError());
         return false;
     }
 
@@ -75,14 +75,14 @@ bool Game::Init()
     sdlResult = Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG);
     if (sdlResult < 0)
     {
-        printf("Unable to initialize SDL_Mix: %s", Mix_GetError());
+        SDL_Log("Unable to initialize SDL_Mix: %s", Mix_GetError());
         return false;
     }
     
     sdlResult = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
     if (sdlResult < 0)
     {
-        printf("Unable to initialize SDL_mixer: %s", Mix_GetError());
+        SDL_Log("Unable to initialize SDL_mixer: %s", Mix_GetError());
         return false;
     }
 
@@ -98,7 +98,7 @@ bool Game::Init()
 
     if (!gWindow)
     {
-        printf("Failed to create window: %s", SDL_GetError());
+        SDL_Log("Failed to create window: %s", SDL_GetError());
         return false;
     }
 
@@ -109,19 +109,19 @@ bool Game::Init()
         SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!gRenderer)
     {
-        printf("Failed to create renderer: %s", SDL_GetError());
+        SDL_Log("Failed to create renderer: %s", SDL_GetError());
         return false;
     }
 
     gClickEffect = Mix_LoadWAV("assets/click.mp3");
     if(gClickEffect == NULL) {
-        printf("Failed to load sound effect : %s", Mix_GetError());
+        SDL_Log("Failed to load sound effect : %s", Mix_GetError());
         return false;
     }
 
     mMusic = Mix_LoadMUS("assets/dungeon.ogg");//Mix_LoadMUS("assets/BGM.mp3");
     if(mMusic == NULL) {
-        printf("Failed to load BGM : %s", Mix_GetError());
+        SDL_Log("Failed to load BGM : %s", Mix_GetError());
         return false;
     }
 

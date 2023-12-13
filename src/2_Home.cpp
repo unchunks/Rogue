@@ -18,44 +18,44 @@ const int SLEEP_H = 256;
 void weaponButton()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
-    printf("weaponButton\n");
+    // SDL_Log("weaponButton\n");
 }
 void armorButton()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
-    printf("armorButton\n");
+    // SDL_Log("armorButton\n");
 }
 void itemButton()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
-    printf("itemButton\n");
+    // SDL_Log("itemButton\n");
 }
 void otherButton()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
-    printf("otherButton\n");
+    // SDL_Log("otherButton\n");
 }
 
 void haveButton()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
-    printf("haveButton\n");
+    // SDL_Log("haveButton\n");
 }
 void storageButton()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
-    printf("storageButton\n");
+    // SDL_Log("storageButton\n");
 }
 void saveButton()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
-    printf("saveButton\n");
+    // SDL_Log("saveButton\n");
 }
 void dungeonButton()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
     gNowScene = SCENE::DUNGEON_MENU;
-    printf("dungeonButton\n");
+    // SDL_Log("dungeonButton\n");
 }
 
 Home::Home()
@@ -166,7 +166,7 @@ void Home::LoadData()
     mBornSleepSpriteClips.resize(SLEEP_NUM, {0, 0, 0, 0});
     if (!mBornSleepTexture.loadFromFile("assets/bone_sleeping.png"))
     {
-        printf("Failed to load walking animation texture!\n");
+        SDL_Log("Failed to load walking animation texture!\n");
         return;
     }
     for (int sprite_num = 0; sprite_num < SLEEP_NUM; sprite_num++)

@@ -20,7 +20,7 @@ Dungeon::Dungeon()
     enemy_sprite_clips.resize(static_cast<int>(ENEMY_TYPE_NUMBER), std::vector<SDL_Rect>(ANIMATION_FRAMES * static_cast<int>(NO_DIRECTION), {0, 0, 0, 0}));
     if (!LoadData())
     {
-        printf("Failed to load media!\n");
+        SDL_Log("Failed to load media!\n");
     }
     camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 }
@@ -92,7 +92,7 @@ void Dungeon::Input(SDL_Event event)
             {
                 e.isMoved = true;
             }
-            SDL_Log("敵のターン===============================================================================");
+            // SDL_Log("敵のターン===============================================================================");
         	break;
         case SDLK_q:
             player.isMoved = false;
@@ -100,58 +100,58 @@ void Dungeon::Input(SDL_Event event)
             go_next_floor = true;
             break;
         // NOTE: 以下デバッグ用
-        case SDLK_1:    // 見た目をプレイヤーに変更
-            player.isMoved = false;
-            player.sprile_clips = mPlayerSpriteClips;
-            break;
-        case SDLK_2:    // 見た目をデカに変更
-            player.isMoved = false;
-            player.sprile_clips = enemy_sprite_clips[0];
-            break;
-        case SDLK_3:    // 見た目をグリに変更
-            player.isMoved = false;
-            player.sprile_clips = enemy_sprite_clips[1];
-            break;
-        case SDLK_4:    // 見た目をジェリフに変更
-            player.isMoved = false;
-            player.sprile_clips = enemy_sprite_clips[2];
-            break;
-        case SDLK_5:    // 見た目をヤミーに変更
-            player.isMoved = false;
-            player.sprile_clips = enemy_sprite_clips[3];
-            break;
-        case SDLK_6:    // 見た目をクリスタルに変更
-            player.isMoved = false;
-            player.sprile_clips = enemy_sprite_clips[4];
-            break;
-        case SDLK_7:    // 見た目をグロスパイダーに変更
-            player.isMoved = false;
-            player.sprile_clips = enemy_sprite_clips[5];
-            break;
-        case SDLK_8:    // 見た目をアイアンに変更
-            player.isMoved = false;
-            player.sprile_clips = enemy_sprite_clips[6];
-            break;
-        case SDLK_t:    // ランダムな位置にワープ
-            player.isMoved = false;
-            switch (gNowScene)
-            {
-                case DUNGEON_AREA_DIVIDE:
-                    player.setDataPos(getRandomDataPos(area_divide.getRoomNum()));
-                    break;
-                case DUNGEON_RRA:
-                    player.setDataPos(getRandomDataPos(rra.getRoomNum()));
-                    break;
-                default:
-                    break;
-            }
-            break;
-        case SDLK_e:    // 敵の近くにワープ
-            player.isMoved = false;
-            player.setDataPos(Ivec2(
-                enemies.at(0).getDataPos().x,
-                enemies.at(0).getDataPos().y + 2));
-            break;
+        // case SDLK_1:    // 見た目をプレイヤーに変更
+        //     player.isMoved = false;
+        //     player.sprile_clips = mPlayerSpriteClips;
+        //     break;
+        // case SDLK_2:    // 見た目をデカに変更
+        //     player.isMoved = false;
+        //     player.sprile_clips = enemy_sprite_clips[0];
+        //     break;
+        // case SDLK_3:    // 見た目をグリに変更
+        //     player.isMoved = false;
+        //     player.sprile_clips = enemy_sprite_clips[1];
+        //     break;
+        // case SDLK_4:    // 見た目をジェリフに変更
+        //     player.isMoved = false;
+        //     player.sprile_clips = enemy_sprite_clips[2];
+        //     break;
+        // case SDLK_5:    // 見た目をヤミーに変更
+        //     player.isMoved = false;
+        //     player.sprile_clips = enemy_sprite_clips[3];
+        //     break;
+        // case SDLK_6:    // 見た目をクリスタルに変更
+        //     player.isMoved = false;
+        //     player.sprile_clips = enemy_sprite_clips[4];
+        //     break;
+        // case SDLK_7:    // 見た目をグロスパイダーに変更
+        //     player.isMoved = false;
+        //     player.sprile_clips = enemy_sprite_clips[5];
+        //     break;
+        // case SDLK_8:    // 見た目をアイアンに変更
+        //     player.isMoved = false;
+        //     player.sprile_clips = enemy_sprite_clips[6];
+        //     break;
+        // case SDLK_t:    // ランダムな位置にワープ
+        //     player.isMoved = false;
+        //     switch (gNowScene)
+        //     {
+        //         case DUNGEON_AREA_DIVIDE:
+        //             player.setDataPos(getRandomDataPos(area_divide.getRoomNum()));
+        //             break;
+        //         case DUNGEON_RRA:
+        //             player.setDataPos(getRandomDataPos(rra.getRoomNum()));
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        //     break;
+        // case SDLK_e:    // 敵の近くにワープ
+        //     player.isMoved = false;
+        //     player.setDataPos(Ivec2(
+        //         enemies.at(0).getDataPos().x,
+        //         enemies.at(0).getDataPos().y + 2));
+        //     break;
         default:
             break;
         }
@@ -185,10 +185,10 @@ void Dungeon::Update()
     // プレイヤーのアップデート
     if (nowTurn == PLAYER && player.isMoved)
     {
-        if (player.onTileCenter())
-        {
-            SDL_Log("プレイヤーのターン=========================================================================");
-        }
+        // if (player.onTileCenter())
+        // {
+        //     SDL_Log("プレイヤーのターン=========================================================================");
+        // }
         if( (player.onTileCenter()) && ( isOtherPos( player.getFrontDataPos() ) >= 0 ) )
         {
             log.addText(player.attack(whichEnemy(player.getFrontDataPos())));
@@ -204,10 +204,10 @@ void Dungeon::Update()
             player.move(tileSet, otherCharacters);
         }
 
-        if (player.onTileCenter())
-        {
-            SDL_Log("(%d, %d)", player.getDataPos().x, player.getDataPos().y);
-        }
+        // if (player.onTileCenter())
+        // {
+        //     SDL_Log("(%d, %d)", player.getDataPos().x, player.getDataPos().y);
+        // }
 
         // 階段を登ったときの処理
         go_next_floor = ((player.onTileCenter()) && (floor[(player.getDataPos().y)][(player.getDataPos().x)] == STEP));
@@ -223,7 +223,7 @@ void Dungeon::Update()
             {
                 e.isMoved = true;
             }
-            SDL_Log("敵のターン===============================================================================");
+            // SDL_Log("敵のターン===============================================================================");
         }
 
     }// 敵のアップデート
@@ -232,7 +232,7 @@ void Dungeon::Update()
         all_e_on_ceneter = true;
         for (auto &e : enemies)
         {
-            SDL_Log("%sのターン-------------------------------------------------------------------------", e.getName().c_str());
+            // SDL_Log("%sのターン-------------------------------------------------------------------------", e.getName().c_str());
 
             if(!e.isMoved)
                 continue;
@@ -241,7 +241,7 @@ void Dungeon::Update()
             {
                 case SEARCH:
 
-                    SDL_Log("SEARCH");
+                    // SDL_Log("SEARCH");
 
                     // 発見確認
                     if(e.changeState(player))
@@ -254,7 +254,7 @@ void Dungeon::Update()
                     if (e.mustUpdateRoute())
                     {
 
-                        SDL_Log("SEARCH: ルート更新");
+                        // SDL_Log("SEARCH: ルート更新");
 
                         updateEnemyRoute(e, RANDOM_POS);
                     }
@@ -264,7 +264,7 @@ GOTO_SEARCH:
 
                 case FOUND:
 
-                    SDL_Log("FOUND");
+                    // SDL_Log("FOUND");
 
                     // 移動前の発見確認
                     if(e.changeState(player))
@@ -293,7 +293,7 @@ GOTO_FOUND:
                     break;
 
                 case DEAD:
-                    SDL_Log("DEAD");
+                    // SDL_Log("DEAD");
                     break;
 
                 default:
@@ -303,7 +303,7 @@ GOTO_FOUND:
             // プレイヤーのターンに移行
             if (e.onTileCenter())
             {
-                SDL_Log("中央に到着したので、isMovedをfalseに");
+                // SDL_Log("中央に到着したので、isMovedをfalseに");
                 e.isMoved = false;
             }
             else
@@ -321,7 +321,7 @@ GOTO_FOUND:
                 {
                     continue;
                 }
-                SDL_Log("死亡した敵を別の敵としてリスポーン");
+                // SDL_Log("死亡した敵を別の敵としてリスポーン");
                 ENEMY_TYPE new_e_type = static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER));
                 e = Enemy(new_e_type);
                 e.sprile_clips = enemy_sprite_clips.at(static_cast<int>(new_e_type));
@@ -339,13 +339,13 @@ GOTO_FOUND:
                 }
                 e.setDataPos(data_pos);
             }
-            std::cout << "\n\n";
-            SDL_Log("Input: 現在%dターン目", turn);
-            SDL_Log("プレイヤー HP: %d", player.getNowHP());
-            for(auto e: enemies)
-            {
-                SDL_Log("%s HP: %d", e.getName().c_str(), e.getNowHP());
-            }
+            // std::cout << "\n\n";
+            // SDL_Log("Input: 現在%dターン目", turn);
+            // SDL_Log("プレイヤー HP: %d", player.getNowHP());
+            // for(auto e: enemies)
+            // {
+            //     SDL_Log("%s HP: %d", e.getName().c_str(), e.getNowHP());
+            // }
         }
     }
 
@@ -380,7 +380,7 @@ bool Dungeon::LoadData()
     // プレイヤーのスプライトシートのテクスチャを読み込む
     if (!player.mCharTexture.loadFromFile("assets/character.png"))
     {
-        printf("Failed to load walking animation texture!\n");
+        SDL_Log("Failed to load walking animation texture!\n");
         success = false;
     }
     else
@@ -418,7 +418,7 @@ bool Dungeon::LoadData()
     // Load tile texture
     if (!gTileTexture.loadFromFile("assets/dungeon_tiles.png"))
     {
-        printf("Failed to load tile set texture!\n");
+        SDL_Log("Failed to load tile set texture!\n");
         success = false;
     }
 
@@ -431,7 +431,7 @@ void Dungeon::PlayMusic()
 
 void Dungeon::InitDungeon()
 {
-    SDL_Log("InitDungeon: ダンジョンを初期化\n");
+    // SDL_Log("InitDungeon: ダンジョンを初期化\n");
     floor_num++;
     in_dungeon = true;
     go_next_floor = false;
@@ -470,7 +470,7 @@ void Dungeon::InitDungeon()
         SDL_Log("InitDungeon: Failed to load tile set!");
 
     Ivec2 data_pos;
-    SDL_Log("InitDungeon: プレイヤーを初期化");
+    // SDL_Log("InitDungeon: プレイヤーを初期化");
     switch (gNowScene)
     {
     case DUNGEON_AREA_DIVIDE:
@@ -482,11 +482,11 @@ void Dungeon::InitDungeon()
     default:
         break;
     }
-    SDL_Log("InitDungeon: 初期スポーン地点(%d, %d)", data_pos.x, data_pos.y);
+    // SDL_Log("InitDungeon: 初期スポーン地点(%d, %d)", data_pos.x, data_pos.y);
     player.setDataPos(data_pos);
     player.isMoved = false;
 
-    SDL_Log("InitDungeon: 敵を初期化");
+    // SDL_Log("InitDungeon: 敵を初期化");
     enemies.clear();
     enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
     for (auto &e : enemies)
@@ -494,7 +494,7 @@ void Dungeon::InitDungeon()
         e = Enemy(static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER)));
         e.sprile_clips = enemy_sprite_clips.at(static_cast<int>(e.getEnemyType()));
 
-        SDL_Log("InitDungeon: 敵の位置を初期化");
+        // SDL_Log("InitDungeon: 敵の位置を初期化");
         switch (gNowScene)
         {
         case DUNGEON_AREA_DIVIDE:
@@ -507,7 +507,7 @@ void Dungeon::InitDungeon()
             break;
         }
         e.setDataPos(data_pos);
-        SDL_Log("InitDungeon: 敵の位置(%d, %d)", e.getDataPos().x, e.getDataPos().y);
+        // SDL_Log("InitDungeon: 敵の位置(%d, %d)", e.getDataPos().x, e.getDataPos().y);
     }
 }
 
@@ -594,7 +594,7 @@ bool Dungeon::setTiles()
     // マップが読み込めなかった場合
     if (map.fail())
     {
-        printf("Unable to load map file!\n");
+        SDL_Log("Unable to load map file!\n");
         tilesLoaded = false;
     }
     else
@@ -612,7 +612,7 @@ bool Dungeon::setTiles()
             if (map.fail())
             {
                 // Stop loading map
-                printf("Error loading map: Unexpected end of file!\n");
+                SDL_Log("Error loading map: Unexpected end of file!\n");
                 tilesLoaded = false;
                 break;
             }
@@ -626,7 +626,7 @@ bool Dungeon::setTiles()
             else
             {
                 // Stop loading map
-                printf("Error loading map: Invalid tile type at %d!\n", i);
+                SDL_Log("Error loading map: Invalid tile type at %d!\n", i);
                 tilesLoaded = false;
                 break;
             }
@@ -686,14 +686,14 @@ void Dungeon::updateEnemyRoute(Enemy &_enemy, GOAL_TYPE _goalType)
                 break;
             }
 
-            SDL_Log("updateEnemyRoute: RANDOM_POS = GOAL(%d, %d)", goal.x, goal.y);
+            // SDL_Log("updateEnemyRoute: RANDOM_POS = GOAL(%d, %d)", goal.x, goal.y);
 
         }
         break;
     case PLAYER_POS:
         goal = player.getDataPos();
 
-        SDL_Log("updateEnemyRoute: PLAYER_POS = GOAL(%d, %d)", goal.x, goal.y);
+        // SDL_Log("updateEnemyRoute: PLAYER_POS = GOAL(%d, %d)", goal.x, goal.y);
 
         break;
     }

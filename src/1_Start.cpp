@@ -12,12 +12,11 @@ void startButton()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
     gNowScene = SCENE::HOME;
-    printf("startButton\n");
+    // SDL_Log("startButton\n");
 }
 
 Start::Start()
 {
-    SDL_Log("Start constructor");
     LoadData();
 
     mStartButton.onClick = &startButton;

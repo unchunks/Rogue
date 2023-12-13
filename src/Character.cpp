@@ -37,68 +37,68 @@ bool Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherChar
     if(onTileCenter() && collided(_tiles, front, _otherCharacters))
     {
 
-        SDL_Log("移動先に障害物あり");
+        // SDL_Log("移動先に障害物あり");
 
         return true;
     }
 
-    SDL_Log("移動先に障害物無し");
+    // SDL_Log("移動先に障害物無し");
 
     // 次のマス目につくまで前フレームの移動を継続
     switch (mDir)
     {
     case LEFT:
 
-        if(onTileCenter())
-            SDL_Log("move: 左に移動");
+        // if(onTileCenter())
+        //     SDL_Log("move: 左に移動");
 
         mBox.x -= CHAR_VEL;
         if(mBox.y % TILE_H != TILE_H / 4)
         {
 
-            SDL_Log("上下位置調整");
+            // SDL_Log("上下位置調整");
 
             mBox.y += (TILE_H / 4) - (mBox.y % TILE_H);
         }
         break;
     case RIGHT:
 
-        if(onTileCenter())
-            SDL_Log("move: 右に移動");
+        // if(onTileCenter())
+        //     SDL_Log("move: 右に移動");
 
         mBox.x += CHAR_VEL;
         if(mBox.y % TILE_H != TILE_H / 4)
         {
 
-            SDL_Log("上下位置調整");
+            // SDL_Log("上下位置調整");
 
             mBox.y += (TILE_H / 4) - (mBox.y % TILE_H);
         }
         break;
     case UP:
 
-        if(onTileCenter())
-            SDL_Log("move: 上に移動");
+        // if(onTileCenter())
+        //     SDL_Log("move: 上に移動");
 
         mBox.y -= CHAR_VEL;
         if(mBox.x % TILE_W != TILE_W / 4)
         {
 
-            SDL_Log("左右位置調整");
+            // SDL_Log("左右位置調整");
 
             mBox.x += (TILE_W / 4) - (mBox.x % TILE_W);
         }
         break;
     case DOWN:
 
-        if(onTileCenter())
-            SDL_Log("move: 下に移動");
+        // if(onTileCenter())
+        //     SDL_Log("move: 下に移動");
 
         mBox.y += CHAR_VEL;
         if(mBox.x % TILE_W != TILE_W / 4)
         {
 
-            SDL_Log("左右位置調整");
+            // SDL_Log("左右位置調整");
 
             mBox.x += (TILE_W / 4) - (mBox.x % TILE_W);
         }
@@ -133,7 +133,7 @@ bool Character::moveTo(Ivec2 _destination, std::vector<Tile> _tiles, std::vector
         return false;
     }
 
-    SDL_Log("moveTo: 行き先(%d, %d)、現在地（%d, %d)", _destination.x, _destination.y, getDataPos().x, getDataPos().y);
+    // SDL_Log("moveTo: 行き先(%d, %d)、現在地（%d, %d)", _destination.x, _destination.y, getDataPos().x, getDataPos().y);
 
     return move(_tiles, _otherCharacters);
 }
@@ -143,12 +143,11 @@ DIRECTION Character::adjacent(Character _opponent)
     if(!onTileCenter())
         return NO_DIRECTION;
 
-//FIX: プレイヤーが複数の敵を引数にしても正しく動くように
     if( (mBox.x == _opponent.mBox.x) && (mBox.y - TILE_H == _opponent.mBox.y) )
     {
         mDir = UP;
 
-        SDL_Log("adjacent: キャラに隣接（上）");
+        // SDL_Log("adjacent: キャラに隣接（上）");
 
         return mDir;
     }
@@ -157,7 +156,7 @@ DIRECTION Character::adjacent(Character _opponent)
     {
         mDir = DOWN;
 
-        SDL_Log("adjacent: キャラに隣接（下）");
+        // SDL_Log("adjacent: キャラに隣接（下）");
 
         return mDir;
     }
@@ -166,7 +165,7 @@ DIRECTION Character::adjacent(Character _opponent)
     {
         mDir = LEFT;
 
-        SDL_Log("adjacent: キャラに隣接（左）");
+        // SDL_Log("adjacent: キャラに隣接（左）");
 
         return mDir;
     }
@@ -175,7 +174,7 @@ DIRECTION Character::adjacent(Character _opponent)
     {
         mDir = RIGHT;
 
-        SDL_Log("adjacent: キャラに隣接（右）");
+        // SDL_Log("adjacent: キャラに隣接（右）");
 
         return mDir;
     }
@@ -237,7 +236,7 @@ void Character::healed(int _heal_val)
 void Character::setImagePos(Ivec2 _image_pos)
 {
 
-    SDL_Log("setImagePos: (%d, %d)", _image_pos.x / TILE_W, _image_pos.y / TILE_H);
+    // SDL_Log("setImagePos: (%d, %d)", _image_pos.x / TILE_W, _image_pos.y / TILE_H);
 
     mBox.x = _image_pos.x;
     mBox.y = _image_pos.y;
@@ -246,7 +245,7 @@ void Character::setImagePos(Ivec2 _image_pos)
 void Character::setDataPos(Ivec2 _data_pos)
 {
 
-    SDL_Log("setDataPos: (%d, %d)", _data_pos.x, _data_pos.y);
+    // SDL_Log("setDataPos: (%d, %d)", _data_pos.x, _data_pos.y);
 
     mBox.x = _data_pos.x * TILE_W + TILE_W / 4;
     mBox.y = _data_pos.y * TILE_H + TILE_H / 4;
@@ -371,7 +370,7 @@ bool Character::touchWall(std::vector<Tile> _tiles, Ivec2 _data_pos)
          && _data_pos.y == (_tile.getBox().y / TILE_H))
         {
 
-            SDL_Log("touchWall: 壁に接触");
+            // SDL_Log("touchWall: 壁に接触");
 
             return true;
         }
@@ -397,7 +396,7 @@ bool Character::touchChar(Character _otherCharacter, Ivec2 _data_pos)
     if( (_data_pos == _otherCharacter.getDataPos()) )
         {
 
-            SDL_Log("touchChar: キャラクターに接触");
+            // SDL_Log("touchChar: キャラクターに接触");
 
             return true;
         }
@@ -410,7 +409,7 @@ bool Character::mapOver()
      || (getDataPos().y < 0) || (getDataPos().y >= FLOOR_H))
     {
 
-        SDL_Log("mapOver: 範囲外");
+        // SDL_Log("mapOver: 範囲外");
 
         return true;
     }

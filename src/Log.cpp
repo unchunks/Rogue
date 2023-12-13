@@ -17,7 +17,7 @@ Log::~Log()
 
 void Log::addText(std::string _text)
 {
-    SDL_Log("%s", _text.c_str());
+    // SDL_Log("%s", _text.c_str());
 
     texts.push_back(_text);
     if (static_cast<int>(texts.size()) > LINE_NUM)
@@ -40,7 +40,7 @@ void Log::render(SDL_Renderer *renderer)
         0};
     for(auto text : texts)
     {
-        SDL_Log("%s", text.c_str());
+        // SDL_Log("%s", text.c_str());
         SDL_Surface *surface = TTF_RenderUTF8_Blended(fontN, text.c_str(), {255, 255, 255});
         if(surface == NULL)
         {

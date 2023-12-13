@@ -15,7 +15,7 @@ namespace AStar
 	std::deque<Ivec2> astar_route;
 }
 
-int depth = 0;
+// int depth = 0;
 
 // マンハッタン距離を求める
 int AStar::GetDistance(int from_x, int from_y)
@@ -39,9 +39,9 @@ int AStar::BackTrace(int x, int y)
 // A*で経路探査する
 int AStar::Search()
 {
-    depth++;
+    // depth++;
 
-    std::cout << "現在の深さ: " << depth << std::endl;
+    // std::cout << "現在の深さ: " << depth << std::endl;
 
 	// 検索中のノード、X・Y座標、実コスト
 	MAPCELL *n = NULL;
@@ -107,7 +107,7 @@ int AStar::Search()
 		return -1;
 	}
 
-    depth--;
+    // depth--;
 	return Search();
 }
 
@@ -155,11 +155,11 @@ std::deque<Ivec2> AStar::AStar(CELL_TYPE def_data[FLOOR_H][FLOOR_W], Ivec2 _star
     astar_map_data[start.y][start.x].SearchStatus = SEARCH_OPEN;
     Search();
 
-	std::cout << "トレース開始\n";
+	// std::cout << "トレース開始\n";
 
 	TraceRoute(goal.x, goal.y);
 
-	std::cout << "トレース終了\n";
+	// std::cout << "トレース終了\n";
 
 	return astar_route;
 }

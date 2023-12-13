@@ -12,13 +12,13 @@ void toHome()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
     gNowScene = SCENE::HOME;
-    printf("toHome\n");
+    // SDL_Log("toHome\n");
 }
 void toDungeonmenu()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
     gNowScene = SCENE::DUNGEON_MENU;
-    printf("toDungeonmenu\n");
+    // SDL_Log("toDungeonmenu\n");
 }
 
 Congratulations::Congratulations()

@@ -12,13 +12,13 @@ void area_divide()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
     gNowScene = SCENE::DUNGEON_AREA_DIVIDE;
-    printf("area_divide\n");
+    // SDL_Log("area_divide\n");
 }
 void RRA()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
     gNowScene = SCENE::DUNGEON_RRA;
-    printf("RRA\n");
+    // SDL_Log("RRA\n");
 }
 
 DungeonMenu::DungeonMenu()
