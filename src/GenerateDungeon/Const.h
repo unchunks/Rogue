@@ -60,7 +60,7 @@ constexpr int DEKA_VIT  = 20;
 
 // グリ
 constexpr int GURI_HP   = 30;
-constexpr int GURI_STR  = 35;
+constexpr int GURI_STR  = 25;
 constexpr int GURI_VIT  = 5;
 
 // ジェリフ
