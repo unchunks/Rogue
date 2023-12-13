@@ -130,6 +130,7 @@ bool Game::Init()
     mDungeonMenu = new DungeonMenu();
     mDungeon = new Dungeon();
     mCongratulations = new Congratulations();
+    mGameOver = new GameOver();
 
     Mix_PlayMusic(mMusic, -1);
 
@@ -202,6 +203,10 @@ void Game::Input()
             case CONGRATULATIONS:
                 mCongratulations->Input(event);
                 break;
+            
+            case GAME_OVER:
+                mGameOver->Input(event);
+                break;
         }
     } while (SDL_PollEvent(&event));
     const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -229,6 +234,9 @@ void Game::Update()
         case CONGRATULATIONS:
             mCongratulations->Update();
             break;
+        case GAME_OVER:
+            mGameOver->Update();
+            break;
     }
 }
 
@@ -255,6 +263,9 @@ void Game::Output()
         case CONGRATULATIONS:
             mCongratulations->Output();
             break;
+        case GAME_OVER:
+            mGameOver->Output();
+            break;
     }
 
     SDL_RenderPresent(gRenderer);
@@ -275,6 +286,7 @@ void Game::Shutdown()
     delete mDungeonMenu;
     delete mDungeon;
     delete mCongratulations;
+    delete mGameOver;
 
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);

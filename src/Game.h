@@ -13,6 +13,7 @@
 #include "Scene/3_DungeonMenu.h"
 #include "Scene/4_Dungeon.h"
 #include "Scene/5_Congratulations.h"
+#include "Scene/6_GameOver.h"
 
 class Game
 {
@@ -39,4 +40,5 @@ private:
     class DungeonMenu *mDungeonMenu;
     class Dungeon *mDungeon;
     class Congratulations *mCongratulations;
+    class GameOver *mGameOver;
 };

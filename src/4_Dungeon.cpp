@@ -351,8 +351,9 @@ GOTO_FOUND:
 
     if (player.getState() == DEAD)
     {
-        in_dungeon = false;
-        go_next_floor = true;
+        quit();
+        gNowScene = SCENE::GAME_OVER;
+        return;
     }
 }
 

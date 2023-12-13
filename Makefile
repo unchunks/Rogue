@@ -1,7 +1,7 @@
 #OBSRC specifies which files to compile as part of the project
 OBSRC = src/*.cpp
 
-OBJO = 1_Start.o 2_Home.o 3_DungeonMenu.o 4_Dungeon.o 5_Congratulations.o AreaDivide.o AStar.o Character.o Enemy.o Extern.o Game.o Generator.o Log.o LTexture.o main.o OSearch.o Player.o RRA.o Tile.o
+OBJO = 1_Start.o 2_Home.o 3_DungeonMenu.o 4_Dungeon.o 5_Congratulations.o 6_GameOver.o AreaDivide.o AStar.o Character.o Enemy.o Extern.o Game.o Generator.o Log.o LTexture.o main.o OSearch.o Player.o RRA.o Tile.o
 
 #CC specifies which compiler we're using
 CC = g++
@@ -82,6 +82,8 @@ play: $(OBSRC)
 	g++ src/4_Dungeon.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 5_Congratulations.o : src/5_Congratulations.cpp src/Scene/5_Congratulations.h src/UI/Button.h src/Functions/Color.h src/GenerateDungeon/Const.h src/Game.h
 	g++ src/5_Congratulations.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
+6_GameOver.o : src/6_GameOver.cpp src/Scene/6_GameOver.h src/UI/Button.h src/Functions/Color.h src/GenerateDungeon/Const.h src/Game.h
+	g++ src/6_GameOver.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 AreaDivide.o : src/AreaDivide.cpp src/GenerateDungeon/AreaDivide.h src/GenerateDungeon/Generator.h
 	g++ src/AreaDivide.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 AStar.o : src/AStar.cpp src/GenerateDungeon/AStar.h src/GenerateDungeon/Const.h src/GenerateDungeon/Enum.h Ivec2.h 

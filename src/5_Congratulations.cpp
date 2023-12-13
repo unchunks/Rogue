@@ -8,25 +8,25 @@ extern SCENE gNowScene;
 const int BUTTON_W = 250;
 const int BUTTON_H = 60;
 
-void toHome()
+void toHomeCong()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
     gNowScene = SCENE::HOME;
-    // SDL_Log("toHome\n");
+    // SDL_Log("toHomeCong\n");
 }
-void toDungeonmenu()
+void toDungeonmenuCong()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
     gNowScene = SCENE::DUNGEON_MENU;
-    // SDL_Log("toDungeonmenu\n");
+    // SDL_Log("toDungeonmenuCong\n");
 }
 
 Congratulations::Congratulations()
 {
     LoadData();
 
-    to_home.onClick = &toHome;
-    to_dungeonmenu.onClick = &toDungeonmenu;
+    to_home.onClick = &toHomeCong;
+    to_dungeonmenu.onClick = &toDungeonmenuCong;
     to_home.create(
         gRenderer,
         (SCREEN_WIDTH / 2 - BUTTON_W) / 2,
