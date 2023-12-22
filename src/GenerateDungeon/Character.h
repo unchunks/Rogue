@@ -43,17 +43,17 @@ public:
     void setState(STATE _state);
     void setDir(DIRECTION _dir);
 
-    int getNowHP() {return nowHP;}
-    STATE getState() {return mState;}
-    DIRECTION getDir() {return mDir;}
-    CHAR_TYPE getType() {return mType;}
-    std::string getName() {return mName;}
+    int getNowHP() const {return nowHP;}
+    STATE getState() const {return mState;}
+    DIRECTION getDir() const {return mDir;}
+    CHAR_TYPE getType() const {return mType;}
+    std::string getName() const {return mName;}
 
     /// @brief 画像系座標を返す
-    Ivec2 getImagePos() {return Ivec2(mBox.x, mBox.y);}
+    Ivec2 getImagePos() const {return Ivec2(mBox.x, mBox.y);}
 
 	/// @brief データ系座標を返す
-    Ivec2 getDataPos() {return Ivec2(static_cast<int>(mBox.x / TILE_W), static_cast<int>(mBox.y / TILE_H));}
+    Ivec2 getDataPos() const {return Ivec2(static_cast<int>(mBox.x / TILE_W), static_cast<int>(mBox.y / TILE_H));}
 	
 	/// @brief 前方の座標を返す
     /// @return NO_DIRECTIONの場合は現在地を返す
@@ -62,12 +62,12 @@ public:
 
     /// @brief 向いている方向に移動。当たり判定も含む
     /// @param _tiles 当たり判定用の全タイルの配列
-    bool move(std::vector<class Tile> _tiles, std::vector<class Character> _otherCharacters);
+    bool move(std::vector<class Tile> _tiles, const std::vector<class Character>& _otherCharacters);
     
     /// @brief 向いている方向に移動。当たり判定も含む
     /// @param _destination 移動先のデータ系座標
     /// @param _tiles 当たり判定用の全タイルの配列
-    bool moveTo(Ivec2 _destination, std::vector<Tile> _tiles, std::vector<Character> _otherCharacters);
+    bool moveTo(Ivec2 _destination, std::vector<Tile> _tiles, const std::vector<Character>& _otherCharacters);
     void setCamera(SDL_Rect& _camera);
     void render(SDL_Rect& _camera);
     bool collided(std::vector<Tile> _tiles, Ivec2 _data_pos, std::vector<class Character> _otherCharacters);
@@ -89,13 +89,13 @@ protected:
     /// @param _otherCharacters 
     /// @param _data_pos 
     /// @return 当たっていたらtrue
-    bool touchChars(std::vector<class Character> _otherCharacters, Ivec2 _data_pos);
+    bool touchChars(const std::vector<class Character>& _otherCharacters, Ivec2 _data_pos);
 
     /// @brief キャラとキャラの衝突判定
     /// @param _otherCharacter 
     /// @param _data_pos 
     /// @return 当たっていたらtrue
-    bool touchChar(class Character  _otherCharacter, Ivec2 _data_pos);
+    bool touchChar(const class Character & _otherCharacter, Ivec2 _data_pos);
 
     /// @brief マップ外か判定
     /// @return マップ外だったらtrue

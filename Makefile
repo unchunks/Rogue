@@ -1,7 +1,7 @@
 #OBSRC specifies which files to compile as part of the project
 OBSRC = src/*.cpp
 
-OBJO = 1_Start.o 2_Home.o 3_DungeonMenu.o 4_Dungeon.o 5_Congratulations.o 6_GameOver.o AreaDivide.o AStar.o Character.o Enemy.o Extern.o Game.o Generator.o Log.o LTexture.o main.o OSearch.o Player.o RRA.o Tile.o
+OBJO = 1_Start.o 2_Home.o 3_DungeonMenu.o 4_Dungeon.o 5_Congratulations.o 6_GameOver.o AreaDivide.o AStar.o Character.o Enemy.o Extern.o Game.o Generator.o Log.o LTexture.o main.o Player.o RRA.o Tile.o
 
 #CC specifies which compiler we're using
 CC = g++
@@ -90,7 +90,7 @@ AStar.o : src/AStar.cpp src/GenerateDungeon/AStar.h src/GenerateDungeon/Const.h 
 	g++ src/AStar.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 Character.o : src/Character.cpp src/GenerateDungeon/Character.h src/GenerateDungeon/Const.h src/GenerateDungeon/Enum.h src/GenerateDungeon/Tile.h Ivec2.h
 	g++ src/Character.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
-Enemy.o : src/Enemy.cpp src/GenerateDungeon/Enemy.h src/GenerateDungeon/AStar.h src/GenerateDungeon/OSearch.h src/GenerateDungeon/Character.h src/GenerateDungeon/Const.h src/GenerateDungeon/Enum.h src/GenerateDungeon/Tile.h Ivec2.h
+Enemy.o : src/Enemy.cpp src/GenerateDungeon/Enemy.h src/GenerateDungeon/AStar.h src/GenerateDungeon/Character.h src/GenerateDungeon/Const.h src/GenerateDungeon/Enum.h src/GenerateDungeon/Tile.h Ivec2.h
 	g++ src/Enemy.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 Extern.o : src/Extern.cpp
 	g++ src/Extern.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
@@ -104,8 +104,6 @@ LTexture.o : src/LTexture.cpp src/GenerateDungeon/LTexture.h src/GenerateDungeon
 	g++ src/LTexture.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 main.o : src/main.cpp
 	g++ src/main.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
-OSearch.o : src/OSearch.cpp src/GenerateDungeon/OSearch.h src/GenerateDungeon/Generator.h
-	g++ src/OSearch.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 Player.o : src/Player.cpp src/GenerateDungeon/Player.h src/GenerateDungeon/Character.h
 	g++ src/Player.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 RRA.o : src/RRA.cpp src/GenerateDungeon/RRA.h src/GenerateDungeon/Generator.h

@@ -23,7 +23,7 @@ Character::~Character()
     sprile_clips.shrink_to_fit();
 }
 
-bool Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherCharacters)
+bool Character::move(std::vector<Tile> _tiles, const std::vector<Character>& _otherCharacters)
 {
     Ivec2 front = getDataPos();
     switch (mDir)
@@ -109,9 +109,8 @@ bool Character::move(std::vector<Tile> _tiles, std::vector<Character> _otherChar
     return false;
 }
 
-bool Character::moveTo(Ivec2 _destination, std::vector<Tile> _tiles, std::vector<Character> _otherCharacters)
+bool Character::moveTo(Ivec2 _destination, std::vector<Tile> _tiles, const std::vector<Character>& _otherCharacters)
 {
-   
     if(_destination.x < getDataPos().x)
     {
         mDir = LEFT;
@@ -288,7 +287,6 @@ void Character::setCamera(SDL_Rect &_camera)
 
 void Character::render(SDL_Rect &_camera)
 {
-// TODO: HPはキャラの上に表示するかも
     const int HP_BAR_H = 5;
     SDL_Rect hp_bar_frame = {
         mBox.x - _camera.x, 
@@ -304,7 +302,7 @@ void Character::render(SDL_Rect &_camera)
     // HPのフレームを表示
     SDL_SetRenderDrawColor(gRenderer, 100, 100, 100, 255);
     SDL_RenderFillRect(gRenderer, &hp_bar_frame);
-   
+    
     // HPを表示
     SDL_SetRenderDrawColor(gRenderer, 5, 255, 0, 255);
     SDL_RenderFillRect(gRenderer, &hp_bar);
@@ -379,7 +377,7 @@ bool Character::touchWall(std::vector<Tile> _tiles, Ivec2 _data_pos)
     return false;
 }
 
-bool Character::touchChars(std::vector<Character> _otherCharacters, Ivec2 _data_pos)
+bool Character::touchChars(const std::vector<Character>& _otherCharacters, Ivec2 _data_pos)
 {
     for(auto _otherCharacter : _otherCharacters)
     {
@@ -391,15 +389,18 @@ bool Character::touchChars(std::vector<Character> _otherCharacters, Ivec2 _data_
     return false;
 }
 
-bool Character::touchChar(Character _otherCharacter, Ivec2 _data_pos)
+bool Character::touchChar(const Character& _otherCharacter, Ivec2 _data_pos)
 {
-    if( (_data_pos == _otherCharacter.getDataPos()) )
+    try
+    {
+        if( (_data_pos == _otherCharacter.getDataPos()) )
         {
-
             // SDL_Log("touchChar: キャラクターに接触");
-
             return true;
         }
+    } catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+    }
     return false;
 }
 
