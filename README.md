@@ -5,8 +5,8 @@
 ## 実行方法
 まずこのリポジトリをクローンするか、zipファイルをダウンロードして解凍してください。
 ```
-sudo apt-get install make
-sudo apt-get install g++
+sudo apt-get install make -y
+sudo apt-get install g++ -y
 cd Rogue
 make play
 ```
