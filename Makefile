@@ -70,7 +70,8 @@ wc: *.cpp *.h src/* src/*/*
 
 play: $(OBSRC)
 	sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev -y
-	make do
+	make release
+	./$(OBJ_NAME)
 
 1_Start.o : src/1_Start.cpp src/Scene/1_Start.h src/UI/Button.h src/Functions/Color.h src/GenerateDungeon/Const.h src/Game.h
 	g++ src/1_Start.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
