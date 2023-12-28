@@ -8,7 +8,7 @@
 sudo apt-get install make
 sudo apt-get install g++
 cd Rogue
-make game
+make play
 ```
 
 ## ダンジョンの生成方法一覧
