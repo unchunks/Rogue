@@ -1,5 +1,20 @@
 #include "GenerateDungeon/Enemy.h"
 
+Enemy::Enemy(const Enemy& other)
+{
+    maxHP = other.maxHP;
+    STR   = other.STR;
+    VIT   = other.VIT;
+    mName = other.mName;
+    enemy_type = other.enemy_type;
+    mBox.x = other.mBox.x;
+    mBox.y = other.mBox.y;
+    mState = other.mState;
+    mDir = other.mDir;
+    mType = other.mType;
+    nowHP = other.nowHP;
+}
+
 Enemy::Enemy(ENEMY_TYPE _enemy_type)
 : Character(), elapsedTurn(0)
 {
@@ -93,13 +108,13 @@ Enemy::~Enemy()
 void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<Enemy> _otherEnemies)
 {
     std::vector<Character> otherCharacters;
-    otherCharacters.push_back(_player);
+    otherCharacters.push_back(static_cast<Character>(_player));
     for(auto enemy : _otherEnemies)
     {
         if(enemy.getDataPos() == getDataPos())
             continue;
 
-        otherCharacters.push_back(enemy);
+        otherCharacters.push_back(static_cast<Character>(enemy));
     }
 
     // if(onTileCenter())

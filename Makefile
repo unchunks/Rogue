@@ -65,8 +65,8 @@ push-% :
 	git commit -m "${@:push-%=%}"
 	git push
 
-wc: *.cpp *.h src/* src/*/*
-	wc *.cpp *.h src/* src/*/* -m -l
+wc: src/* src/*/*
+	wc src/* src/*/* -m -l
 
 play: $(OBSRC)
 	sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev -y

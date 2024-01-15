@@ -185,10 +185,10 @@ void Dungeon::Update()
     // プレイヤーのアップデート
     if (nowTurn == PLAYER && player.isMoved)
     {
-        // if (player.onTileCenter())
-        // {
-        //     SDL_Log("プレイヤーのターン=========================================================================");
-        // }
+        if (player.onTileCenter())
+        {
+            SDL_Log("プレイヤーのターン=========================================================================");
+        }
         if( (player.onTileCenter()) && ( isOtherPos( player.getFrontDataPos() ) >= 0 ) )
         {
             log.addText(player.attack(whichEnemy(player.getFrontDataPos())));
@@ -197,9 +197,9 @@ void Dungeon::Update()
         else
         {
             std::vector<Character> otherCharacters;
-            for (auto enemy : enemies)
+            for (auto &enemy : enemies)
             {
-                otherCharacters.push_back(enemy);
+                otherCharacters.push_back(static_cast<Character>(enemy));
             }
             player.move(tileSet, otherCharacters);
         }
@@ -223,7 +223,7 @@ void Dungeon::Update()
             {
                 e.isMoved = true;
             }
-            // SDL_Log("敵のターン===============================================================================");
+            SDL_Log("敵のターン===============================================================================");
         }
 
     }// 敵のアップデート
@@ -241,7 +241,7 @@ void Dungeon::Update()
             {
                 case SEARCH:
 
-                    // SDL_Log("SEARCH");
+                    SDL_Log("SEARCH");
 
                     // 発見確認
                     if(e.changeState(player))
@@ -259,6 +259,7 @@ void Dungeon::Update()
                         updateEnemyRoute(e, RANDOM_POS);
                     }
 GOTO_SEARCH:
+                    SDL_Log("歩く");
                     e.walk(tileSet, player, enemies);
                     break;
 
