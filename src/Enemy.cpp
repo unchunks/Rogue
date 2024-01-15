@@ -95,8 +95,19 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
 }
 
 Enemy::Enemy(int _x, int _y, int _maxHP, int _STR, int _VIT)
-: Character(_x, _y, _maxHP, _STR, _VIT, SEARCH, DOWN, ENEMY, "敵"), elapsedTurn(0)
+: Character(), elapsedTurn(0)
 {
+    enemy_type = DEKA;
+    maxHP = DEKA_HP;
+    STR   = DEKA_STR;
+    VIT   = DEKA_VIT;
+    mName = "デカ";
+    mBox.x = 0;
+    mBox.y = 0;
+    mState = SEARCH;
+    mDir = DOWN;
+    mType = ENEMY;
+    nowHP = maxHP;
 }
 
 Enemy::~Enemy()
@@ -105,7 +116,7 @@ Enemy::~Enemy()
     route.shrink_to_fit();
 }
 
-void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<Enemy> _otherEnemies)
+void Enemy::walk(std::vector<class Tile> _tiles, Character _player, const std::vector<Enemy>& _otherEnemies)
 {
     std::vector<Character> otherCharacters;
     otherCharacters.push_back(static_cast<Character>(_player));
@@ -113,10 +124,14 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
     {
         if(enemy.getDataPos() == getDataPos())
             continue;
+<<<<<<< HEAD
 
         otherCharacters.push_back(static_cast<Character>(enemy));
+=======
+        
+        otherCharacters.push_back(enemy);
+>>>>>>> 5c2e6348c06e654bd77a3a5cd9d919eea51be515
     }
-
     // if(onTileCenter())
     // {
     //     SDL_Log("walk: nextPos(%d, %d)", nextPos.x, nextPos.y);
@@ -137,12 +152,12 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, std::vector<
         route.pop_front();
         elapsedTurn++;
 
-        // SDL_Log("walk: elapsedTurn = %d, route size = %d\n", elapsedTurn, static_cast<int>(route.size()));
+        SDL_Log("walk: elapsedTurn = %d, route size = %d\n", elapsedTurn, static_cast<int>(route.size()));
 
     }
 }
 
-void Enemy::walkTo(Ivec2 _destination, std::vector<class Tile> _tiles, class Character _player, std::vector<class Enemy> _otherEnemies)
+void Enemy::walkTo(Ivec2 _destination, std::vector<class Tile> _tiles, class Character _player, const std::vector<class Enemy>& _otherEnemies)
 {
     _destination.x = _destination.x / TILE_W;
     _destination.y = _destination.y / TILE_H;
@@ -167,7 +182,6 @@ void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], Ivec2 _goal)
     // SDL_Log("setGoal: ルート探索");
 
     route = AStar::AStar(_dungeon, getDataPos(), goal);
-    // route = OSearch::OSearch(_dungeon, getDataPos(), goal);
     // 現在地をポップ
 
     // SDL_Log("現在地としてポップ(%d, %d)", route.at(0).x, route.at(0).y);

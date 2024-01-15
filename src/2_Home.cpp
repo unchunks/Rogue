@@ -159,6 +159,7 @@ Home::Home()
 
 Home::~Home()
 {
+    mBornSleepTexture.free();
 }
 
 void Home::LoadData()

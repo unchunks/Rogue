@@ -281,12 +281,42 @@ void Game::Shutdown()
     mMusic = NULL;
     Mix_CloseAudio();
 
-    delete mStart;
-    delete mHome;
-    delete mDungeonMenu;
-    delete mDungeon;
-    delete mCongratulations;
-    delete mGameOver;
+    try {
+        delete mStart;
+    } catch (const std::exception& e) {
+        std::cout << "mStart" << std::endl;
+        std::cout << e.what() << std::endl;
+    }
+    try {
+        delete mHome;
+    } catch (const std::exception& e) {
+        std::cout << "mHome" << std::endl;
+        std::cout << e.what() << std::endl;
+    }
+    try {
+        delete mDungeonMenu;
+    } catch (const std::exception& e) {
+        std::cout << "mDungeonMenu" << std::endl;
+        std::cout << e.what() << std::endl;
+    }
+    try {
+        delete mDungeon;
+    } catch (const std::exception& e) {
+        std::cout << "mDungeon" << std::endl;
+        std::cout << e.what() << std::endl;
+    }
+    try {
+        delete mCongratulations;
+    } catch (const std::exception& e) {
+        std::cout << "mCongratulations" << std::endl;
+        std::cout << e.what() << std::endl;
+    }
+    try {
+        delete mGameOver;
+    } catch (const std::exception& e) {
+        std::cout << "mGameOver" << std::endl;
+        std::cout << e.what() << std::endl;
+    }
 
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
