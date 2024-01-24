@@ -44,6 +44,9 @@ public:
     void setDir(DIRECTION _dir);
 
     int getNowHP() const {return nowHP;}
+    int getMaxHP() const {return maxHP;}
+    int getSTR() const {return STR;}
+    int getVIT() const {return VIT;}
     STATE getState() const {return mState;}
     DIRECTION getDir() const {return mDir;}
     CHAR_TYPE getType() const {return mType;}

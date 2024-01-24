@@ -18,18 +18,21 @@ make play
 |RRA      |Random Room Assignmentだと長いので、格好つけて略してます。生成方法は名前のとおりです。|
 
 ## キャラクター一覧
-|敵の種族         |アイコン                              |HP  |ATK |DEF |備考|
+プレイヤーは ``（現在のレベル） * 50``のEXPでレベルアップ
+（例）Lv.1→Lv.2　 50EXP（総EXP 50）
+　　　Lv.2→Lv.3　100EXP（総EXP150）
+|敵の種族         |アイコン                               |HP  |ATK |DEF |EXP|
 |:-------------:|:-----------------------------------:|:--:|:--:|:--:|:--|
-|born（プレイヤー）|![born](sample/born.png)            | 100|  20|  20|なし|
-|deka           |![deka](sample/deka.png)             |  70|  10|  10|なし|
-|guri           |![guri](sample/guri.png)             |  30|  25|   5|なし|
-|jelyf          |![jelyf](sample/jelyf.png)           |  40|  20|   5|なし|
-|yummy          |![yummy](sample/yummy.png)           | 100|   5|   5|なし|
-|crystal        |![crystal](sample/crystal.png)       |  50|   1|  30|なし|
-|grosspider     |![grosspider](sample/grosspider.png) |  40|   7|   7|なし|
-|iron           |![iron](sample/iron.png)             |  50|   8|  10|なし|
-|tatsu          |![tatsu](sample/tatsu.png)           |  30|  20|  15|なし|
-|ball           |![ball](sample/ball.png)             |  20|  15|  20|なし|
+|born（プレイヤー）|![born](sample/born.png)             | 100|  20|  20|なし|
+|deka           |![deka](sample/deka.png)             |  70|  10|  10| 10|
+|guri           |![guri](sample/guri.png)             |  30|  25|   5| 17|
+|jelyf          |![jelyf](sample/jelyf.png)           |  40|  20|   5|  7|
+|yummy          |![yummy](sample/yummy.png)           | 100|   5|   5| 18|
+|crystal        |![crystal](sample/crystal.png)       |  50|   1|  30| 10|
+|grosspider     |![grosspider](sample/grosspider.png) |  40|   7|   7|  7|
+|iron           |![iron](sample/iron.png)             |  50|   8|  10| 15|
+|tatsu          |![tatsu](sample/tatsu.png)           |  30|  20|  15|  7|
+|ball           |![ball](sample/ball.png)             |  20|  15|  20|  5|
 
 ## ダンジョンのサンプル画像
 ![参考画像](sample/sample.png)

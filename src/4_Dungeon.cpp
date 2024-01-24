@@ -323,6 +323,17 @@ GOTO_FOUND:
                     continue;
                 }
                 // SDL_Log("死亡した敵を別の敵としてリスポーン");
+                log.addText( player.getName() + "は" + std::to_string(e.EXP) + "EXPを得た");
+                if(player.levelUp(e.EXP))
+                {
+                    log.addText(player.getName() + "はレベルアップした！");
+                    log.addText(
+                        "Lv." + std::to_string(player.level) + 
+                        "　HP:" + std::to_string(player.getMaxHP()) + 
+                        "　STR:" + std::to_string(player.getSTR()) + 
+                        "　VIT:" + std::to_string(player.getVIT())
+                    );
+                }
                 ENEMY_TYPE new_e_type = static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER));
                 e = Enemy(new_e_type, e.ID);
                 e.sprile_clips = enemy_sprite_clips.at(static_cast<int>(new_e_type));

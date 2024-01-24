@@ -26,6 +26,7 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
             maxHP = DEKA_HP;
             STR   = DEKA_STR;
             VIT   = DEKA_VIT;
+            EXP   = DEKA_EXP;
             mName = "　　デ　カ　　";
             break;
 
@@ -33,6 +34,7 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
             maxHP = GURI_HP;
             STR   = GURI_STR;
             VIT   = GURI_VIT;
+            EXP   = GURI_EXP;
             mName = "　　グ　リ　　";
             break;
 
@@ -40,6 +42,7 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
             maxHP = JELYF_HP;
             STR   = JELYF_STR;
             VIT   = JELYF_VIT;
+            EXP   = JELYF_EXP;
             mName = "　 ジェリフ 　";
             break;
 
@@ -47,6 +50,7 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
             maxHP = YUMMY_HP;
             STR   = YUMMY_STR;
             VIT   = YUMMY_VIT;
+            EXP   = YUMMY_EXP;
             mName = "　　ヤミー　　";
             break;
         
@@ -54,6 +58,7 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
             maxHP = CRYSTAL_HP;
             STR   = CRYSTAL_STR;
             VIT   = CRYSTAL_VIT;
+            EXP   = CRYSTAL_EXP;
             mName = "　クリスタル　";
             break;
 
@@ -61,6 +66,7 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
             maxHP = GROSSPIDER_HP;
             STR   = GROSSPIDER_STR;
             VIT   = GROSSPIDER_VIT;
+            EXP   = GROSSPIDER_EXP;
             mName = "グロスパイダー";
             break;
 
@@ -68,6 +74,7 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
             maxHP = IRON_HP;
             STR   = IRON_STR;
             VIT   = IRON_VIT;
+            EXP   = IRON_EXP;
             mName = "　 アイアン　";
             break;
         
@@ -75,6 +82,7 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
             maxHP = TATSU_HP;
             STR   = TATSU_STR;
             VIT   = TATSU_VIT;
+            EXP   = TATSU_EXP;
             mName = "　　タ　ツ　　";
             break;
         
@@ -82,6 +90,7 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
             maxHP = BALL_HP;
             STR   = BALL_STR;
             VIT   = BALL_VIT;
+            EXP   = BALL_EXP;
             mName = "　　ボール　　";
             break;
 
@@ -102,13 +111,14 @@ Enemy::Enemy(int _x, int _y, int _maxHP, int _STR, int _VIT, int _id)
     maxHP = DEKA_HP;
     STR   = DEKA_STR;
     VIT   = DEKA_VIT;
-    mName = "デカ";
+    mName = "　オリジナル　";
     mBox.x = 0;
     mBox.y = 0;
     mState = SEARCH;
     mDir = DOWN;
     mType = ENEMY;
     nowHP = maxHP;
+    EXP = DEKA_EXP;
 }
 
 Enemy::~Enemy()

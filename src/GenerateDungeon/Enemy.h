@@ -38,6 +38,7 @@ public:
     ENEMY_TYPE getEnemyType() {return enemy_type;}
 
     int ID;
+    int EXP;
 
 private:
     std::deque<Ivec2> route;
