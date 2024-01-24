@@ -1,15 +1,20 @@
 # 卒業制作「ローグライクゲーム」
-一応AppImageも作成したのですが、何故かダンジョンのタイルが読み込まれず、表示されません。
-それ以外はちゃんと動きます。
 
 ## 実行方法
 まずこのリポジトリをクローンするか、zipファイルをダウンロードして解凍してください。
 ```
+（コンパイルから実行）
 sudo apt-get install make -y
 sudo apt-get install g++ -y
 cd Rogue
 make play
+
+（AppImageから実行）
+cd Rogue
+chmod +x Rogue-x86_64.AppImage
+./Rogue-x86_64.AppImage
 ```
+AppImageで実行すると、たまに壁の中に敵が湧きます。
 
 ## ダンジョンの生成方法一覧
 |生成方法  |備考|
@@ -18,7 +23,7 @@ make play
 |RRA      |Random Room Assignmentだと長いので、格好つけて略してます。生成方法は名前のとおりです。|
 
 ## キャラクター一覧
-プレイヤーは ``（現在のレベル） * 100``のEXPでレベルアップ
+プレイヤーは ```（現在のレベル） * 100```のEXPでレベルアップ  
 （例）Lv.1→Lv.2　100EXP（総EXP100）
 　　　Lv.2→Lv.3　200EXP（総EXP300）
 |敵の種族         |アイコン                               |HP  |ATK |DEF |EXP|

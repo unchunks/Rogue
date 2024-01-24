@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL.h>
+#include "../../include/SDL2/SDL.h"
 
 #include "Enum.h"
 #include "Const.h"

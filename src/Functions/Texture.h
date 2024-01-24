@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include "../../include/SDL2/SDL.h"
+#include "../../include/SDL2/SDL_image.h"
 
 SDL_Texture* loadTexture(std::string path, SDL_Renderer* renderer) {
     //The return texture

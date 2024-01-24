@@ -1,6 +1,6 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_mixer.h>
+#include "../../include/SDL2/SDL.h"
+#include "../../include/SDL2/SDL_ttf.h"
+#include "../../SDL2/SDL_mixer.h"
 
 #include "GenerateDungeon/Enum.h"
 
