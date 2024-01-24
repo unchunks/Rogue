@@ -1,18 +1,24 @@
-# 卒業制作「ローグライクゲーム」
+# 卒業制作「ローグライクゲーム」 <img src="https://img.shields.io/badge/-C++-00599C.svg?logo=cplusplus&style=plastic"> [![Downloads](https://img.shields.io/github/downloads/unchunks/Rogue/total)](https://github.com/unchunks/Rogue/releases) [![Releases](https://img.shields.io/github/v/release/unchunks/Rogue)](https://github.com/unchunks/Rogue/releases)
+
+
+ 
+
 
 ## 実行方法
+（AppImageから実行）
+リリースからAppImageをダウンロードしてください。
+```
+chmod +x Rogue-x86_64.AppImage
+./Rogue-x86_64.AppImage
+```
+
+（コンパイルから実行）
 まずこのリポジトリをクローンするか、zipファイルをダウンロードして解凍してください。
 ```
-（コンパイルから実行）
 sudo apt-get install make -y
 sudo apt-get install g++ -y
 cd Rogue
 make play
-
-（AppImageから実行）
-cd Rogue
-chmod +x Rogue-x86_64.AppImage
-./Rogue-x86_64.AppImage
 ```
 AppImageで実行すると、たまに壁の中に敵が湧きます。
 
