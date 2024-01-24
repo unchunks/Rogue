@@ -26,35 +26,35 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
             maxHP = DEKA_HP;
             STR   = DEKA_STR;
             VIT   = DEKA_VIT;
-            mName = "　　　　　デカ";
+            mName = "　　デ　カ　　";
             break;
 
         case GURI:
             maxHP = GURI_HP;
             STR   = GURI_STR;
             VIT   = GURI_VIT;
-            mName = "　　　　　グリ";
+            mName = "　　グ　リ　　";
             break;
 
         case JELYF:
             maxHP = JELYF_HP;
             STR   = JELYF_STR;
             VIT   = JELYF_VIT;
-            mName = "　　　ジェリフ";
+            mName = "　 ジェリフ 　";
             break;
 
         case YUMMY:
             maxHP = YUMMY_HP;
             STR   = YUMMY_STR;
             VIT   = YUMMY_VIT;
-            mName = "　　　　ヤミー";
+            mName = "　　ヤミー　　";
             break;
         
         case CRYSTAL:
             maxHP = CRYSTAL_HP;
             STR   = CRYSTAL_STR;
             VIT   = CRYSTAL_VIT;
-            mName = "　　クリスタル";
+            mName = "　クリスタル　";
             break;
 
         case GROSSPIDER:
@@ -68,21 +68,21 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
             maxHP = IRON_HP;
             STR   = IRON_STR;
             VIT   = IRON_VIT;
-            mName = "　　　アイアン";
+            mName = "　 アイアン　";
             break;
         
         case TATSU:
             maxHP = TATSU_HP;
             STR   = TATSU_STR;
             VIT   = TATSU_VIT;
-            mName = "　　　　　タツ";
+            mName = "　　タ　ツ　　";
             break;
         
         case BALL:
             maxHP = BALL_HP;
             STR   = BALL_STR;
             VIT   = BALL_VIT;
-            mName = "　　　　ボール";
+            mName = "　　ボール　　";
             break;
 
         case ENEMY_TYPE_NUMBER: break;
