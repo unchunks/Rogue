@@ -158,7 +158,7 @@ void Enemy::walk(std::vector<class Tile> _tiles, class Character& _player, const
         route.pop_front();
         elapsedTurn++;
 
-        SDL_Log("walk: %2d %s elapsedTurn = %3d, route size = %3d\n", ID, mName.c_str(), elapsedTurn, static_cast<int>(route.size()));
+        // SDL_Log("walk: %2d %s elapsedTurn = %3d, route size = %3d\n", ID, mName.c_str(), elapsedTurn, static_cast<int>(route.size()));
 
     }
 }
@@ -177,9 +177,7 @@ void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], Ivec2 _goal)
 {
     if(_goal.x > FLOOR_W || _goal.y > FLOOR_H || _goal.x < 0 || _goal.y < 0)
     {
-
-        SDL_Log("setGoal: ゴール位置エラー");
-
+        SDL_Log("Goal position error");
         return;
     }
     goal = _goal;
@@ -198,11 +196,11 @@ void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], Ivec2 _goal)
         return;
     }
 
-    SDL_Log("setGoal: 更新後のルート一覧");
-    for(auto vec2 : route)
-    {
-        SDL_Log("setGoal: (%d, %d)", vec2.x, vec2.y);
-    }
+    // SDL_Log("setGoal: 更新後のルート一覧");
+    // for(auto vec2 : route)
+    // {
+    //     SDL_Log("setGoal: (%d, %d)", vec2.x, vec2.y);
+    // }
 
     nextPos = route.at(0);
     route.pop_front();

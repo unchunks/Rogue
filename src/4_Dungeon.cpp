@@ -153,6 +153,13 @@ void Dungeon::Input(SDL_Event event)
         //         enemies.at(0).getDataPos().y + 2));
         //     break;
         default:
+            turn++;
+            nowTurn = ENEMY;
+            player.isMoved = false;
+            for(auto &e : enemies)
+            {
+                e.isMoved = true;
+            }
             break;
         }
         if(!player.isMoved || turn % 3 == 0)
@@ -185,10 +192,10 @@ void Dungeon::Update()
     // プレイヤーのアップデート
     if (nowTurn == PLAYER && player.isMoved)
     {
-        if (player.onTileCenter())
-        {
-            SDL_Log("プレイヤーのターン=========================================================================");
-        }
+        // if (player.onTileCenter())
+        // {
+        //     SDL_Log("プレイヤーのターン=========================================================================");
+        // }
         if( (player.onTileCenter()) && ( isOtherPos( player.getFrontDataPos() ) >= 0 ) )
         {
             log.addText(player.attack(whichEnemy(player.getFrontDataPos())));
@@ -223,7 +230,7 @@ void Dungeon::Update()
             {
                 e.isMoved = true;
             }
-            SDL_Log("敵のターン===============================================================================");
+            // SDL_Log("敵のターン===============================================================================");
         }
 
     }// 敵のアップデート
@@ -253,9 +260,7 @@ void Dungeon::Update()
                     // ルートの情報が古くなったり、なくなったりした場合に更新
                     while (e.mustUpdateRoute())
                     {
-
-                        SDL_Log("SEARCH: %d %s ルート更新", e.ID, e.getName().c_str());
-
+                        // SDL_Log("SEARCH: %d %s ルート更新", e.ID, e.getName().c_str());
                         updateEnemyRoute(e, RANDOM_POS);
                     }
 GOTO_SEARCH:
@@ -701,7 +706,7 @@ void Dungeon::updateEnemyRoute(Enemy &_enemy, GOAL_TYPE _goalType)
                 break;
             }
 
-            SDL_Log("updateEnemyRoute: RANDOM_POS = GOAL(%d, %d)", goal.x, goal.y);
+            // SDL_Log("updateEnemyRoute: RANDOM_POS = GOAL(%d, %d)", goal.x, goal.y);
 
         }
         break;
