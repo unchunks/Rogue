@@ -83,7 +83,7 @@ private:
     RRA rra;
 
     Player player = Player(0, 0, PLAYER_HP, PLAYER_STR, PLAYER_VIT);
-    std::vector<Enemy> enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
+    std::vector<Enemy> enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA, 0));
 
 	std::vector<Tile> tileSet;
 

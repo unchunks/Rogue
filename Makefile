@@ -50,7 +50,6 @@ debug : $(OBSRC)
 #	gdb ./$(BOJS)
 #	run
 #	bt
-#	frame 0
 
 test : test.cpp
 	$(CC) test.cpp $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o test
@@ -95,7 +94,7 @@ Enemy.o : src/Enemy.cpp src/GenerateDungeon/Enemy.h src/GenerateDungeon/AStar.h 
 	g++ src/Enemy.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 Extern.o : src/Extern.cpp
 	g++ src/Extern.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
-Game.o : src/Game.cpp src/Game.h src/Scene/1_Start.h src/Scene/2_Home.h src/Scene/3_DungeonMenu.h src/Scene/4_Dungeon.h src/Scene/5_Congratulations.h
+Game.o : src/Game.cpp src/Game.h src/Scene/1_Start.h src/Scene/2_Home.h src/Scene/3_DungeonMenu.h src/Scene/4_Dungeon.h src/Scene/5_Congratulations.h src/GenerateDungeon/Const.h
 	g++ src/Game.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 Generator.o : src/Generator.cpp src/GenerateDungeon/Generator.h src/GenerateDungeon/Area.h src/GenerateDungeon/Room.h src/GenerateDungeon/Player.h src/GenerateDungeon/Enemy.h src/GenerateDungeon/Enum.h src/GenerateDungeon/Const.h Ivec2.h
 	g++ src/Generator.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)

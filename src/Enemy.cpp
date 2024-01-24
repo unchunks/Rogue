@@ -1,6 +1,7 @@
 #include "GenerateDungeon/Enemy.h"
 
 Enemy::Enemy(const Enemy& other)
+:ID(other.ID)
 {
     maxHP = other.maxHP;
     STR   = other.STR;
@@ -15,8 +16,8 @@ Enemy::Enemy(const Enemy& other)
     nowHP = other.nowHP;
 }
 
-Enemy::Enemy(ENEMY_TYPE _enemy_type)
-: Character(), elapsedTurn(0)
+Enemy::Enemy(ENEMY_TYPE _enemy_type, int _id)
+: Character(), ID(_id), elapsedTurn(0)
 {
     enemy_type = _enemy_type;
     switch(enemy_type)
@@ -25,35 +26,35 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
             maxHP = DEKA_HP;
             STR   = DEKA_STR;
             VIT   = DEKA_VIT;
-            mName = "デカ";
+            mName = "　　　　　デカ";
             break;
 
         case GURI:
             maxHP = GURI_HP;
             STR   = GURI_STR;
             VIT   = GURI_VIT;
-            mName = "グリ";
+            mName = "　　　　　グリ";
             break;
 
         case JELYF:
             maxHP = JELYF_HP;
             STR   = JELYF_STR;
             VIT   = JELYF_VIT;
-            mName = "ジェリフ";
+            mName = "　　　ジェリフ";
             break;
 
         case YUMMY:
             maxHP = YUMMY_HP;
             STR   = YUMMY_STR;
             VIT   = YUMMY_VIT;
-            mName = "ヤミー";
+            mName = "　　　　ヤミー";
             break;
         
         case CRYSTAL:
             maxHP = CRYSTAL_HP;
             STR   = CRYSTAL_STR;
             VIT   = CRYSTAL_VIT;
-            mName = "クリスタル";
+            mName = "　　クリスタル";
             break;
 
         case GROSSPIDER:
@@ -67,21 +68,21 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
             maxHP = IRON_HP;
             STR   = IRON_STR;
             VIT   = IRON_VIT;
-            mName = "アイアン";
+            mName = "　　　アイアン";
             break;
         
         case TATSU:
             maxHP = TATSU_HP;
             STR   = TATSU_STR;
             VIT   = TATSU_VIT;
-            mName = "タツ";
+            mName = "　　　　　タツ";
             break;
         
         case BALL:
             maxHP = BALL_HP;
             STR   = BALL_STR;
             VIT   = BALL_VIT;
-            mName = "ボール";
+            mName = "　　　　ボール";
             break;
 
         case ENEMY_TYPE_NUMBER: break;
@@ -94,8 +95,8 @@ Enemy::Enemy(ENEMY_TYPE _enemy_type)
     nowHP = maxHP;
 }
 
-Enemy::Enemy(int _x, int _y, int _maxHP, int _STR, int _VIT)
-: Character(), elapsedTurn(0)
+Enemy::Enemy(int _x, int _y, int _maxHP, int _STR, int _VIT, int _id)
+: Character(), ID(_id), elapsedTurn(0)
 {
     enemy_type = DEKA;
     maxHP = DEKA_HP;
@@ -116,7 +117,7 @@ Enemy::~Enemy()
     route.shrink_to_fit();
 }
 
-void Enemy::walk(std::vector<class Tile> _tiles, Character _player, const std::vector<Enemy>& _otherEnemies)
+void Enemy::walk(std::vector<class Tile> _tiles, class Character& _player, const std::vector<class Enemy>& _otherEnemies)
 {
     std::vector<Character> otherCharacters;
     otherCharacters.push_back(static_cast<Character>(_player));
@@ -124,13 +125,8 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, const std::v
     {
         if(enemy.getDataPos() == getDataPos())
             continue;
-<<<<<<< HEAD
 
         otherCharacters.push_back(static_cast<Character>(enemy));
-=======
-        
-        otherCharacters.push_back(enemy);
->>>>>>> 5c2e6348c06e654bd77a3a5cd9d919eea51be515
     }
     // if(onTileCenter())
     // {
@@ -152,12 +148,12 @@ void Enemy::walk(std::vector<class Tile> _tiles, Character _player, const std::v
         route.pop_front();
         elapsedTurn++;
 
-        SDL_Log("walk: elapsedTurn = %d, route size = %d\n", elapsedTurn, static_cast<int>(route.size()));
+        SDL_Log("walk: %2d %s elapsedTurn = %3d, route size = %3d\n", ID, mName.c_str(), elapsedTurn, static_cast<int>(route.size()));
 
     }
 }
 
-void Enemy::walkTo(Ivec2 _destination, std::vector<class Tile> _tiles, class Character _player, const std::vector<class Enemy>& _otherEnemies)
+void Enemy::walkTo(Ivec2 _destination, std::vector<class Tile> _tiles, class Character& _player, const std::vector<class Enemy>& _otherEnemies)
 {
     _destination.x = _destination.x / TILE_W;
     _destination.y = _destination.y / TILE_H;
@@ -172,7 +168,7 @@ void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], Ivec2 _goal)
     if(_goal.x > FLOOR_W || _goal.y > FLOOR_H || _goal.x < 0 || _goal.y < 0)
     {
 
-        // SDL_Log("setGoal: ゴール位置エラー");
+        SDL_Log("setGoal: ゴール位置エラー");
 
         return;
     }
@@ -192,11 +188,11 @@ void Enemy::setGoal(CELL_TYPE _dungeon[FLOOR_H][FLOOR_W], Ivec2 _goal)
         return;
     }
 
-    // SDL_Log("setGoal: 更新後のルート一覧");
-    // for(auto vec2 : route)
-    // {
-    //     SDL_Log("setGoal: (%d, %d)", vec2.x, vec2.y);
-    // }
+    SDL_Log("setGoal: 更新後のルート一覧");
+    for(auto vec2 : route)
+    {
+        SDL_Log("setGoal: (%d, %d)", vec2.x, vec2.y);
+    }
 
     nextPos = route.at(0);
     route.pop_front();

@@ -13,15 +13,15 @@ constexpr int AREA_MAX = 10;
 constexpr int AREA_SIZE_MIN = 10;
 
 // 同時スポーンする敵の数
-constexpr int NUM_ENEMY = 10;
+constexpr int NUM_ENEMY = 30;
 // 敵の検知範囲
-constexpr int ENEMY_FIND_RANGE = 3;
-constexpr int ENEMY_SEARCH_INTERVAL = 10;
+constexpr int ENEMY_FIND_RANGE = 0;
+constexpr int ENEMY_SEARCH_INTERVAL = 50;
 
 // スクリーンの寸法（幅）
 constexpr int SCREEN_WIDTH = 996;
 // スクリーンの寸法（高さ）
-constexpr int SCREEN_HEIGHT = 560;
+constexpr int SCREEN_HEIGHT = 665; //560
 
 // Tile 定数
 constexpr int TILE_W = 128;

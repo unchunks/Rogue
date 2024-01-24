@@ -241,7 +241,7 @@ void Dungeon::Update()
             {
                 case SEARCH:
 
-                    SDL_Log("SEARCH");
+                    // SDL_Log("SEARCH");
 
                     // 発見確認
                     if(e.changeState(player))
@@ -251,15 +251,15 @@ void Dungeon::Update()
                     }
 
                     // ルートの情報が古くなったり、なくなったりした場合に更新
-                    if (e.mustUpdateRoute())
+                    while (e.mustUpdateRoute())
                     {
 
-                        // SDL_Log("SEARCH: ルート更新");
+                        SDL_Log("SEARCH: %d %s ルート更新", e.ID, e.getName().c_str());
 
                         updateEnemyRoute(e, RANDOM_POS);
                     }
 GOTO_SEARCH:
-                    SDL_Log("歩く");
+                    // SDL_Log("歩く");
                     e.walk(tileSet, player, enemies);
                     break;
 
@@ -324,7 +324,7 @@ GOTO_FOUND:
                 }
                 // SDL_Log("死亡した敵を別の敵としてリスポーン");
                 ENEMY_TYPE new_e_type = static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER));
-                e = Enemy(new_e_type);
+                e = Enemy(new_e_type, e.ID);
                 e.sprile_clips = enemy_sprite_clips.at(static_cast<int>(new_e_type));
                 Ivec2 data_pos;
                 switch (gNowScene)
@@ -490,10 +490,11 @@ void Dungeon::InitDungeon()
 
     // SDL_Log("InitDungeon: 敵を初期化");
     enemies.clear();
-    enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
+    int id = 0;
+    enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA, id));
     for (auto &e : enemies)
     {
-        e = Enemy(static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER)));
+        e = Enemy(static_cast<ENEMY_TYPE>(random_num(random_engine) % static_cast<int>(ENEMY_TYPE_NUMBER)), id);
         e.sprile_clips = enemy_sprite_clips.at(static_cast<int>(e.getEnemyType()));
 
         // SDL_Log("InitDungeon: 敵の位置を初期化");
@@ -510,6 +511,7 @@ void Dungeon::InitDungeon()
         }
         e.setDataPos(data_pos);
         // SDL_Log("InitDungeon: 敵の位置(%d, %d)", e.getDataPos().x, e.getDataPos().y);
+        id++;
     }
 }
 
@@ -519,7 +521,7 @@ void Dungeon::quit()
     go_next_floor = true;
     floor_num = 0;
     player.reset();
-    enemies = std::vector<Enemy>(NUM_ENEMY, Enemy(DEKA));
+    enemies.clear();
 }
 
 int Dungeon::isOtherPos(Ivec2 _data_pos)
@@ -688,7 +690,7 @@ void Dungeon::updateEnemyRoute(Enemy &_enemy, GOAL_TYPE _goalType)
                 break;
             }
 
-            // SDL_Log("updateEnemyRoute: RANDOM_POS = GOAL(%d, %d)", goal.x, goal.y);
+            SDL_Log("updateEnemyRoute: RANDOM_POS = GOAL(%d, %d)", goal.x, goal.y);
 
         }
         break;
