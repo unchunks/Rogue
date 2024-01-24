@@ -23,13 +23,13 @@ make play
 |born（プレイヤー）|![born](sample/born.png)            | 100|  20|  20|なし|
 |deka           |![deka](sample/deka.png)             |  70|  10|  10|なし|
 |guri           |![guri](sample/guri.png)             |  30|  25|   5|なし|
-|jelyf          |![jelyf](sample/jelyf.png)           |  20|  15|   5|なし|
+|jelyf          |![jelyf](sample/jelyf.png)           |  40|  20|   5|なし|
 |yummy          |![yummy](sample/yummy.png)           | 100|   5|   5|なし|
 |crystal        |![crystal](sample/crystal.png)       |  50|   1|  30|なし|
 |grosspider     |![grosspider](sample/grosspider.png) |  40|   7|   7|なし|
 |iron           |![iron](sample/iron.png)             |  50|   8|  10|なし|
-|tatsu          |![tatsu](sample/tatsu.png)           |  20|  20|  15|なし|
-|ball           |![ball](sample/ball.png)             |  20|   5|  20|なし|
+|tatsu          |![tatsu](sample/tatsu.png)           |  30|  20|  15|なし|
+|ball           |![ball](sample/ball.png)             |  20|  15|  20|なし|
 
 ## ダンジョンのサンプル画像
 ![参考画像](sample/sample.png)

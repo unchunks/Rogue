@@ -13,9 +13,9 @@ constexpr int AREA_MAX = 10;
 constexpr int AREA_SIZE_MIN = 10;
 
 // 同時スポーンする敵の数
-constexpr int NUM_ENEMY = 30;
+constexpr int NUM_ENEMY = 20;
 // 敵の検知範囲
-constexpr int ENEMY_FIND_RANGE = 0;
+constexpr int ENEMY_FIND_RANGE = 3;
 constexpr int ENEMY_SEARCH_INTERVAL = 50;
 
 // スクリーンの寸法（幅）
@@ -64,8 +64,8 @@ constexpr int GURI_STR  = 25;
 constexpr int GURI_VIT  = 5;
 
 // ジェリフ
-constexpr int JELYF_HP   = 20;
-constexpr int JELYF_STR  = 15;
+constexpr int JELYF_HP   = 40;
+constexpr int JELYF_STR  = 20;
 constexpr int JELYF_VIT  = 5;
 
 // ヤミー
@@ -89,11 +89,11 @@ constexpr int IRON_STR  = 10;
 constexpr int IRON_VIT  = 10;
 
 // タツ
-constexpr int TATSU_HP   = 20;
+constexpr int TATSU_HP   = 30;
 constexpr int TATSU_STR  = 20;
 constexpr int TATSU_VIT  = 15;
 
 // ボール
 constexpr int BALL_HP   = 20;
-constexpr int BALL_STR  = 5;
+constexpr int BALL_STR  = 15;
 constexpr int BALL_VIT  = 20;
