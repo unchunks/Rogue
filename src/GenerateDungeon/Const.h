@@ -27,7 +27,7 @@ constexpr int SCREEN_HEIGHT = 665; //560
 constexpr int TILE_W = 128;
 constexpr int TILE_H = 128;
 constexpr int TOTAL_TILES = 1600;
-constexpr int TOTAL_TILE_SPRITES = 20;
+constexpr int TOTAL_TILE_SPRITES = 30;
 
 // レベルの寸法
 constexpr int LEVEL_WIDTH = TILE_W * FLOOR_W;
@@ -49,10 +49,10 @@ constexpr int ANIMATION_FRAMES = 4;
 constexpr int ANIM_SPEED = 8;
 
 // REVIEW: プレイヤー
-constexpr int PLAYER_HP = 100;
-constexpr int PLAYER_STR = 20;
-constexpr int PLAYER_VIT = 20;
-constexpr int PLAYER_EXP = 50;
+constexpr int PLAYER_HP  = 100;
+constexpr int PLAYER_STR =  20;
+constexpr int PLAYER_VIT =  20;
+constexpr int PLAYER_EXP = 100;
 
 // デカ
 constexpr int DEKA_HP   = 70;
