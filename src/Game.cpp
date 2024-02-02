@@ -139,7 +139,7 @@ bool Game::Init()
 
 void Game::RunLoop()
 {
-    SDL_AddTimer(1000, fps_timer_callback, NULL);
+    // SDL_AddTimer(1000, fps_timer_callback, NULL);
     int beforTime = SDL_GetTicks();
     int afterTime = SDL_GetTicks();
     int elapsedTime = 0;
@@ -159,7 +159,9 @@ void Game::RunLoop()
 
 	
         /* フレーム数に1を加える */
-        SDL_AtomicAdd(&frames, 1);
+        // SDL_AtomicAdd(&frames, 1);
+
+        // FPS調整
         afterTime = SDL_GetTicks();
         elapsedTime = afterTime - beforTime;
         if(SPF > elapsedTime)
@@ -273,55 +275,44 @@ void Game::Output()
 
 void Game::Shutdown()
 {
-    Mix_FreeChunk(gClickEffect);
-    gClickEffect = NULL;
-
     Mix_HaltMusic();
     Mix_FreeMusic(mMusic);
     mMusic = NULL;
+    Mix_FreeChunk(gClickEffect);
+    gClickEffect = NULL;
     Mix_CloseAudio();
 
-    try {
-        delete mStart;
-    } catch (const std::exception& e) {
-        std::cout << "mStart" << std::endl;
-        std::cout << e.what() << std::endl;
-    }
-    try {
-        delete mHome;
-    } catch (const std::exception& e) {
-        std::cout << "mHome" << std::endl;
-        std::cout << e.what() << std::endl;
-    }
-    try {
-        delete mDungeonMenu;
-    } catch (const std::exception& e) {
-        std::cout << "mDungeonMenu" << std::endl;
-        std::cout << e.what() << std::endl;
-    }
-    try {
-        delete mDungeon;
-    } catch (const std::exception& e) {
-        std::cout << "mDungeon" << std::endl;
-        std::cout << e.what() << std::endl;
-    }
-    try {
-        delete mCongratulations;
-    } catch (const std::exception& e) {
-        std::cout << "mCongratulations" << std::endl;
-        std::cout << e.what() << std::endl;
-    }
-    try {
-        delete mGameOver;
-    } catch (const std::exception& e) {
-        std::cout << "mGameOver" << std::endl;
-        std::cout << e.what() << std::endl;
-    }
+    
+    delete mStart;
+    mStart = nullptr;
+    delete mHome;
+    mHome = nullptr;
+    delete mDungeonMenu;
+    mDungeonMenu = nullptr;
+    delete mDungeon;
+    mDungeon = nullptr;
+    delete mCongratulations;
+    mCongratulations = nullptr;
+    delete mGameOver;
+    mGameOver = nullptr;
+
+    // try {
+    //     delete mStart;
+    //     delete mHome;
+    //     delete mDungeonMenu;
+    //     delete mDungeon;
+    //     delete mCongratulations;
+    //     delete mGameOver;
+
+    // } catch (const std::exception& e) {
+    //     std::cout << "class" << std::endl;
+    //     std::cout << e.what() << std::endl;
+    // }
 
     SDL_DestroyRenderer(gRenderer);
+    gRenderer = NULL;
     SDL_DestroyWindow(gWindow);
     gWindow = NULL;
-    gRenderer = NULL;
 
     IMG_Quit();
     TTF_Quit();

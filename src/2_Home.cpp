@@ -160,6 +160,8 @@ Home::Home()
 Home::~Home()
 {
     mBornSleepTexture.free();
+    mBornSleepSpriteClips.clear();
+    mBornSleepSpriteClips.shrink_to_fit();
 }
 
 void Home::LoadData()
@@ -295,9 +297,7 @@ void Home::Output()
         mAnimFrame = 0;
     }
     int c_sprite_num = (mAnimFrame * SLEEP_SPEED / FPS);
-    // キャラクターを表示
-    // mBornSleepTexture.render(mBornSleepBox.x, mBornSleepBox.y, &mBornSleepSpriteClips[c_sprite_num]);
-
+    
     //レンダリングスペースを設定し、画面にレンダリング
 	SDL_Rect renderQuad = { mBornSleepBox.x, mBornSleepBox.y, SLEEP_W, SLEEP_H };
 
