@@ -1,4 +1,4 @@
-<img src="https://img.shields.io/badge/-C++-00599C.svg?logo=cplusplus&style=plastic"> [![Downloads](https://img.shields.io/github/downloads/unchunks/Rogue/total)](https://github.com/unchunks/Rogue/releases) [![Releases](https://img.shields.io/github/v/release/unchunks/Rogue?sort=semver)](https://github.com/unchunks/Rogue/releases)
+<img src="https://img.shields.io/badge/-C++-00599C.svg?logo=cplusplus&style=plastic"> [![Downloads](https://img.shields.io/github/downloads/unchunks/Rogue/total)](https://github.com/unchunks/Rogue/releases) [![Releases](https://img.shields.io/github/v/release/unchunks/Rogue?sort=semver&style=flat-square)](https://github.com/unchunks/Rogue/releases)
 # 卒業制作「ローグライクゲーム」
 
  
