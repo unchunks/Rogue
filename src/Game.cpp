@@ -89,8 +89,8 @@ bool Game::Init()
     // Create an SDL Window
     gWindow = SDL_CreateWindow(
         "Rogue",                               // Window title
-        100,                                   // Top left x-coordinate of window
-        100,                                   // Top left y-coordinate of window
+        SDL_WINDOWPOS_UNDEFINED,               // Top left x-coordinate of window
+        SDL_WINDOWPOS_UNDEFINED,               // Top left y-coordinate of window
         SCREEN_WIDTH,                          // Width of window
         SCREEN_HEIGHT,                         // Height of window
         0                                      // Flags (0 for no flags set)
