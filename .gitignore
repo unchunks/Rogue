@@ -1,7 +1,9 @@
 .vscode/c_cpp_properties.json
 .vscode/settings.json
+Game.AppDir
 token.txt
 *.o
 *.map
+*.AppImage
 game
 TODO.md
