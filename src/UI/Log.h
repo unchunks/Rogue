@@ -2,8 +2,8 @@
 
 #include <vector>
 #include <string>
-#include "../../include/SDL2/SDL.h"
-#include "../../include/SDL2/SDL_ttf.h"
+#include <SDL.h>
+#include <SDL_ttf.h>
 
 #include "../GenerateDungeon/Const.h"
 

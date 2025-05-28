@@ -1,6 +1,6 @@
 .vscode/c_cpp_properties.json
 .vscode/settings.json
-Game.AppDir
+AppDir
 token.txt
 *.o
 *.map

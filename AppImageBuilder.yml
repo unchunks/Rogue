@@ -1,0 +1,55 @@
+version: 1
+
+AppDir:
+  path: ./AppDir
+
+  app_info:
+    id: dev.unchunks.rogue
+    name: Rogue
+    version: 0.1.0
+    exec: usr/bin/rogue
+    exec_args: $@
+
+  apt:
+    arch: amd64
+    sources:
+      - sourceline: 'deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse'
+        key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3b4fe6acc0b21f32'
+    include:
+      - libsdl2-2.0-0
+      - libsdl2-image-2.0-0
+      - libsdl2-ttf-2.0-0
+      - libsdl2-mixer-2.0-0
+      - libstdc++6
+      - libfreetype6
+      - libfreetype6-dev
+      - libharfbuzz0b  # ← これが本来必要なパッケージ名
+
+  files:
+    include:
+      - ./assets:usr/share/rogue/assets
+      - ./rogue:usr/bin/rogue
+    exclude:
+      - usr/share/man
+      - usr/share/doc
+      - usr/share/info
+      - usr/share/lintian
+      - usr/share/bug
+      - usr/lib/kernel
+      - etc/init.d
+      - lib/systemd
+      - lib/udev
+      - sbin
+
+  runtime:
+    env:
+      # Ensure AppDir libs are found first
+      LD_LIBRARY_PATH: '${APPDIR}/usr/lib:${APPDIR}/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH'
+      # Avoid GStreamer-related warnings
+      GST_REGISTRY_DISABLE: '1'
+      GST_PLUGIN_SCANNER_DISABLE: '1'
+
+AppImage:
+  arch: x86_64
+  update-information: None
+  sign-key: ""

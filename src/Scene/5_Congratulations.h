@@ -1,9 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include "../../include/SDL2/SDL.h"
-#include "../../include/SDL2/SDL_ttf.h"
-#include "../../SDL2/SDL_mixer.h"
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 #include "../UI/Button.h"
 #include "../Functions/Color.h"
