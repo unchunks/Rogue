@@ -12,16 +12,7 @@ sudo apt-get install libsdl2-2.0-0 libsdl2-image-2.0-0 libsdl2-ttf-2.0-0 libsdl2
 chmod +x Rogue-x86_64.AppImage
 ./Rogue-x86_64.AppImage
 ```
-
-（コンパイルから実行）
-まずこのリポジトリをクローンするか、zipファイルをダウンロードして解凍してください。
-```
-sudo apt-get install make -y
-sudo apt-get install g++ -y
-cd Rogue
-make play
-```
-AppImageで実行すると、たまに壁の中に敵が湧きます。
+たまに壁の中に敵が湧きます。
 
 ## ダンジョンの生成方法一覧
 |生成方法  |備考|
