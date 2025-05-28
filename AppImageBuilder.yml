@@ -2,7 +2,6 @@ version: 1
 
 AppDir:
   path: ./AppDir
-
   app_info:
     id: dev.unchunks.rogue
     name: Rogue
@@ -22,8 +21,19 @@ AppDir:
       - libsdl2-mixer-2.0-0
       - libstdc++6
       - libfreetype6
-      - libfreetype6-dev
-      - libharfbuzz0b  # ← これが本来必要なパッケージ名
+      - libharfbuzz0b
+      - libc6
+      - libgcc-s1
+      - libpng16-16
+      - libjpeg-turbo8
+      - libwebp6
+      - libtiff5
+      - libvorbis0a
+      - libvorbisfile3
+      - libflac8
+      - libmodplug1
+      - libopusfile0
+      - libmpg123-0
 
   files:
     include:
@@ -44,7 +54,7 @@ AppDir:
   runtime:
     env:
       # Ensure AppDir libs are found first
-      LD_LIBRARY_PATH: '${APPDIR}/usr/lib:${APPDIR}/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH'
+      LD_LIBRARY_PATH: '${APPDIR}/usr/lib:${APPDIR}/usr/lib/x86_64-linux-gnu:${APPDIR}/lib:${APPDIR}/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH'
       # Avoid GStreamer-related warnings
       GST_REGISTRY_DISABLE: '1'
       GST_PLUGIN_SCANNER_DISABLE: '1'

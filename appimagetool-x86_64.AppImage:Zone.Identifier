@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://github.com/AppImage/AppImageKit/releases
+HostUrl=https://objects.githubusercontent.com/github-production-release-asset-2e65be/9435153/947c0a00-4b61-11eb-8047-89c3df153503?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=releaseassetproduction%2F20250528%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250528T135057Z&X-Amz-Expires=300&X-Amz-Signature=467f855f6099c7567a35d862647763b63b8e09f76bd7c9b10634cf8826617e07&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3Dappimagetool-x86_64.AppImage&response-content-type=application%2Foctet-stream

@@ -3,7 +3,7 @@
 constexpr int FPS = 30;
 constexpr int SPF = 1000 / FPS;
 
-constexpr int LAST_FLOOR = 5;
+constexpr int LAST_FLOOR = 10;
 
 constexpr int FLOOR_W = 40;
 constexpr int FLOOR_H = 40;
@@ -13,7 +13,7 @@ constexpr int AREA_MAX = 10;
 constexpr int AREA_SIZE_MIN = 10;
 
 // 同時スポーンする敵の数
-constexpr int NUM_ENEMY = 20;
+constexpr int NUM_ENEMY = 10;
 // 敵の検知範囲
 constexpr int ENEMY_FIND_RANGE = 3;
 constexpr int ENEMY_SEARCH_INTERVAL = 50;
