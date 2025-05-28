@@ -8,7 +8,6 @@
 （AppImageから実行）
 リリースからAppImageをダウンロードしてください。
 ```
-sudo apt-get install libsdl2-2.0-0 libsdl2-image-2.0-0 libsdl2-ttf-2.0-0 libsdl2-mixer-2.0-0 -y
 chmod +x Rogue-x86_64.AppImage
 ./Rogue-x86_64.AppImage
 ```
