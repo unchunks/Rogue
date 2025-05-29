@@ -8,8 +8,8 @@
 （AppImageから実行）
 リリースからAppImageをダウンロードしてください。
 ```
-chmod +x Rogue-x86_64.AppImage
-./Rogue-x86_64.AppImage
+chmod +x Rogue-1.0.4-x86_64.AppImage
+./Rogue-1.0.4-x86_64.AppImage
 ```
 たまに壁の中に敵が湧きます。
 
