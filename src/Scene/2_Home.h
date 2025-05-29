@@ -7,6 +7,7 @@
 
 #include "../UI/Button.h"
 #include "../Functions/Color.h"
+#include "../Functions/Util.h"
 #include "../GenerateDungeon/Const.h"
 #include "../GenerateDungeon/LTexture.h"
 

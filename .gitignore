@@ -4,8 +4,6 @@ AppDir
 token.txt
 *.o
 *.map
-*.AppImage
-*.yml
 *.zsync
 rogue
 game

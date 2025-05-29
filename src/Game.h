@@ -8,6 +8,8 @@
 #include <SDL_ttf.h>
 #include "../SDL2/SDL_mixer.h"
 
+#include "Functions/Util.h"
+
 #include "Scene/1_Start.h"
 #include "Scene/2_Home.h"
 #include "Scene/3_DungeonMenu.h"

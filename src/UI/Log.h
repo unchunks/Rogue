@@ -6,6 +6,7 @@
 #include <SDL_ttf.h>
 
 #include "../GenerateDungeon/Const.h"
+#include "../Functions/Util.h"
 
 class Log
 {

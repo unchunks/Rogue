@@ -5,7 +5,7 @@ constexpr SDL_Rect Log::logRect;
 Log::Log()
 {
     // なぜか指定したフォントより1大きくなる
-    fontN = TTF_OpenFont("assets/JF-Dot-K14.ttf", FONT_SIZE - 1);
+    fontN = TTF_OpenFont(resource_path("JF-Dot-K14.ttf"), FONT_SIZE - 1);
     texts.resize(0);
 
 }

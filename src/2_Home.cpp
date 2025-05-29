@@ -167,7 +167,7 @@ Home::~Home()
 void Home::LoadData()
 {
     mBornSleepSpriteClips.resize(SLEEP_NUM, {0, 0, 0, 0});
-    if (!mBornSleepTexture.loadFromFile("assets/bone_sleeping.png"))
+    if (!mBornSleepTexture.loadFromFile(resource_path("bone_sleeping.png")))
     {
         SDL_Log("Failed to load walking animation texture!\n");
         return;

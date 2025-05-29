@@ -58,6 +58,7 @@ AppDir:
       # Avoid GStreamer-related warnings
       GST_REGISTRY_DISABLE: '1'
       GST_PLUGIN_SCANNER_DISABLE: '1'
+      ROGUE_ASSETS_DIR: '${APPDIR}/usr/share/rogue/assets'
 
 AppImage:
   arch: x86_64

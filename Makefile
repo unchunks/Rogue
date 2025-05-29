@@ -46,6 +46,14 @@ valgrind : $(OBSRC)
 debug : $(OBSRC)
 	$(CC) $(OBSRC) -g $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME)
 
+appimage : 
+	make release
+	mkdir -p AppDir/usr/bin
+	mkdir -p AppDir/usr/share/rogue
+	cp $(OBJ_NAME) AppDir/usr/bin/
+	cp assets AppDir/usr/share/rogue/
+	./appimage-builder-x86_64.AppImage --recipe AppImageBuilder.yml
+
 # gdbの手順
 #	gdb ./$(BOJS)
 #	run
@@ -74,11 +82,11 @@ play: $(OBSRC)
 
 1_Start.o : src/1_Start.cpp src/Scene/1_Start.h src/UI/Button.h src/Functions/Color.h src/GenerateDungeon/Const.h src/Game.h
 	g++ src/1_Start.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
-2_Home.o : src/2_Home.cpp src/Scene/2_Home.h src/UI/Button.h src/Functions/Color.h src/GenerateDungeon/Const.h src/GenerateDungeon/LTexture.h src/Game.h
+2_Home.o : src/2_Home.cpp src/Scene/2_Home.h src/UI/Button.h src/Functions/Color.h src/Functions/Util.h src/GenerateDungeon/Const.h src/GenerateDungeon/LTexture.h src/Game.h
 	g++ src/2_Home.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 3_DungeonMenu.o : src/3_DungeonMenu.cpp src/Scene/3_DungeonMenu.h src/UI/Button.h src/Functions/Color.h src/GenerateDungeon/Const.h src/Game.h
 	g++ src/3_DungeonMenu.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
-4_Dungeon.o : src/4_Dungeon.cpp src/Scene/4_Dungeon.h src/UI/Log.h src/Functions/Color.h src/GenerateDungeon/Const.h src/GenerateDungeon/AreaDivide.h src/GenerateDungeon/RRA.h src/GenerateDungeon/Player.h src/GenerateDungeon/Enemy.h src/GenerateDungeon/Const.h src/GenerateDungeon/Tile.h src/GenerateDungeon/LTexture.h src/Game.h
+4_Dungeon.o : src/4_Dungeon.cpp src/Scene/4_Dungeon.h src/UI/Log.h src/Functions/Color.h src/Functions/Util.h src/GenerateDungeon/Const.h src/GenerateDungeon/AreaDivide.h src/GenerateDungeon/RRA.h src/GenerateDungeon/Player.h src/GenerateDungeon/Enemy.h src/GenerateDungeon/Const.h src/GenerateDungeon/Tile.h src/GenerateDungeon/LTexture.h src/Game.h
 	g++ src/4_Dungeon.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 5_Congratulations.o : src/5_Congratulations.cpp src/Scene/5_Congratulations.h src/UI/Button.h src/Functions/Color.h src/GenerateDungeon/Const.h src/Game.h
 	g++ src/5_Congratulations.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
@@ -94,11 +102,11 @@ Enemy.o : src/Enemy.cpp src/GenerateDungeon/Enemy.h src/GenerateDungeon/AStar.h 
 	g++ src/Enemy.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 Extern.o : src/Extern.cpp
 	g++ src/Extern.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
-Game.o : src/Game.cpp src/Game.h src/Scene/1_Start.h src/Scene/2_Home.h src/Scene/3_DungeonMenu.h src/Scene/4_Dungeon.h src/Scene/5_Congratulations.h src/GenerateDungeon/Const.h
+Game.o : src/Game.cpp src/Game.h src/Scene/1_Start.h src/Scene/2_Home.h src/Scene/3_DungeonMenu.h src/Scene/4_Dungeon.h src/Scene/5_Congratulations.h src/GenerateDungeon/Const.h src/Functions/Util.h
 	g++ src/Game.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 Generator.o : src/Generator.cpp src/GenerateDungeon/Generator.h src/GenerateDungeon/Area.h src/GenerateDungeon/Room.h src/GenerateDungeon/Player.h src/GenerateDungeon/Enemy.h src/GenerateDungeon/Enum.h src/GenerateDungeon/Const.h Ivec2.h
 	g++ src/Generator.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
-Log.o : src/Log.cpp src/UI/Log.h src/GenerateDungeon/Const.h
+Log.o : src/Log.cpp src/UI/Log.h src/GenerateDungeon/Const.h src/Functions/Util.h
 	g++ src/Log.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)
 LTexture.o : src/LTexture.cpp src/GenerateDungeon/LTexture.h src/GenerateDungeon/Const.h src/GenerateDungeon/Enum.h Ivec2.h
 	g++ src/LTexture.cpp -c $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS)

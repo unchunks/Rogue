@@ -396,7 +396,7 @@ bool Dungeon::LoadData()
     bool success = true;
 
     // プレイヤーのスプライトシートのテクスチャを読み込む
-    if (!player.mCharTexture.loadFromFile("assets/character.png"))
+    if (!player.mCharTexture.loadFromFile(resource_path("character.png")))
     {
         SDL_Log("Failed to load walking animation texture!\n");
         success = false;
@@ -434,7 +434,7 @@ bool Dungeon::LoadData()
     player.sprile_clips = mPlayerSpriteClips;
 
     // Load tile texture
-    if (!gTileTexture.loadFromFile("assets/dungeon_tiles.png"))
+    if (!gTileTexture.loadFromFile(resource_path("dungeon_tiles.png")))
     {
         SDL_Log("Failed to load tile set texture!\n");
         success = false;

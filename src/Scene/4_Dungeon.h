@@ -9,6 +9,7 @@
 
 #include "../UI/Log.h"
 #include "../Functions/Color.h"
+#include "../Functions/Util.h"
 #include "../GenerateDungeon/Const.h"
 #include "../GenerateDungeon/Enum.h"
 
