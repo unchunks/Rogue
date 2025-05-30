@@ -1,6 +1,7 @@
-.vscode/c_cpp_properties.json
-.vscode/settings.json
+.vscode
 AppDir
+appimage-build
+squashfs-root
 token.txt
 *.o
 *.map
