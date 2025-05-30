@@ -172,17 +172,17 @@ void Game::RunLoop()
 void Game::Input()
 {
     Button staticButton;
-    SDL_PollEvent(&event);
-    do
+    while (SDL_PollEvent(&event))
     {
-        if(event.type != SDL_KEYDOWN && event.type != SDL_KEYUP)
-        {
-            continue;
-        }
         if (event.type == SDL_QUIT)
         {
             mIsRunning = false;
         }
+        if(event.type != SDL_KEYDOWN && event.type != SDL_KEYUP)
+        {
+            continue;
+        }
+        
         switch (gNowScene)
         {
             case START:         
@@ -210,7 +210,7 @@ void Game::Input()
                 mGameOver->Input(event);
                 break;
         }
-    } while (SDL_PollEvent(&event));
+    }
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_ESCAPE]) mIsRunning = false;
 }

@@ -5,7 +5,7 @@ AppDir:
   app_info:
     id: dev.unchunks.rogue
     name: Rogue
-    version: 0.1.0
+    version: 1.0.5
     exec: usr/bin/rogue
     exec_args: $@
 
