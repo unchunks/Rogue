@@ -1,176 +1,11 @@
-Package: libglx0
-Status: install ok installed
-Version: 1.3.1-1
-Architecture: amd64
-
-Package: libglapi-mesa
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: mesa-vdpau-drivers
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: libinput-bin
-Status: install ok installed
-Version: 1.15.5-1
-Architecture: amd64
-
-Package: libegl1-mesa-dev
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: libxcb-shm0
+Package: libxcb-glx0
 Status: install ok installed
 Version: 1.14-2
 Architecture: amd64
-
-Package: libx11-protocol-perl
-Status: install ok installed
-Version: 0.56-7
-Architecture: all
-
-Package: libgbm1
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: bind9-host
-Status: install ok installed
-Version: 1:9.16.1-0ubuntu2
-Architecture: amd64
-
-Package: libx11-xcb1
-Status: install ok installed
-Version: 2:1.6.9-2ubuntu1
-Architecture: amd64
-
-Package: libegl1
-Status: install ok installed
-Version: 1.3.1-1
-Architecture: amd64
-
-Package: libgl1-mesa-dri
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: libglx-dev
-Status: install ok installed
-Version: 1.3.1-1
-Architecture: amd64
-
-Package: libx11-xcb-dev
-Status: install ok installed
-Version: 2:1.6.9-2ubuntu1
-Architecture: amd64
-
-Package: libglx-mesa0
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: apt
-Status: install ok installed
-Version: 2.0.2
-Architecture: amd64
-
-Package: libdrm-tests
-Status: install ok installed
-Version: 2.4.101-2
-Architecture: amd64
-
-Package: base-files
-Status: install ok installed
-Version: 11ubuntu5
-Architecture: amd64
-
-Package: libx11-doc
-Status: install ok installed
-Version: 2:1.6.9-2ubuntu1
-Architecture: all
-
-Package: libxcb-xfixes0
-Status: install ok installed
-Version: 1.14-2
-Architecture: amd64
-
-Package: adduser
-Status: install ok installed
-Version: 3.118ubuntu2
-Architecture: all
-
-Package: libx11-xcb-perl
-Status: install ok installed
-Version: 0.18-1build1
-Architecture: amd64
-
-Package: mesa-utils-extra
-Status: install ok installed
-Version: 8.4.0-1build1
-Architecture: amd64
-
-Package: libdrm-common
-Status: install ok installed
-Version: 2.4.101-2
-Architecture: all
-
-Package: libxcb-present0
-Status: install ok installed
-Version: 1.14-2
-Architecture: amd64
-
-Package: fdisk
-Status: install ok installed
-Version: 2.34-0.1ubuntu9
-Architecture: amd64
-
-Package: libwayland-egl1
-Status: install ok installed
-Version: 1.18.0-1
-Architecture: amd64
-
-Package: debconf
-Status: install ok installed
-Version: 1.5.73
-Architecture: all
 
 Package: libx11-6
 Status: install ok installed
 Version: 2:1.6.9-2ubuntu1
-Architecture: amd64
-
-Package: libgles1
-Status: install ok installed
-Version: 1.3.1-1
-Architecture: amd64
-
-Package: mesa-utils
-Status: install ok installed
-Version: 8.4.0-1build1
-Architecture: amd64
-
-Package: fontconfig-config
-Status: install ok installed
-Version: 2.13.1-2ubuntu3
-Architecture: all
-
-Package: libdrm-radeon1
-Status: install ok installed
-Version: 2.4.101-2
-Architecture: amd64
-
-Package: libwayland-server0
-Status: install ok installed
-Version: 1.18.0-1
-Architecture: amd64
-
-Package: libegl-dev
-Status: install ok installed
-Version: 1.3.1-1
 Architecture: amd64
 
 Package: init-system-helpers
@@ -178,97 +13,17 @@ Status: install ok installed
 Version: 1.57
 Architecture: all
 
-Package: xdg-user-dirs
-Status: install ok installed
-Version: 0.17-2ubuntu1
-Architecture: amd64
-
-Package: libx11-windowhierarchy-perl
-Status: install ok installed
-Version: 0.004-1
-Architecture: all
-
-Package: libwayland-doc
-Status: install ok installed
-Version: 1.18.0-1
-Architecture: all
-
-Package: libdrm-dev
-Status: install ok installed
-Version: 2.4.101-2
-Architecture: amd64
-
-Package: libpam-runtime
-Status: install ok installed
-Version: 1.3.1-5ubuntu4
-Architecture: all
-
-Package: libdrm2
-Status: install ok installed
-Version: 2.4.101-2
-Architecture: amd64
-
-Package: libdrmaa1.0-ruby
-Status: install ok installed
-Version: 8.1.9+dfsg-9build2
-Architecture: all
-
-Package: libcap2-bin
-Status: install ok installed
-Version: 1:2.32-1
-Architecture: amd64
-
-Package: libgl1-mesa-glx
+Package: libgl1-mesa-dri
 Status: install ok installed
 Version: 20.0.4-2ubuntu1
 Architecture: amd64
 
-Package: debianutils
+Package: fontconfig
 Status: install ok installed
-Version: 4.9.1
+Version: 2.13.1-2ubuntu3
 Architecture: amd64
 
-Package: libwayland-client-extra++0
-Status: install ok installed
-Version: 0.2.5-2build1
-Architecture: amd64
-
-Package: coreutils
-Status: install ok installed
-Version: 8.30-3ubuntu2
-Architecture: amd64
-
-Package: mesa-opencl-icd
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: libgles2
-Status: install ok installed
-Version: 1.3.1-1
-Architecture: amd64
-
-Package: systemd-sysv
-Status: install ok installed
-Version: 245.4-4ubuntu3
-Architecture: amd64
-
-Package: libxcb-dri2-0
-Status: install ok installed
-Version: 1.14-2
-Architecture: amd64
-
-Package: mesa-vulkan-drivers
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: libx11-keyboard-perl
-Status: install ok installed
-Version: 1.4-7
-Architecture: all
-
-Package: libglvnd-core-dev
+Package: libegl1
 Status: install ok installed
 Version: 1.3.1-1
 Architecture: amd64
@@ -278,54 +33,34 @@ Status: install ok installed
 Version: 1.12.16-2ubuntu2
 Architecture: amd64
 
-Package: avahi-daemon
+Package: mesa-utils
 Status: install ok installed
-Version: 0.7-4ubuntu7
+Version: 8.4.0-1build1
 Architecture: amd64
 
-Package: iso-codes
-Status: install ok installed
-Version: 4.4-1
-Architecture: all
-
-Package: libwayland-egl-backend-dev
-Status: install ok installed
-Version: 1.18.0-1
-Architecture: amd64
-
-Package: libgbm-dev
+Package: mesa-vdpau-drivers
 Status: install ok installed
 Version: 20.0.4-2ubuntu1
 Architecture: amd64
 
-Package: util-linux
-Status: install ok installed
-Version: 2.34-0.1ubuntu9
-Architecture: amd64
-
-Package: sysvinit-utils
-Status: install ok installed
-Version: 2.96-2.1ubuntu1
-Architecture: amd64
-
-Package: x11-common
-Status: install ok installed
-Version: 1:7.7+19ubuntu14
-Architecture: all
-
-Package: libx11-data
-Status: install ok installed
-Version: 2:1.6.9-2ubuntu1
-Architecture: all
-
-Package: libegl1-mesa
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: libwayland-bin
+Package: libwayland-dev
 Status: install ok installed
 Version: 1.18.0-1
+Architecture: amd64
+
+Package: libpam-runtime
+Status: install ok installed
+Version: 1.3.1-5ubuntu4
+Architecture: all
+
+Package: libx11-keyboard-perl
+Status: install ok installed
+Version: 1.4-7
+Architecture: all
+
+Package: libgl1
+Status: install ok installed
+Version: 1.3.1-1
 Architecture: amd64
 
 Package: libwayland-client0
@@ -333,19 +68,184 @@ Status: install ok installed
 Version: 1.18.0-1
 Architecture: amd64
 
+Package: x11-common
+Status: install ok installed
+Version: 1:7.7+19ubuntu14
+Architecture: all
+
+Package: libwayland-client++0
+Status: install ok installed
+Version: 0.2.5-2build1
+Architecture: amd64
+
+Package: libx11-data
+Status: install ok installed
+Version: 2:1.6.9-2ubuntu1
+Architecture: all
+
+Package: libx11-dev
+Status: install ok installed
+Version: 2:1.6.9-2ubuntu1
+Architecture: amd64
+
+Package: fontconfig-config
+Status: install ok installed
+Version: 2.13.1-2ubuntu3
+Architecture: all
+
+Package: xdg-user-dirs
+Status: install ok installed
+Version: 0.17-2ubuntu1
+Architecture: amd64
+
+Package: libglvnd0
+Status: install ok installed
+Version: 1.3.1-1
+Architecture: amd64
+
 Package: libpam-modules-bin
 Status: install ok installed
 Version: 1.3.1-5ubuntu4
 Architecture: amd64
 
-Package: lsb-base
+Package: libgl1-mesa-dev
 Status: install ok installed
-Version: 11.1.0ubuntu2
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libdrmaa1.0-ruby
+Status: install ok installed
+Version: 8.1.9+dfsg-9build2
 Architecture: all
 
-Package: mount
+Package: libx11-protocol-perl
 Status: install ok installed
-Version: 2.34-0.1ubuntu9
+Version: 0.56-7
+Architecture: all
+
+Package: libwayland-egl1-mesa
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libxcb1
+Status: install ok installed
+Version: 1.14-2
+Architecture: amd64
+
+Package: bind9-host
+Status: install ok installed
+Version: 1:9.16.1-0ubuntu2
+Architecture: amd64
+
+Package: libglvnd-dev
+Status: install ok installed
+Version: 1.3.1-1
+Architecture: amd64
+
+Package: libgles2-mesa
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libx11-windowhierarchy-perl
+Status: install ok installed
+Version: 0.004-1
+Architecture: all
+
+Package: debconf
+Status: install ok installed
+Version: 1.5.73
+Architecture: all
+
+Package: libdrm-intel1
+Status: install ok installed
+Version: 2.4.101-2
+Architecture: amd64
+
+Package: libxcb-shm0
+Status: install ok installed
+Version: 1.14-2
+Architecture: amd64
+
+Package: mesa-common-dev
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libegl-dev
+Status: install ok installed
+Version: 1.3.1-1
+Architecture: amd64
+
+Package: libx11-doc
+Status: install ok installed
+Version: 2:1.6.9-2ubuntu1
+Architecture: all
+
+Package: ucf
+Status: install ok installed
+Version: 3.0038+nmu1
+Architecture: all
+
+Package: libegl-mesa0
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libglx0
+Status: install ok installed
+Version: 1.3.1-1
+Architecture: amd64
+
+Package: coreutils
+Status: install ok installed
+Version: 8.30-3ubuntu2
+Architecture: amd64
+
+Package: base-files
+Status: install ok installed
+Version: 11ubuntu5
+Architecture: amd64
+
+Package: dpkg
+Status: install ok installed
+Version: 1.19.7ubuntu3
+Architecture: amd64
+
+Package: libwayland-bin
+Status: install ok installed
+Version: 1.18.0-1
+Architecture: amd64
+
+Package: libgles1
+Status: install ok installed
+Version: 1.3.1-1
+Architecture: amd64
+
+Package: sysvinit-utils
+Status: install ok installed
+Version: 2.96-2.1ubuntu1
+Architecture: amd64
+
+Package: libx11-protocol-other-perl
+Status: install ok installed
+Version: 31-1
+Architecture: all
+
+Package: libwayland-client-extra++0
+Status: install ok installed
+Version: 0.2.5-2build1
+Architecture: amd64
+
+Package: libdrm-radeon1
+Status: install ok installed
+Version: 2.4.101-2
+Architecture: amd64
+
+Package: libx11-xcb-perl
+Status: install ok installed
+Version: 0.18-1build1
 Architecture: amd64
 
 Package: libx11-freedesktop-desktopentry-perl
@@ -358,152 +258,17 @@ Status: install ok installed
 Version: 1.14-2
 Architecture: amd64
 
-Package: mesa-common-dev
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: mesa-va-drivers
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: libwayland-client++0
-Status: install ok installed
-Version: 0.2.5-2build1
-Architecture: amd64
-
-Package: libxcb-glx0
-Status: install ok installed
-Version: 1.14-2
-Architecture: amd64
-
-Package: ucf
-Status: install ok installed
-Version: 3.0038+nmu1
-Architecture: all
-
-Package: libgl1
-Status: install ok installed
-Version: 1.3.1-1
-Architecture: amd64
-
-Package: libxcb-render0
-Status: install ok installed
-Version: 1.14-2
-Architecture: amd64
-
-Package: fontconfig
-Status: install ok installed
-Version: 2.13.1-2ubuntu3
-Architecture: amd64
-
-Package: shared-mime-info
-Status: install ok installed
-Version: 1.15-1
-Architecture: amd64
-
-Package: libwayland-cursor0
-Status: install ok installed
-Version: 1.18.0-1
-Architecture: amd64
-
-Package: libx11-dev
-Status: install ok installed
-Version: 2:1.6.9-2ubuntu1
-Architecture: amd64
-
-Package: libdrm-intel1
-Status: install ok installed
-Version: 2.4.101-2
-Architecture: amd64
-
-Package: libgles2-mesa
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: libgl1-mesa-dev
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: libwayland-egl1-mesa
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: libglvnd-dev
-Status: install ok installed
-Version: 1.3.1-1
-Architecture: amd64
-
-Package: libdrm-nouveau2
-Status: install ok installed
-Version: 2.4.101-2
-Architecture: amd64
-
-Package: libegl-mesa0
-Status: install ok installed
-Version: 20.0.4-2ubuntu1
-Architecture: amd64
-
-Package: libx11-guitest-perl
-Status: install ok installed
-Version: 0.28-2build2
-Architecture: amd64
-
-Package: libdrmaa1.0-java
-Status: install ok installed
-Version: 8.1.9+dfsg-9build2
-Architecture: all
-
 Package: systemd
 Status: install ok installed
 Version: 245.4-4ubuntu3
 Architecture: amd64
 
-Package: dpkg
-Status: install ok installed
-Version: 1.19.7ubuntu3
-Architecture: amd64
-
-Package: libwayland-egl++0
-Status: install ok installed
-Version: 0.2.5-2build1
-Architecture: amd64
-
-Package: libx11-protocol-other-perl
-Status: install ok installed
-Version: 31-1
-Architecture: all
-
-Package: libglvnd0
-Status: install ok installed
-Version: 1.3.1-1
-Architecture: amd64
-
-Package: libwayland-dev
-Status: install ok installed
-Version: 1.18.0-1
-Architecture: amd64
-
-Package: libgles2-mesa-dev
+Package: mesa-opencl-icd
 Status: install ok installed
 Version: 20.0.4-2ubuntu1
 Architecture: amd64
 
-Package: libdrmaa1.0-java-doc
-Status: install ok installed
-Version: 8.1.9+dfsg-9build2
-Architecture: all
-
-Package: libxcb-shape0
-Status: install ok installed
-Version: 1.14-2
-Architecture: amd64
-
-Package: libxcb1
+Package: libxcb-present0
 Status: install ok installed
 Version: 1.14-2
 Architecture: amd64
@@ -513,9 +278,194 @@ Status: install ok installed
 Version: 2.4.101-2
 Architecture: amd64
 
+Package: libwayland-cursor++0
+Status: install ok installed
+Version: 0.2.5-2build1
+Architecture: amd64
+
+Package: libgles2-mesa-dev
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: adduser
+Status: install ok installed
+Version: 3.118ubuntu2
+Architecture: all
+
+Package: libx11-guitest-perl
+Status: install ok installed
+Version: 0.28-2build2
+Architecture: amd64
+
+Package: libdrm-tests
+Status: install ok installed
+Version: 2.4.101-2
+Architecture: amd64
+
+Package: libxcb-dri2-0
+Status: install ok installed
+Version: 1.14-2
+Architecture: amd64
+
+Package: util-linux
+Status: install ok installed
+Version: 2.34-0.1ubuntu9
+Architecture: amd64
+
+Package: debianutils
+Status: install ok installed
+Version: 4.9.1
+Architecture: amd64
+
+Package: libgbm-dev
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libinput-bin
+Status: install ok installed
+Version: 1.15.5-1
+Architecture: amd64
+
+Package: libegl1-mesa
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libgles2
+Status: install ok installed
+Version: 1.3.1-1
+Architecture: amd64
+
+Package: apt
+Status: install ok installed
+Version: 2.0.2
+Architecture: amd64
+
+Package: libwayland-server0
+Status: install ok installed
+Version: 1.18.0-1
+Architecture: amd64
+
+Package: libxcb-xfixes0
+Status: install ok installed
+Version: 1.14-2
+Architecture: amd64
+
+Package: libdrm-common
+Status: install ok installed
+Version: 2.4.101-2
+Architecture: all
+
+Package: libwayland-egl++0
+Status: install ok installed
+Version: 0.2.5-2build1
+Architecture: amd64
+
+Package: libdrmaa1.0-java
+Status: install ok installed
+Version: 8.1.9+dfsg-9build2
+Architecture: all
+
+Package: avahi-daemon
+Status: install ok installed
+Version: 0.7-4ubuntu7
+Architecture: amd64
+
 Package: libgles-dev
 Status: install ok installed
 Version: 1.3.1-1
+Architecture: amd64
+
+Package: shared-mime-info
+Status: install ok installed
+Version: 1.15-1
+Architecture: amd64
+
+Package: systemd-sysv
+Status: install ok installed
+Version: 245.4-4ubuntu3
+Architecture: amd64
+
+Package: libglx-mesa0
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libwayland-cursor0
+Status: install ok installed
+Version: 1.18.0-1
+Architecture: amd64
+
+Package: libcap2-bin
+Status: install ok installed
+Version: 1:2.32-1
+Architecture: amd64
+
+Package: mesa-vulkan-drivers
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libwayland-egl-backend-dev
+Status: install ok installed
+Version: 1.18.0-1
+Architecture: amd64
+
+Package: iso-codes
+Status: install ok installed
+Version: 4.4-1
+Architecture: all
+
+Package: libdrmaa1.0-java-doc
+Status: install ok installed
+Version: 8.1.9+dfsg-9build2
+Architecture: all
+
+Package: mesa-va-drivers
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libx11-xcb1
+Status: install ok installed
+Version: 2:1.6.9-2ubuntu1
+Architecture: amd64
+
+Package: libdrm-dev
+Status: install ok installed
+Version: 2.4.101-2
+Architecture: amd64
+
+Package: libwayland-doc
+Status: install ok installed
+Version: 1.18.0-1
+Architecture: all
+
+Package: libdrm2
+Status: install ok installed
+Version: 2.4.101-2
+Architecture: amd64
+
+Package: libx11-xcb-dev
+Status: install ok installed
+Version: 2:1.6.9-2ubuntu1
+Architecture: amd64
+
+Package: mount
+Status: install ok installed
+Version: 2.34-0.1ubuntu9
+Architecture: amd64
+
+Package: lsb-base
+Status: install ok installed
+Version: 11.1.0ubuntu2
+Architecture: all
+
+Package: libgbm1
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
 Architecture: amd64
 
 Package: passwd
@@ -523,8 +473,58 @@ Status: install ok installed
 Version: 1:4.8.1-1ubuntu5
 Architecture: amd64
 
-Package: libwayland-cursor++0
+Package: libgl1-mesa-glx
 Status: install ok installed
-Version: 0.2.5-2build1
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libxcb-render0
+Status: install ok installed
+Version: 1.14-2
+Architecture: amd64
+
+Package: libglvnd-core-dev
+Status: install ok installed
+Version: 1.3.1-1
+Architecture: amd64
+
+Package: mesa-utils-extra
+Status: install ok installed
+Version: 8.4.0-1build1
+Architecture: amd64
+
+Package: libwayland-egl1
+Status: install ok installed
+Version: 1.18.0-1
+Architecture: amd64
+
+Package: libxcb-shape0
+Status: install ok installed
+Version: 1.14-2
+Architecture: amd64
+
+Package: fdisk
+Status: install ok installed
+Version: 2.34-0.1ubuntu9
+Architecture: amd64
+
+Package: libegl1-mesa-dev
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
+Architecture: amd64
+
+Package: libglx-dev
+Status: install ok installed
+Version: 1.3.1-1
+Architecture: amd64
+
+Package: libdrm-nouveau2
+Status: install ok installed
+Version: 2.4.101-2
+Architecture: amd64
+
+Package: libglapi-mesa
+Status: install ok installed
+Version: 20.0.4-2ubuntu1
 Architecture: amd64
 

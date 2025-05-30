@@ -48,10 +48,64 @@ debug : $(OBSRC)
 
 appimage : 
 	make release
+
+	# AppDirを削除して再作成
+	rm -rf AppDir
 	mkdir -p AppDir/usr/bin
+	mkdir -p AppDir/usr/lib
 	mkdir -p AppDir/usr/share/rogue
-	cp $(OBJ_NAME) AppDir/usr/bin/
-	cp assets AppDir/usr/share/rogue/
+
+	# バイナリをコピー
+	cp ./rogue AppDir/usr/bin/
+
+	# アセットをコピー
+	cp -r ./assets AppDir/usr/share/rogue/
+
+	# 必要なライブラリを自動収集
+	echo "Collecting dependencies..."
+	ldd ./rogue | awk '/=>/ {print $3}' | grep -v '^$' | while read lib; do
+		if [[ $lib == /usr/lib/* ]] || [[ $lib == /lib/* ]]; then
+			echo "Copying $lib"
+			cp "$lib" AppDir/usr/lib/ 2>/dev/null || true
+		fi
+	done
+
+	# SDL2関連ライブラリを明示的にコピー
+	for lib in /usr/lib/x86_64-linux-gnu/libSDL2*.so*; do
+		if [ -f "$lib" ]; then
+			echo "Copying SDL2 library: $lib"
+			cp "$lib" AppDir/usr/lib/
+		fi
+	done
+
+	# .desktopファイルを作成
+	cat > AppDir/rogue.desktop << EOF
+	[Desktop Entry]
+	Type=Application
+	Name=Rogue
+	Exec=rogue
+	Icon=rogue
+	Categories=Game;
+	EOF
+
+	# AppRunスクリプトを作成
+	cat > AppDir/AppRun << 'EOF'
+	#!/bin/bash
+	HERE="$(dirname "$(readlink -f "${0}")")"
+	export LD_LIBRARY_PATH="${HERE}/usr/lib:${HERE}/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
+	export PATH="${HERE}/usr/bin:${PATH}"
+	exec "${HERE}/usr/bin/rogue" "$@"
+	EOF
+
+	chmod +x AppDir/AppRun
+
+	# シンボリックリンクを作成
+	ln -sf rogue.desktop AppDir/
+	ln -sf usr/share/icons/hicolor/256x256/apps/rogue.png AppDir/ 2>/dev/null || touch AppDir/rogue.png
+
+	echo "AppDir created successfully!"
+	echo "Now run: appimagetool AppDir"
+
 	./appimage-builder-x86_64.AppImage --recipe AppImageBuilder.yml
 
 # gdbの手順
