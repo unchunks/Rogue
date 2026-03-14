@@ -113,9 +113,15 @@ appimage :
 #	run
 #	bt
 
-test : test.cpp
-	$(CC) test.cpp $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o test
+test : test.cpp Character_test.o Tile_test.o
+	$(CC) test.cpp Character_test.o Tile_test.o $(COMPILER_FLAGS) -Iinclude/SDL2 -I. -o test
 	./test
+
+Character_test.o : src/Character.cpp include/SDL2/SDL.h
+	$(CC) -c src/Character.cpp $(COMPILER_FLAGS) -Iinclude/SDL2 -I. -o Character_test.o
+
+Tile_test.o : src/Tile.cpp include/SDL2/SDL.h
+	$(CC) -c src/Tile.cpp $(COMPILER_FLAGS) -Iinclude/SDL2 -I. -o Tile_test.o
 
 commit-% :
 	git add -A
