@@ -1,4 +1,5 @@
 #include "GenerateDungeon/Generator.h"
+#include "Functions/Util.h"
 
 std::random_device random_seed;
 std::mt19937 random_engine(random_seed());
@@ -66,7 +67,7 @@ void Generator::outputMap_forDebug() {
     bool charDrawn = false;
 
     std::ofstream writing_file;
-    std::string filename = "debug.map";
+    std::string filename = output_path("debug.map");
     writing_file.open(filename, std::ios::out);
     std::string writing_text = "";
 
@@ -182,7 +183,7 @@ void Generator::outputMap() {
     bool charDrawn = false;
 
     std::ofstream writing_file;
-    std::string filename = "dungeon.map";
+    std::string filename = output_path("dungeon.map");
     writing_file.open(filename, std::ios::out);
     std::string writing_text = "";
 

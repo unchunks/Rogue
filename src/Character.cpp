@@ -137,7 +137,7 @@ bool Character::moveTo(Ivec2 _destination, std::vector<Tile> _tiles, const std::
     return move(_tiles, _otherCharacters);
 }
 
-DIRECTION Character::adjacent(Character _opponent)
+DIRECTION Character::adjacent(const Character& _opponent)
 {
     if(!onTileCenter())
         return NO_DIRECTION;
@@ -180,13 +180,14 @@ DIRECTION Character::adjacent(Character _opponent)
     return NO_DIRECTION;
 }
 
-DIRECTION Character::adjacent(std::vector<Character> _opponents)
+DIRECTION Character::adjacent(const std::vector<Character>& _opponents)
 {
-    for(auto oppo : _opponents)
+    for(const auto& oppo : _opponents)
     {
-        if(adjacent(oppo) != NO_DIRECTION)
+        DIRECTION dir = adjacent(oppo);
+        if(dir != NO_DIRECTION)
         {
-            return adjacent(oppo);
+            return dir;
         }
     }
     return NO_DIRECTION;
@@ -379,7 +380,7 @@ bool Character::touchWall(std::vector<Tile> _tiles, Ivec2 _data_pos)
 
 bool Character::touchChars(const std::vector<Character>& _otherCharacters, Ivec2 _data_pos)
 {
-    for(auto _otherCharacter : _otherCharacters)
+    for(const auto& _otherCharacter : _otherCharacters)
     {
         if( touchChar(_otherCharacter, _data_pos) )
         {

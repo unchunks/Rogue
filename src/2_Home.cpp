@@ -15,42 +15,6 @@ const int SLEEP_SPEED = 3;
 const int SLEEP_W = 256;
 const int SLEEP_H = 256;
 
-void weaponButton()
-{
-    Mix_PlayChannel(-1, gClickEffect, 0);
-    // SDL_Log("weaponButton\n");
-}
-void armorButton()
-{
-    Mix_PlayChannel(-1, gClickEffect, 0);
-    // SDL_Log("armorButton\n");
-}
-void itemButton()
-{
-    Mix_PlayChannel(-1, gClickEffect, 0);
-    // SDL_Log("itemButton\n");
-}
-void otherButton()
-{
-    Mix_PlayChannel(-1, gClickEffect, 0);
-    // SDL_Log("otherButton\n");
-}
-
-void haveButton()
-{
-    Mix_PlayChannel(-1, gClickEffect, 0);
-    // SDL_Log("haveButton\n");
-}
-void storageButton()
-{
-    Mix_PlayChannel(-1, gClickEffect, 0);
-    // SDL_Log("storageButton\n");
-}
-void saveButton()
-{
-    Mix_PlayChannel(-1, gClickEffect, 0);
-    // SDL_Log("saveButton\n");
-}
 void dungeonButton()
 {
     Mix_PlayChannel(-1, gClickEffect, 0);
@@ -63,88 +27,8 @@ Home::Home()
 {
     LoadData();
 
-    // mWeaponButton.onClick = &weaponButton;
-    // mArmorButton.onClick = &armorButton;
-    // mItemButton.onClick = &itemButton;
-    // mOtherButton.onClick = &otherButton;
-    // mHaveButton.onClick = &haveButton;
-    // mStorageButton.onClick = &storageButton;
-    // mSaveButton.onClick = &saveButton;
     mDungeonButton.onClick = &dungeonButton;
 
-    // トップボタン
-    // mWeaponButton.create(
-    //     gRenderer,
-    //     SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 4) - PADDING,
-    //     PADDING,
-    //     TOP_BUTTON_W,
-    //     TOP_BUTTON_H,
-    //     "1:武",
-    //     gFontN,
-    //     Color::SDL_blue,
-    //     Color::SDL_white);
-    // mArmorButton.create(
-    //     gRenderer,
-    //     SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 3) - PADDING,
-    //     PADDING,
-    //     TOP_BUTTON_W,
-    //     TOP_BUTTON_H,
-    //     "2:防",
-    //     gFontN,
-    //     Color::SDL_blue,
-    //     Color::SDL_white);
-    // mItemButton.create(
-    //     gRenderer,
-    //     SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 2) - PADDING,
-    //     PADDING,
-    //     TOP_BUTTON_W,
-    //     TOP_BUTTON_H,
-    //     "3:ア",
-    //     gFontN,
-    //     Color::SDL_blue,
-    //     Color::SDL_white);
-    // mOtherButton.create(
-    //     gRenderer,
-    //     SCREEN_WIDTH - SIDE_BUTTON_W - ((TOP_BUTTON_W + 10) * 1) - PADDING,
-    //     PADDING,
-    //     TOP_BUTTON_W,
-    //     TOP_BUTTON_H,
-    //     "4:他",
-    //     gFontN,
-    //     Color::SDL_blue,
-    //     Color::SDL_white);
-
-    // // サイドボタン
-    // mHaveButton.create(
-    //     gRenderer,
-    //     SCREEN_WIDTH - SIDE_BUTTON_W - PADDING,
-    //     SIDE_BUTTON_H * 0 + PADDING,
-    //     SIDE_BUTTON_W,
-    //     SIDE_BUTTON_H,
-    //     "5:もちもの",
-    //     gFontN,
-    //     Color::SDL_blue,
-    //     Color::SDL_white);
-    // mStorageButton.create(
-    //     gRenderer,
-    //     SCREEN_WIDTH - SIDE_BUTTON_W - PADDING,
-    //     (SIDE_BUTTON_H + 10) * 1 + PADDING,
-    //     SIDE_BUTTON_W,
-    //     SIDE_BUTTON_H,
-    //     "6:　倉庫　",
-    //     gFontN,
-    //     Color::SDL_blue,
-    //     Color::SDL_white);
-    // mSaveButton.create(
-    //     gRenderer,
-    //     SCREEN_WIDTH - SIDE_BUTTON_W - PADDING,
-    //     (SIDE_BUTTON_H + 10) * 2 + PADDING,
-    //     SIDE_BUTTON_W,
-    //     SIDE_BUTTON_H,
-    //     "7: セーブ ",
-    //     gFontN,
-    //     Color::SDL_blue,
-    //     Color::SDL_white);
     mDungeonButton.create(
         gRenderer,
         SCREEN_WIDTH - SIDE_BUTTON_W - PADDING,
@@ -188,28 +72,6 @@ void Home::Input(SDL_Event event)
     {
         switch (event.key.keysym.sym)
         {
-        // case SDLK_1:
-        //     mWeaponButton.press();
-        //     break;
-        // case SDLK_2:
-        //     mArmorButton.press();
-        //     break;
-        // case SDLK_3:
-        //     mItemButton.press();
-        //     break;
-        // case SDLK_4:
-        //     mOtherButton.press();
-        //     break;
-        // case SDLK_5:
-        //     mHaveButton.press();
-        //     break;
-        // case SDLK_6:
-        //     mStorageButton.press();
-        //     break;
-        // case SDLK_7:
-        //     mSaveButton.press();
-        //     break;
-        // case SDLK_8:
         case SDLK_RETURN:
             mDungeonButton.press();
             break;
@@ -218,56 +80,6 @@ void Home::Input(SDL_Event event)
     }
     switch (event.key.keysym.sym)
     {
-    // case SDLK_1:
-    //     if (mWeaponButton.isPressed)
-    //     {
-    //         mWeaponButton.release();
-    //         mWeaponButton.onClick();
-    //     }
-    //     break;
-    // case SDLK_2:
-    //     if (mArmorButton.isPressed)
-    //     {
-    //         mArmorButton.release();
-    //         mArmorButton.onClick();
-    //     }
-    //     break;
-    // case SDLK_3:
-    //     if (mItemButton.isPressed)
-    //     {
-    //         mItemButton.release();
-    //         mItemButton.onClick();
-    //     }
-    //     break;
-    // case SDLK_4:
-    //     if (mOtherButton.isPressed)
-    //     {
-    //         mOtherButton.release();
-    //         mOtherButton.onClick();
-    //     }
-    //     break;
-    // case SDLK_5:
-    //     if (mHaveButton.isPressed)
-    //     {
-    //         mHaveButton.release();
-    //         mHaveButton.onClick();
-    //     }
-    //     break;
-    // case SDLK_6:
-    //     if (mStorageButton.isPressed)
-    //     {
-    //         mStorageButton.release();
-    //         mStorageButton.onClick();
-    //     }
-    //     break;
-    // case SDLK_7:
-    //     if (mSaveButton.isPressed)
-    //     {
-    //         mSaveButton.release();
-    //         mSaveButton.onClick();
-    //     }
-    //     break;
-    // case SDLK_8:
     case SDLK_RETURN:
         if (mDungeonButton.isPressed)
         {
@@ -284,13 +96,6 @@ void Home::Update()
 
 void Home::Output()
 {
-    // mWeaponButton.Draw();
-    // mArmorButton.Draw();
-    // mItemButton.Draw();
-    // mOtherButton.Draw();
-    // mHaveButton.Draw();
-    // mStorageButton.Draw();
-    // mSaveButton.Draw();
     mDungeonButton.Draw();
 
     mAnimFrame++;
@@ -299,7 +104,7 @@ void Home::Output()
         mAnimFrame = 0;
     }
     int c_sprite_num = (mAnimFrame * SLEEP_SPEED / FPS);
-    
+
     //レンダリングスペースを設定し、画面にレンダリング
 	SDL_Rect renderQuad = { mBornSleepBox.x, mBornSleepBox.y, SLEEP_W, SLEEP_H };
 
