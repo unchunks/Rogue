@@ -60,12 +60,12 @@ bool Game::Init()
         return false;
     }
 
-    gFontN = TTF_OpenFont(resource_path("JF-Dot-K14.ttf"), 30);
+    gFontN = TTF_OpenFont(resource_path("JF-Dot-K14.ttf").c_str(), 30);
     if (!gFontN) {
         SDL_Log("TTF_OpenFont: %s\n", TTF_GetError());
         return false;
     }
-    gFontB = TTF_OpenFont(resource_path("JF-Dot-K14B.ttf"), 30);
+    gFontB = TTF_OpenFont(resource_path("JF-Dot-K14B.ttf").c_str(), 30);
     if (!gFontB) {
         SDL_Log("TTF_OpenFont: %s\n", TTF_GetError());
         return false;
@@ -113,13 +113,13 @@ bool Game::Init()
         return false;
     }
 
-    gClickEffect = Mix_LoadWAV(resource_path("click.mp3"));
+    gClickEffect = Mix_LoadWAV(resource_path("click.mp3").c_str());
     if(gClickEffect == NULL) {
         SDL_Log("Failed to load sound effect : %s", Mix_GetError());
         return false;
     }
 
-    mMusic = Mix_LoadMUS(resource_path("dungeon.ogg"));//Mix_LoadMUS("assets/BGM.mp3");
+    mMusic = Mix_LoadMUS(resource_path("dungeon.ogg").c_str());//Mix_LoadMUS("assets/BGM.mp3");
     if(mMusic == NULL) {
         SDL_Log("Failed to load BGM : %s", Mix_GetError());
         return false;

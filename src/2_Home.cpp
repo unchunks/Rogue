@@ -5,6 +5,8 @@ extern TTF_Font *gFontN;
 extern Mix_Chunk* gClickEffect;
 extern SCENE gNowScene;
 
+const int TOP_BUTTON_W = 120;
+const int TOP_BUTTON_H = 60;
 const int SIDE_BUTTON_W = 250;
 const int SIDE_BUTTON_H = 60;
 
