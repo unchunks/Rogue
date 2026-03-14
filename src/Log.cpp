@@ -39,7 +39,7 @@ void Log::render(SDL_Renderer *renderer)
         SCREEN_HEIGHT - (FONT_SIZE + LINE_PADDING) * LINE_NUM - LINE_PADDING, 
         0, 
         0};
-    for(auto text : texts)
+    for(const auto& text : texts)
     {
         // SDL_Log("%s", text.c_str());
         SDL_Surface *surface = TTF_RenderUTF8_Blended(fontN, text.c_str(), {255, 255, 255});
