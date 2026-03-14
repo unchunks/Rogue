@@ -38,6 +38,7 @@ release : $(OBSRC)
 .PHONY : clean
 clean : $(OBJO)
 	rm $(OBJO)
+	rm -f tests/test_run
 
 valgrind : $(OBSRC)
 #$(CC) $(OBSRC) $(COMPILER_FLAGS) -g $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o $(OBJ_NAME) 
@@ -113,9 +114,9 @@ appimage :
 #	run
 #	bt
 
-test : test.cpp
-	$(CC) test.cpp $(COMPILER_FLAGS) $(COMPILE_OPTIONS) $(LINKER_FLAGS) -o test
-	./test
+test : tests/test_AinB.cpp src/Functions/RectUtils.h
+	$(CC) $(COMPILER_FLAGS) -I./tests/include -I./src tests/test_AinB.cpp -o tests/test_run
+	./tests/test_run
 
 commit-% :
 	git add -A
