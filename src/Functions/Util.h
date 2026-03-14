@@ -3,16 +3,15 @@
 #include <stdlib.h>
 #include <string>
 
-inline char* resource_path(const char* relative_path) {
-    static char full_path[1024];
+inline std::string resource_path(const char* relative_path) {
     const char* appdir = getenv("APPDIR");
     
     if (appdir) {
         // AppImage内で実行されている場合
-        snprintf(full_path, sizeof(full_path), "%s/usr/share/rogue/assets/%s", appdir, relative_path);
+        return std::string(appdir) + "/usr/share/rogue/assets/" + relative_path;
     } else {
         // 通常の実行の場合
-        snprintf(full_path, sizeof(full_path), "assets/%s", relative_path);
+        return std::string("assets/") + relative_path;
     }
     
     return full_path;
