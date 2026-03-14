@@ -27,13 +27,6 @@ private:
     void LoadData();
     void PlayMusic();
 
-    // Button mWeaponButton;
-    // Button mArmorButton;
-    // Button mItemButton;
-    // Button mOtherButton;
-    // Button mHaveButton;
-    // Button mStorageButton;
-    // Button mSaveButton;
     Button mDungeonButton;
 
     int mAnimFrame;
