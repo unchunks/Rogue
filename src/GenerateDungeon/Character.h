@@ -27,8 +27,8 @@ public:
     Character(int _x, int _y, int _maxHP, int _STR, int _VIT, STATE _state, DIRECTION _dir, CHAR_TYPE _type, std::string _name);
     ~Character();
 
-    DIRECTION adjacent(class Character _opponent);
-	DIRECTION adjacent(std::vector<class Character> _opponents);
+    DIRECTION adjacent(const class Character& _opponent);
+	DIRECTION adjacent(const std::vector<class Character>& _opponents);
     virtual std::string attack(class Character& _opponent);
     std::string receiveDamage(int _damage);
     void healed(int _heal_val);
