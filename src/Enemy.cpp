@@ -131,7 +131,7 @@ void Enemy::walk(std::vector<class Tile> _tiles, class Character& _player, const
 {
     std::vector<Character> otherCharacters;
     otherCharacters.push_back(static_cast<Character>(_player));
-    for(auto enemy : _otherEnemies)
+    for(const auto& enemy : _otherEnemies)
     {
         if(enemy.getDataPos() == getDataPos())
             continue;

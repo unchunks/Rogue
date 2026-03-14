@@ -60,7 +60,7 @@ void AreaDivide::generate()
 
     // SDL_Log("部屋生成");
 // 各エリアに対する処理
-    for(auto area : areas) {
+    for(const auto& area : areas) {
         Room room = Room(
             area.x + ROOM_MARGIN,
             area.y + ROOM_MARGIN,

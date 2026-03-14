@@ -380,7 +380,7 @@ bool Character::touchWall(std::vector<Tile> _tiles, Ivec2 _data_pos)
 
 bool Character::touchChars(const std::vector<Character>& _otherCharacters, Ivec2 _data_pos)
 {
-    for(auto _otherCharacter : _otherCharacters)
+    for(const auto& _otherCharacter : _otherCharacters)
     {
         if( touchChar(_otherCharacter, _data_pos) )
         {
