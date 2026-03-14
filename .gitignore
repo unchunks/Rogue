@@ -13,4 +13,5 @@ include/
 Character_test.o
 Tile_test.o
 TODO.md
+tests/test_run
 

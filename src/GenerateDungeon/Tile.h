@@ -5,6 +5,7 @@
 #include "Enum.h"
 #include "Const.h"
 #include "LTexture.h"
+#include "../Functions/RectUtils.h"
 
 //タイルクラス
 class Tile
@@ -29,6 +30,3 @@ class Tile
 		//タイルのタイプ
 		CELL_TYPE mType;
 };
-
-//ボックスの衝突検出
-bool AinB( SDL_Rect a, SDL_Rect b );
