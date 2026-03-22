@@ -1,18 +1,53 @@
-.vscode
-AppDir
-appimage-build
-squashfs-root
-token.txt
-*.o
-*.map
-*.zsync
+# ----------------------------
+# 🔧 Build / Generated Files
+# ----------------------------
+build/
+AppDir/
+appimage-build/
+squashfs-root/
+
+# ----------------------------
+# ⚙️ Binary / Executables
+# ----------------------------
 rogue
 game
 test
-include/
-Character_test.o
-Tile_test.o
-TODO.md
 tests/test_run
 tests/test_player_run
-build/
+
+# ----------------------------
+# 🧱 Object / Intermediate Files
+# ----------------------------
+*.o
+*.map
+
+# ----------------------------
+# 📦 Distribution Artifacts
+# ----------------------------
+*.zsync
+
+# ----------------------------
+# 🧪 Test Artifacts
+# ----------------------------
+Character_test.o
+Tile_test.o
+
+# ----------------------------
+# 🔐 Secrets / Tokens
+# ----------------------------
+token.txt
+
+# ----------------------------
+# 🧩 IDE / Editor
+# ----------------------------
+.vscode/
+
+# ----------------------------
+# 📂 Include (必要なら除外)
+# ----------------------------
+include/
+
+# ----------------------------
+# 📝 Misc
+# ----------------------------
+TODO.md
