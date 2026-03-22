@@ -13,13 +13,11 @@ inline std::string resource_path(const char* relative_path) {
         // 通常の実行の場合
         return std::string("assets/") + relative_path;
     }
-    
-    return full_path;
 }
 
 inline std::string output_path(const std::string& filename) {
     const char* tmpdir = getenv("TMPDIR");
-    if (!tmpdir) {
+    if (!tmpdir || std::string(tmpdir).find("..") != std::string::npos || std::string(tmpdir).find("/") != 0) {
         tmpdir = "/tmp";
     }
     std::string path = tmpdir;
