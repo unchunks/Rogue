@@ -5,13 +5,14 @@
 
 inline std::string resource_path(const char* relative_path) {
     const char* appdir = getenv("APPDIR");
-    
+    std::string path;
+
     if (appdir) {
         // AppImage内で実行されている場合
-        return std::string(appdir) + "/usr/share/rogue/assets/" + relative_path;
+        path = std::string(appdir) + "/usr/share/rogue/assets/";
     } else {
         // 通常の実行の場合
-        return std::string("assets/") + relative_path;
+        path = "assets/";
     }
 }
 
