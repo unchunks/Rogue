@@ -1,5 +1,0 @@
-C:/Users/progr/MyProjects/Cpp/Rogue/build/CMakeFiles/rogue.dir
-C:/Users/progr/MyProjects/Cpp/Rogue/build/CMakeFiles/test_run.dir
-C:/Users/progr/MyProjects/Cpp/Rogue/build/CMakeFiles/run_test.dir
-C:/Users/progr/MyProjects/Cpp/Rogue/build/CMakeFiles/edit_cache.dir
-C:/Users/progr/MyProjects/Cpp/Rogue/build/CMakeFiles/rebuild_cache.dir
