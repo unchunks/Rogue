@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Generator.h"
+#include "GenerateDungeon/Generator.h"
 
 class AreaDivide : public Generator
 {

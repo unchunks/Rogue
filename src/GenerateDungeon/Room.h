@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Area.h"
-#include "Const.h"
+#include "GenerateDungeon/Area.h"
+#include "GenerateDungeon/Const.h"
 
 const int ROOM_MARGIN = 2;
 

@@ -5,10 +5,10 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
-#include "../UI/Button.h"
-#include "../Functions/Color.h"
-#include "../GenerateDungeon/Const.h"
-#include "../GenerateDungeon/Enum.h"
+#include "UI/Button.h"
+#include "Utils/Color.h"
+#include "GenerateDungeon/Const.h"
+#include "GenerateDungeon/Enum.h"
 
 class Start
 {

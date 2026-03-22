@@ -1,4 +1,4 @@
-#include "GenerateDungeon/AStar.h"
+#include "System/AStar.h"
 
 namespace AStar
 {

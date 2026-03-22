@@ -5,14 +5,14 @@
 #include <string>
 #include <fstream>
 #include <random>
-#include "../../Ivec2.h"
+#include "Utils/Ivec2.h"
 
-#include "Area.h"
-#include "Room.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "Enum.h"
-#include "Const.h"
+#include "GenerateDungeon/Area.h"
+#include "GenerateDungeon/Room.h"
+#include "Characters/Player.h"
+#include "Characters/Enemy.h"
+#include "GenerateDungeon/Enum.h"
+#include "GenerateDungeon/Const.h"
 
 class Generator
 {
@@ -42,7 +42,7 @@ protected:
     void outputMap();
 
     void outputMap_forDebug();
-    
+
     CELL_TYPE floorTYPE[FLOOR_H][FLOOR_W];
     std::vector<Area> areas = std::vector<Area>(1, Area(0, 0, FLOOR_W, FLOOR_H));
     std::vector<Room> rooms = std::vector<Room>(1, Room(ROOM_MARGIN, ROOM_MARGIN, FLOOR_W - 2*ROOM_MARGIN, FLOOR_H - 2*ROOM_MARGIN));

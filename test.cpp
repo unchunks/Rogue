@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cassert>
-#include "src/GenerateDungeon/Character.h"
+#include "src/Characters/Character.h"
 #include <SDL.h>
 
 // Stubs for global/static variables needed by Character.cpp and Tile.cpp

@@ -5,7 +5,7 @@
 
 // Mock necessary SDL types before including headers that use them
 #include "SDL2/SDL.h"
-#include "Functions/RectUtils.h"
+#include "Utils/RectUtils.h"
 
 struct TestCase {
     std::string name;

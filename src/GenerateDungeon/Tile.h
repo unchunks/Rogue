@@ -2,10 +2,10 @@
 
 #include <SDL.h>
 
-#include "Enum.h"
-#include "Const.h"
-#include "LTexture.h"
-#include "../Functions/RectUtils.h"
+#include "GenerateDungeon/Enum.h"
+#include "GenerateDungeon/Const.h"
+#include "System/LTexture.h"
+#include "Utils/RectUtils.h"
 
 //タイルクラス
 class Tile

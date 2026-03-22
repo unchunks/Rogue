@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "../../include/SDL2/SDL_image.h"
+#include <SDL_image.h>
 
 //テクスチャーラッパークラス
 class LTexture

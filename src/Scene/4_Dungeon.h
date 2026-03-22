@@ -5,24 +5,24 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-#include "../../Ivec2.h"
+#include "Utils/Ivec2.h"
 
-#include "../UI/Log.h"
-#include "../Functions/Color.h"
-#include "../Functions/Util.h"
-#include "../GenerateDungeon/Const.h"
-#include "../GenerateDungeon/Enum.h"
+#include "UI/Log.h"
+#include "Utils/Color.h"
+#include "Utils/Util.h"
+#include "GenerateDungeon/Const.h"
+#include "GenerateDungeon/Enum.h"
 
-#include "../GenerateDungeon/AreaDivide.h"
-#include "../GenerateDungeon/RRA.h"
+#include "GenerateDungeon/AreaDivide.h"
+#include "GenerateDungeon/RRA.h"
 
-#include "../GenerateDungeon/Player.h"
-#include "../GenerateDungeon/Enemy.h"
-#include "../GenerateDungeon/Const.h"
-#include "../GenerateDungeon/Tile.h"
-#include "../GenerateDungeon/LTexture.h"
+#include "Characters/Player.h"
+#include "Characters/Enemy.h"
+#include "GenerateDungeon/Const.h"
+#include "GenerateDungeon/Tile.h"
+#include "System/LTexture.h"
 
-#include "../Game.h"
+#include "Core/Game.h"
 
 enum GOAL_TYPE
 {
@@ -66,12 +66,12 @@ private:
     bool canGetOn(Ivec2 _data_pos);
 
     /// @brief ランダムな座標を返す
-    /// @param _roomCount 
+    /// @param _roomCount
     /// @return データ系座標
     Ivec2 getRandomDataPos(int _roomCount);
 
     /// @brief 座標にいる敵を返す
-    /// @param _data_pos 
+    /// @param _data_pos
     /// @return 敵の参照を返す
     Enemy& whichEnemy(Ivec2 _data_pos);
 
@@ -98,4 +98,3 @@ private:
 
     int floor_num;
 };
-

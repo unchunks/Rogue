@@ -6,14 +6,14 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
-#include "../Functions/Color.h"
+#include "Utils/Color.h"
 
 class Button
 {
 public:
     void create(
-        SDL_Renderer *renderer, 
-        int x, int y, int w, int h, std::string text, TTF_Font *font, 
+        SDL_Renderer *renderer,
+        int x, int y, int w, int h, std::string text, TTF_Font *font,
         SDL_Color buttonColor, SDL_Color textColor)
     {
         mRenderer = renderer;

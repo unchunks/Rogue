@@ -1,5 +1,5 @@
 #include "GenerateDungeon/Generator.h"
-#include "Functions/Util.h"
+#include "Utils/Util.h"
 
 std::random_device random_seed;
 std::mt19937 random_engine(random_seed());

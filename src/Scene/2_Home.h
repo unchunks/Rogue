@@ -5,13 +5,13 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
-#include "../UI/Button.h"
-#include "../Functions/Color.h"
-#include "../Functions/Util.h"
-#include "../GenerateDungeon/Const.h"
-#include "../GenerateDungeon/LTexture.h"
+#include "UI/Button.h"
+#include "Utils/Color.h"
+#include "Utils/Util.h"
+#include "GenerateDungeon/Const.h"
+#include "System/LTexture.h"
 
-#include "../Game.h"
+#include "Core/Game.h"
 
 class Home
 {
