@@ -114,9 +114,15 @@ appimage :
 #	run
 #	bt
 
-test : tests/test_AinB.cpp src/Functions/RectUtils.h
+test : tests/test_AinB.cpp tests/test_Player.cpp src/Functions/RectUtils.h
 	$(CC) $(COMPILER_FLAGS) -I./tests/include -I./src tests/test_AinB.cpp -o tests/test_run
 	./tests/test_run
+	$(CC) $(COMPILER_FLAGS) -I./tests/include -I./src tests/test_Player.cpp src/Player.cpp src/Character.cpp src/Tile.cpp src/LTexture.cpp -o tests/test_player_run
+	./tests/test_player_run
+
+test_player : tests/test_Player.cpp src/Player.cpp src/Character.cpp src/Tile.cpp src/LTexture.cpp
+	$(CC) $(COMPILER_FLAGS) -I./tests/include -I./src tests/test_Player.cpp src/Player.cpp src/Character.cpp src/Tile.cpp src/LTexture.cpp -o tests/test_player_run
+	./tests/test_player_run
 
 commit-% :
 	git add -A
