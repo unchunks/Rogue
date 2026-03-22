@@ -93,7 +93,7 @@ void Dungeon::Input(SDL_Event event)
                 e.isMoved = true;
             }
             // SDL_Log("敵のターン===============================================================================");
-        	break;
+		break;
         case SDLK_q:
             player.isMoved = false;
             in_dungeon = false;
@@ -243,7 +243,7 @@ void Dungeon::Update()
 
             if(!e.isMoved)
                 continue;
-            
+
             switch (e.getState())
             {
                 case SEARCH:
@@ -291,7 +291,7 @@ GOTO_FOUND:
                     {
                         updateEnemyRoute(e, PLAYER_POS);
                     }
-                    
+
                     e.walk(tileSet, player, enemies);
                     break;
 
@@ -333,9 +333,9 @@ GOTO_FOUND:
                 {
                     log.addText(player.getName() + "はレベルアップした！");
                     log.addText(
-                        "Lv." + std::to_string(player.level) + 
-                        "　HP:" + std::to_string(player.getMaxHP()) + 
-                        "　STR:" + std::to_string(player.getSTR()) + 
+                        "Lv." + std::to_string(player.level) +
+                        "　HP:" + std::to_string(player.getMaxHP()) +
+                        "　STR:" + std::to_string(player.getSTR()) +
                         "　VIT:" + std::to_string(player.getVIT())
                     );
                 }
@@ -386,7 +386,7 @@ void Dungeon::Output()
 
     for (auto &e : enemies)
         e.render(camera);
-    
+
     log.render(gRenderer);
 }
 
@@ -454,8 +454,7 @@ void Dungeon::InitDungeon()
     in_dungeon = true;
     go_next_floor = false;
 
-//TODO: 最下層についたときの処理を追加
-    if (floor_num >= LAST_FLOOR)
+    if (floor_num > LAST_FLOOR)
     {
         quit();
         gNowScene = SCENE::CONGRATULATIONS;
@@ -463,6 +462,11 @@ void Dungeon::InitDungeon()
     }
 
     log.reset();
+
+    if (floor_num == LAST_FLOOR)
+    {
+        log.addText("ついに最下層に到達した！");
+    }
 
     // 選択した方法でダンジョンを生成
     switch (gNowScene)
